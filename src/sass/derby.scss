@@ -1,0 +1,19 @@
+
+$cubBlue: #248;
+
+@import 'bootstrap';
+
+@import "fontawesome";
+@import "solid";
+@import "light";
+@import "regular";
+@import "brands";
+
+body {
+    background: $cubBlue;
+}
+
+
+.bg-derby {
+    background: darken($cubBlue, 15%);
+}

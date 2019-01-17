@@ -1,0 +1,133 @@
+
+<div id="racers-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="racers-label" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="racers-label">Derby Racers</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="racers-form" action="#">
+          <div class="form-group">
+            <label for="racers-name">Vendor</label>
+            <input type="text" class="form-control" name="vendor" placeholder="Vender name">
+          </div>
+          <div class="form-group">
+            <label for="racers-name">Product</label>
+            <input type="text" class="form-control" name="product" placeholder="Device name">
+          </div>
+          <div class="form-group">
+            <label for="racers-description">Description</label>
+            <input type="text" class="form-control" name="description" placeholder="Description">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="racers-save">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="add-racer-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-racer-label" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-racer-label">Add Racer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add-racer-form" action="#">
+          <div class="form-group">
+            <label for="add-racer-name">Name</label>
+            <input type="text" class="form-control" name="vendor" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="add-racer-name">Den</label>
+            <input type="text" class="form-control" name="product" placeholder="Den">
+          </div>
+          <div class="form-group">
+            <label for="add-racer-description">Car #</label>
+            <input type="text" class="form-control" name="description" placeholder="Car #">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="add-racer-save">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+<video autoplay></video>
+<script>
+</script>
+
+
+
+
+const videoElement = document.querySelector('video');
+const audioSelect = document.querySelector('select#audioSource');
+const videoSelect = document.querySelector('select#videoSource');
+
+navigator.mediaDevices.enumerateDevices()
+  .then(gotDevices).then(getStream).catch(handleError);
+
+audioSelect.onchange = getStream;
+videoSelect.onchange = getStream;
+
+function gotDevices(deviceInfos) {
+  for (let i = 0; i !== deviceInfos.length; ++i) {
+    const deviceInfo = deviceInfos[i];
+    const option = document.createElement('option');
+    option.value = deviceInfo.deviceId;
+    if (deviceInfo.kind === 'audioinput') {
+      option.text = deviceInfo.label ||
+        'microphone ' + (audioSelect.length + 1);
+      audioSelect.appendChild(option);
+    } else if (deviceInfo.kind === 'videoinput') {
+      option.text = deviceInfo.label || 'camera ' +
+        (videoSelect.length + 1);
+      videoSelect.appendChild(option);
+    } else {
+      console.log('Found another kind of device: ', deviceInfo);
+    }
+  }
+}
+
+function getStream() {
+  if (window.stream) {
+    window.stream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+  }
+
+  const constraints = {
+    audio: {
+      deviceId: {exact: audioSelect.value}
+    },
+    video: {
+      deviceId: {exact: videoSelect.value}
+    }
+  };
+
+  navigator.mediaDevices.getUserMedia(constraints).
+    then(gotStream).catch(handleError);
+}
+
+function gotStream(stream) {
+  window.stream = stream; // make stream available to console
+  videoElement.srcObject = stream;
+}
+
+function handleError(error) {
+  console.error('Error: ', error);
+}
+-->

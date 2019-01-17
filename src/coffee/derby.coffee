@@ -1,5 +1,4 @@
 
-
 $        = require('jquery')
 _        = require('underscore')
 Backbone = require('backbone')
@@ -7,8 +6,11 @@ moment   = require('moment')
 
 require('bootstrap')
 
-derby = null
-Templates = {}
+racers = require('./racers.js')
+
+console.log racers
+
+window.Templates = {}
 
 $(document).ready () ->
     $('script[type="text/html-template"]').each () ->
@@ -24,7 +26,9 @@ $(document).ready () ->
 
 class Derby
     constructor: () ->
-        derby = @
+        window.derby = @
+
+        new racers.AddRacerModal
 
         @dispatch = _.clone(Backbone.Events)
         @dispatch.on 'connected', @OnConnected
@@ -56,22 +60,6 @@ Router = Backbone.Router.extend
 
     OnDefault: () ->
         return
-
-
-startVideo = () ->
-    constraints =
-      video:
-        width:
-          min: 1280
-        height:
-            min: 720
-
-    video = $('video')
-
-    navigator.mediaDevices.getUserMedia(constraints).then (stream) =>
-        video.srcObject = stream
-        return
-    return
 
 
 @$SVG = (name) -> $ document.createElementNS('http://www.w3.org/2000/svg', name)

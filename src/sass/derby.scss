@@ -17,3 +17,8 @@ body {
 .bg-derby {
     background: darken($cubBlue, 15%);
 }
+
+video {
+    width: 1024px;
+    max-width: 1024px;
+}

@@ -31,10 +31,21 @@ argparser.add_argument('--port',
     help='port to bind to'
     )
 
+argparser.add_argument('--serial',
+    metavar='<tty>', default='/dev/ttyUSB0',
+    help='serial port to open'
+    )
+
+argparser.add_argument('--baud',
+    metavar='<speed>', type=int, default=9600,
+    help='serial port speed'
+    )
+
 argparser.add_argument('--debug',
     action='store_true',
     help='enable debug options'
     )
+
 
 derby.args = argparser.parse_args()
 

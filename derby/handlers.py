@@ -13,6 +13,12 @@ class Template(tornado.web.RequestHandler):
         self.render(template)
 
 
+class Serial(tornado.web.RequestHandler):
+    def get(self):
+        self.write('yep')
+        self.application.input_queue.put(b'hello\n')
+
+
 class WebSocket(tornado.websocket.WebSocketHandler):
     def __init__(self, application, request, **kwargs):
         super(WebSocket, self).__init__(application, request, **kwargs)

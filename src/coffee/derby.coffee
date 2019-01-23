@@ -20,6 +20,16 @@ $(document).ready () ->
         Templates[name] = _.template(@text)
         return
 
+    $('#serial').on 'click', () ->
+        console.log 'hi'
+        $.ajax
+            method: 'GET'
+            url: '/serial'
+            success: () ->
+                console.log 'ok', arguments
+                return
+        return
+
     new Derby
 
     return
@@ -32,9 +42,10 @@ class Derby
 
         @dispatch = _.clone(Backbone.Events)
         @dispatch.on 'connected', @OnConnected
+        @dispatch.on 'serial',    @OnSerial
         @socket = new Socket
             onmessage: (msg) =>
-                #console.log 'WebSocket:', msg.action
+                console.log 'WebSocket:', msg.action
                 @dispatch.trigger(msg.action, msg)
                 return
 
@@ -43,6 +54,10 @@ class Derby
         console.log 'Connected'
         new Router
         Backbone.history.start() if not Backbone.History.started
+        return
+
+    OnSerial: (msg) ->
+        console.log '###', msg
         return
 
     resizer: () ->

@@ -16,5 +16,5 @@ class error(Exception):
 from . import settings
 from . import database
 from . import handlers
-
-from .application import Application
+from .serialworker import SerialWorker
+from .application  import Application

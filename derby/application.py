@@ -20,7 +20,6 @@ class Application(tornado.web.Application):
         self.input_queue  = multiprocessing.Queue()
         self.output_queue = multiprocessing.Queue()
 
-
         self.serialWorker = derby.SerialWorker(self.input_queue, self.output_queue)
         self.serialWorker.daemon = True
         self.serialWorker.start()

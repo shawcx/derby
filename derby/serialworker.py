@@ -22,16 +22,6 @@ class SerialWorker(multiprocessing.Process):
         except:
             raise derby.error('Unable to open serial port: %s', derby.args.serial)
 
-    def close(self):
-        self.serialPort.close()
-
-    def writeSerial(self, data):
-        self.serialPort.write(data)
-        # time.sleep(1)
-
-    def readSerial(self):
-        return self.serialPort.readline().decode('utf-8')
-
     def run(self):
         self.serialPort.flushInput()
 
@@ -42,10 +32,9 @@ class SerialWorker(multiprocessing.Process):
                 # look for incoming tornado request
                 if not self.input_queue.empty():
                     data = self.input_queue.get()
-
+                    logging.info("Writing to serial: %s", data)
                     # send it to the serial device
                     self.writeSerial(data)
-                    logging.info("Writing to serial: %s", data)
 
                 # look for incoming serial data
                 if self.serialPort.in_waiting > 0:
@@ -56,3 +45,13 @@ class SerialWorker(multiprocessing.Process):
 
         except KeyboardInterrupt:
             pass
+
+    def close(self):
+        self.serialPort.close()
+
+    def writeSerial(self, data):
+        self.serialPort.write(data)
+        # time.sleep(1)
+
+    def readSerial(self):
+        return self.serialPort.readline().decode('utf-8')

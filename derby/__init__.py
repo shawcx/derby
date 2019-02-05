@@ -13,9 +13,8 @@ class error(Exception):
     def __str__(self):
         return self.message
 
-from . import settings
-from . import database
 from . import handlers
+from .database     import Database
 from .trackstate   import TrackState
 from .serialworker import SerialWorker
 from .application  import Application

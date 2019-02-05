@@ -1,10 +1,15 @@
 
 import sys
 import os
+import argparse
+import collections
+import configparser
+import json
+import logging
 import multiprocessing
+import queue
 import signal
 import socket
-import logging
 
 import tornado.web
 import tornado.ioloop
@@ -13,12 +18,58 @@ import derby
 
 ioloop = tornado.ioloop.IOLoop.instance()
 
+# parse the command line arguments
+argparser = argparse.ArgumentParser()
+
+argparser.add_argument('--serial',
+    metavar='<tty>', default='/dev/ttyUSB0',
+    help='serial port to open'
+    )
+
+argparser.add_argument('--baud',
+    metavar='<speed>', type=int, default=9600,
+    help='serial port speed'
+    )
+
+argparser.add_argument('--db',
+    metavar='<sqlite db>', type=str, default='derby.sqlite',
+    help='Path to database'
+    )
+
+argparser.add_argument('--addr',
+    metavar='<ip>', default='0.0.0.0',
+    help='address to listen on'
+    )
+
+argparser.add_argument('--port',
+    metavar='<port>', type=int, default=8000,
+    help='port to bind to'
+    )
+
+argparser.add_argument('--debug',
+    action='store_true',
+    help='enable debug options'
+    )
+
+
+derby.args = argparser.parse_args()
+
+# Setting default stdout logging
+logging.basicConfig(
+    format  = '%(asctime)s %(levelname)-8s %(message)s',
+    datefmt = '%Y-%m-%d %H:%M:%S',
+    level   = logging.DEBUG if derby.args.debug else logging.INFO
+    )
+
 
 class Application(tornado.web.Application):
     def __init__(self, section='server'):
         derby.app = self
 
         self.websockets = {}
+
+        ricochet.db = derby.Database(derby.args.db)
+
         # pipes for the serial reader process
         self.trackPipe,remotePipe = multiprocessing.Pipe()
         # start the serial reader process
@@ -29,7 +80,7 @@ class Application(tornado.web.Application):
         self.trackState = derby.TrackState(self.trackPipe)
 
         # periodically check the serial pipe for data
-        self.scheduler = tornado.ioloop.PeriodicCallback(self.trackState.checkQueue, 500)
+        self.scheduler = tornado.ioloop.PeriodicCallback(self.trackState.checkQueue, 50)
         self.scheduler.start()
 
         patterns = [

@@ -12,7 +12,7 @@ class Database:
     def __init__(self, path):
         schema = None
         if not os.path.isfile(path):
-            schemaPath = os.path.join(derby.root, 'files', 'database.sql')
+            schemaPath = os.path.join(derby.root, 'database.sql')
             schema = open(schemaPath, 'r').read()
 
         # make sure the database is locked since we are crossing threads

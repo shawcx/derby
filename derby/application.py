@@ -94,7 +94,8 @@ class Application(tornado.web.Application):
         self.settings = dict(
             static_path   = os.path.join(derby.root, 'static'),
             template_path = os.path.join(derby.root, 'templates'),
-            #debug         = derby.args.debug
+            debug         = derby.args.debug,
+            autoreload    = False,
             )
 
         super(Application, self).__init__(patterns, **self.settings)

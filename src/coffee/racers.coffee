@@ -27,33 +27,41 @@ class AddRacerModal extends Backbone.View
         return
 
     OnClickVideo: () ->
-        #constraints =
-        #  video:
-        #    width:
-        #      min: 1280
-        #    height:
-        #        min: 720
+        constraints =
+          video:
+            width:
+              min: 320
+            height:
+                min: 240
 
         video = document.querySelector('video');
 
+        DIMENSIONS = 240
+
         canvas = document.createElement('canvas');
-        canvas.width  = video.videoWidth;
-        canvas.height = video.videoHeight;
+        canvas.width  = DIMENSIONS
+        canvas.height = DIMENSIONS
+
+        offset = (video.videoWidth - video.videoHeight)
 
         #navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError)
-        canvas.getContext('2d').drawImage(video, 0, 0);
+        canvas.getContext('2d').drawImage(
+            video,
+            offset, 0,
+            video.videoHeight, video.videoHeight,
+            0, 0,
+            DIMENSIONS, DIMENSIONS
+            );
 
-        $('#yep').attr('src', canvas.toDataURL('image/png'))
+        $('#avatarImg').attr('src', canvas.toDataURL('image/png')).css('display','block')
+        $('#avatarVid').hide()
 
-        handleSuccess = (stream) ->
-            #screenshotButton.disabled = false
-            video.srcObject = stream
-            return
+        #handleSuccess = (stream) ->
+        #    #screenshotButton.disabled = false
+        #    video.srcObject = stream
+        #    return
 
         return
-
-
-
 
 
 module.exports.AddRacerModal = AddRacerModal

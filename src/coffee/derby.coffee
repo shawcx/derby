@@ -37,9 +37,10 @@ class Derby
         new racers.AddRacerModal
 
         @dispatch = _.clone(Backbone.Events)
-        @dispatch.on 'connected',  @OnConnected
-        @dispatch.on 'serial',     @OnSerial
-        @dispatch.on 'trackState', @OnTrackState
+        @dispatch.on 'connected',   @OnConnected
+        @dispatch.on 'trackState',  @OnTrackState
+        @dispatch.on 'raceResults', @OnRaceResults
+        @dispatch.on 'serial',      @OnSerial
         @socket = new Socket
             onmessage: (bundle) =>
                 console.log 'WS:', bundle.action, bundle.message
@@ -48,12 +49,19 @@ class Derby
 
     # called after the websocket is successfully connected
     OnConnected: (message) ->
+        console.log message
+        derby.wsid = message
         new Router
         Backbone.history.start() if not Backbone.History.started
         return
 
     OnTrackState: (message) ->
         console.log 'Gate closed is', message.gateClosed
+        return
+
+    OnRaceResults: (message) ->
+        console.log 'RESULTS:', message.A, message.B
+        return
 
     OnSerial: (message) ->
         console.log '###', message

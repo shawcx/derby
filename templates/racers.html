@@ -42,7 +42,10 @@
         </button>
       </div>
       <div class="modal-body">
-        <video autoplay></video>
+        <div id="avatarVid">
+          <video autoplay></video>
+        </div>
+        <img id="avatarImg" />
         <form id="add-racer-form" action="#">
           <div class="form-group">
             <label for="add-racer-name">Name</label>
@@ -57,7 +60,6 @@
             <input type="text" class="form-control" name="description" placeholder="Car #">
           </div>
         </form>
-        <img id="yep" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>

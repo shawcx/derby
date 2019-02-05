@@ -68,7 +68,7 @@ class Application(tornado.web.Application):
 
         self.websockets = {}
 
-        ricochet.db = derby.Database(derby.args.db)
+        self.db = derby.Database(derby.args.db)
 
         # pipes for the serial reader process
         self.trackPipe,remotePipe = multiprocessing.Pipe()
@@ -80,7 +80,7 @@ class Application(tornado.web.Application):
         self.trackState = derby.TrackState(self.trackPipe)
 
         # periodically check the serial pipe for data
-        self.scheduler = tornado.ioloop.PeriodicCallback(self.trackState.checkQueue, 50)
+        self.scheduler = tornado.ioloop.PeriodicCallback(self.trackState.readSerialPort, 50)
         self.scheduler.start()
 
         patterns = [
@@ -94,7 +94,7 @@ class Application(tornado.web.Application):
         self.settings = dict(
             static_path   = os.path.join(derby.root, 'static'),
             template_path = os.path.join(derby.root, 'templates'),
-            debug         = derby.args.debug
+            #debug         = derby.args.debug
             )
 
         super(Application, self).__init__(patterns, **self.settings)
@@ -112,10 +112,14 @@ class Application(tornado.web.Application):
         ioloop.start()
         logging.info('Exiting')
 
-    def Broadcast(self, msg):
+    def Broadcast(self, action, message):
         'Broadcast a message to all connected sockets'
-        for client in self.websockets:
-            client.write_message(msg)
+        bundle = {
+            'action'  : action,
+            'message' : message,
+            }
+        for websocket in self.websockets.values():
+            websocket.write_message(bundle)
 
     def Stop(self):
         self.scheduler.stop()
@@ -127,12 +131,3 @@ class Application(tornado.web.Application):
         print()
         logging.info('Terminating')
         self.Stop()
-
-    #if not self.fromTrackQueue.empty():
-    #    message = {
-    #        'action'  : 'serial',
-    #        'message' : self.fromTrackQueue.get(),
-    #        }
-    #    #print('>>>', message)
-    #    for client in self.websockets.values():
-    #        client.write_message(message)

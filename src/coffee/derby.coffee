@@ -6,11 +6,9 @@ moment   = require('moment')
 
 require('bootstrap')
 
-racers = require('./racers.js')
-
-console.log racers
-
 window.Templates = {}
+
+racers = require('./racers.js')
 
 $(document).ready () ->
     $('script[type="text/html-template"]').each () ->
@@ -21,17 +19,15 @@ $(document).ready () ->
         return
 
     $('#serial').on 'click', () ->
-        console.log 'hi'
         $.ajax
             method: 'GET'
             url: '/serial'
-            success: () ->
-                console.log 'ok', arguments
+            success: (data) ->
+                console.log 'ok', data
                 return
         return
 
     new Derby
-
     return
 
 class Derby
@@ -41,23 +37,26 @@ class Derby
         new racers.AddRacerModal
 
         @dispatch = _.clone(Backbone.Events)
-        @dispatch.on 'connected', @OnConnected
-        @dispatch.on 'serial',    @OnSerial
+        @dispatch.on 'connected',  @OnConnected
+        @dispatch.on 'serial',     @OnSerial
+        @dispatch.on 'trackState', @OnTrackState
         @socket = new Socket
-            onmessage: (msg) =>
-                console.log 'WebSocket:', msg.action
-                @dispatch.trigger(msg.action, msg)
+            onmessage: (bundle) =>
+                console.log 'WS:', bundle.action, bundle.message
+                @dispatch.trigger(bundle.action, bundle.message)
                 return
 
     # called after the websocket is successfully connected
-    OnConnected: (msg) ->
-        console.log 'Connected'
+    OnConnected: (message) ->
         new Router
         Backbone.history.start() if not Backbone.History.started
         return
 
-    OnSerial: (msg) ->
-        console.log '###', msg
+    OnTrackState: (message) ->
+        console.log 'Gate closed is', message.gateClosed
+
+    OnSerial: (message) ->
+        console.log '###', message
         return
 
     resizer: () ->

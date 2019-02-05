@@ -22,12 +22,11 @@ class SerialWorker(multiprocessing.Process):
         self.pipe = pipe
         try:
             self.serialPort = serial.Serial(derby.args.serial, derby.args.baud)#, timeout=1)
+            self.serialPort.flushInput()
         except:
             raise derby.error('Unable to open serial port: %s', derby.args.serial)
 
     def run(self):
-        self.serialPort.flushInput()
-
         fds = [self.serialPort,self.pipe]
         while True:
             ready = select.select(fds,[],[], 0.2)[0]

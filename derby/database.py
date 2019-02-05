@@ -10,10 +10,15 @@ import derby
 
 class Database:
     def __init__(self, path):
+        self.connection = None
+
         schema = None
         if not os.path.isfile(path):
-            schemaPath = os.path.join(derby.root, 'database.sql')
-            schema = open(schemaPath, 'r').read()
+            schemaPath = os.path.join(derby.root, 'derby', 'database.sql')
+            try:
+                schema = open(schemaPath, 'r').read()
+            except:
+                raise derby.error('Could not open schema: %s', schemaPath) from None
 
         # make sure the database is locked since we are crossing threads
         self.sema = threading.Semaphore()
@@ -21,7 +26,7 @@ class Database:
         try:
             self.connection = sqlite3.connect(path, check_same_thread=False)
         except sqlite3.OperationalError:
-            raise derby.error('Unable to open database: %s', path)
+            raise derby.error('Unable to open database: %s', path) from None
 
         self.connection.text_factory = str
         self.connection.row_factory  = sqlite3.Row

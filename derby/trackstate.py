@@ -9,7 +9,7 @@ class TrackState:
         self.pipe = pipe
         self._input = ''
         self.state = {
-            'gateClosed' : False,
+            'gateClosed' : None,
         }
         # ensure the new time format is used
         self.pipe.send(b'N2')
@@ -53,6 +53,11 @@ class TrackState:
                 self.set('gateClosed', True)
                 self._input = self._input[3:]
                 continue
+            if self._input.startswith('N2'):
+                logging.debug('Timing Mode Set')
+                self.set('timingSet', True)
+                self._input = self._input[2:]
+                continue
             if self._input.startswith('\r'): # carriage return
                 self._input = self._input[1:]
                 continue
@@ -62,7 +67,7 @@ class TrackState:
             if self._input.startswith('A='):
                 # did not receive all the results yet
                 if len(self._input) < 60:
-                    print('not complete')
+                    logging.debug('Waiting for results')
                     break
                 logging.debug('Results: %s', self._input[:60])
                 self.parseResults(self._input[:60])

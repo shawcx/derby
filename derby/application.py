@@ -51,7 +51,6 @@ argparser.add_argument('--debug',
     help='enable debug options'
     )
 
-
 derby.args = argparser.parse_args()
 
 # Setting default stdout logging
@@ -61,23 +60,23 @@ logging.basicConfig(
     level   = logging.DEBUG if derby.args.debug else logging.INFO
     )
 
+# pipes for the serial reader process
+localPipe,remotePipe = multiprocessing.Pipe()
+
+# start the serial reader process
+serialWorker = derby.SerialWorker(remotePipe)
+serialWorker.start()
+
+derby.db = derby.Database(derby.args.db)
 
 class Application(tornado.web.Application):
-    def __init__(self, section='server'):
+    def __init__(self):
         derby.app = self
 
         self.websockets = {}
 
-        self.db = derby.Database(derby.args.db)
-
-        # pipes for the serial reader process
-        self.trackPipe,remotePipe = multiprocessing.Pipe()
-        # start the serial reader process
-        self.serialWorker = derby.SerialWorker(remotePipe)
-        self.serialWorker.start()
-
         # class to manage the state of the track
-        self.trackState = derby.TrackState(self.trackPipe)
+        self.trackState = derby.TrackState(localPipe)
 
         # periodically check the serial pipe for data
         self.scheduler = tornado.ioloop.PeriodicCallback(self.trackState.readSerialPort, 50)
@@ -96,6 +95,7 @@ class Application(tornado.web.Application):
             template_path = os.path.join(derby.root, 'templates'),
             debug         = derby.args.debug,
             autoreload    = False,
+            pipe        = localPipe
             )
 
         super(Application, self).__init__(patterns, **self.settings)
@@ -125,8 +125,8 @@ class Application(tornado.web.Application):
     def Stop(self):
         self.scheduler.stop()
         ioloop.add_callback(ioloop.stop)
-        self.trackPipe.send(None)
-        self.serialWorker.join()
+        localPipe.send(None)
+        serialWorker.join()
 
     def SignalHandler(self, signum, frame):
         print()

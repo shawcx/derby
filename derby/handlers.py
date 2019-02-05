@@ -16,7 +16,7 @@ class Template(tornado.web.RequestHandler):
 class Serial(tornado.web.RequestHandler):
     def get(self):
         self.write('yep')
-        self.application.trackPipe.send(b'LN')
+        self.settings['pipe'].send(b'LN')
 
 
 class WebSocket(tornado.websocket.WebSocketHandler):
@@ -30,7 +30,7 @@ class WebSocket(tornado.websocket.WebSocketHandler):
     def open(self):
         self.set_nodelay(True)
         self.application.websockets[self.wsid] = self
-        self.write_message(dict(action='connected', wsid=self.wsid))
+        self.write_message(dict(action='connected', message=self.wsid))
 
     def on_message(self, msg):
         if msg == 'ping':

@@ -43,12 +43,4 @@ class SerialWorker(multiprocessing.Process):
                     break
                 self.serialPort.write(data)
 
-    def close(self):
         self.serialPort.close()
-
-    def writeSerial(self, data):
-        self.serialPort.write(data)
-        # time.sleep(1)
-
-    def readSerial(self):
-        return self.serialPort.readline().decode('utf-8')

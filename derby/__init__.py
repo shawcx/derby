@@ -16,5 +16,6 @@ class error(Exception):
 from . import settings
 from . import database
 from . import handlers
+from .trackstate   import TrackState
 from .serialworker import SerialWorker
 from .application  import Application

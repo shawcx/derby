@@ -16,7 +16,7 @@ class Template(tornado.web.RequestHandler):
 class Serial(tornado.web.RequestHandler):
     def get(self):
         self.write('yep')
-        self.application.input_queue.put(b'hello\n')
+        self.application.trackPipe.send(b'LN')
 
 
 class WebSocket(tornado.websocket.WebSocketHandler):

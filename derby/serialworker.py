@@ -3,6 +3,7 @@ import sys
 import os
 import multiprocessing
 import select
+import signal
 import time
 import logging
 
@@ -12,39 +13,36 @@ import derby
 
 
 class SerialWorker(multiprocessing.Process):
-    def __init__(self, input_queue, output_queue):
+    def __init__(self, pipe):
         multiprocessing.Process.__init__(self)
-        self.shouldStop   = False
-        self.input_queue  = input_queue
-        self.output_queue = output_queue
+
+        # parent process will signal when this process should exit
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+
+        self.pipe = pipe
         try:
-            self.serialPort   = serial.Serial(derby.args.serial, derby.args.baud, timeout=1)
+            self.serialPort = serial.Serial(derby.args.serial, derby.args.baud)#, timeout=1)
         except:
             raise derby.error('Unable to open serial port: %s', derby.args.serial)
 
     def run(self):
         self.serialPort.flushInput()
 
-        try:
-            while not self.shouldStop:
-                time.sleep(0.1)
-                #print('.')
-                # look for incoming tornado request
-                if not self.input_queue.empty():
-                    data = self.input_queue.get()
-                    logging.info("Writing to serial: %s", data)
-                    # send it to the serial device
-                    self.writeSerial(data)
+        fds = [self.serialPort,self.pipe]
+        while True:
+            ready = select.select(fds,[],[], 0.2)[0]
+            if not ready:
+                continue
 
-                # look for incoming serial data
-                if self.serialPort.in_waiting > 0:
-                    data = self.readSerial()
-                    logging.info("Reading from serial: %s", data)
-                    # send it back to tornado
-                    self.output_queue.put(data)
-
-        except KeyboardInterrupt:
-            pass
+            fd = ready[0]
+            if fd == self.serialPort:
+                data = fd.read(self.serialPort.in_waiting)
+                self.pipe.send(data)
+            elif fd == self.pipe:
+                data = fd.recv()
+                if data == None:
+                    break
+                self.serialPort.write(data)
 
     def close(self):
         self.serialPort.close()

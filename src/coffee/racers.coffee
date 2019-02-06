@@ -19,33 +19,28 @@ class RacersModal extends Backbone.View
     el: () -> $('#racers-modal')
 
     initialize: (options) ->
-        @$a = @$('.modal-body')
-
+        # reference to the body of the racers modal
+        @$body = @$('#racers-body')
+        # bind to the racers collection
         @listenTo @collection, 'reset', (racers) =>
             racers.forEach (racer, idx) =>
                 @Add(racer)
-                #console.log idx, JSON.stringify racer.toJSON()
                 return
             return
-
         @listenTo @collection, 'add', (racer) =>
             @Add(racer)
-            #console.log ':::', racer.toJSON()
-            #console.log 'device session:', session.toJSON()
-            #v = new Views.Session
-            #    model: session
-            #v.deviceView = @
-            #@$('.device-sessions').prepend v.$el
-            #@$('.session-count').text @model.sessions.length
             return
 
         return @
 
     Add: (racer) ->
+        # update the count in the bottom navbar
+        $('#racers-count').text(@collection.length)
+        # create a new racer row
         racerRow = new RacerRow
             model: racer
-        console.log '...'
-        @$a.append racerRow.$el
+        # and append it to the modal body
+        @$body.append racerRow.$el
         return
 
 module.exports.RacersModal = RacersModal
@@ -83,10 +78,12 @@ class AddRacerModal extends Backbone.View
     el: () -> $('#add-racer-modal')
 
     events:
-        'show.bs.modal'         : 'OnShowModal'
-        'submit form'           : 'OnRacerSave'
-        'click #avatarVid'      : 'OnClickVideo'
-        'click #avatarImg'      : 'OnClickImage'
+        'show.bs.modal'          : 'OnShowModal'
+        'submit form'            : 'OnRacerSave'
+        'click #add-racer-reset' : 'reset'
+        'click #avatarVid'       : 'OnClickVideo'
+        'click #avatarVid'       : 'OnClickVideo'
+        'click #avatarImg'       : 'OnClickImage'
 
     initialize: (options) ->
         @reset()
@@ -100,6 +97,7 @@ class AddRacerModal extends Backbone.View
 
         $('#avatarImg').hide()
         $('#avatarVid').show()
+        $('#add-racer-save').prop('disabled', true)
 
         return
 
@@ -116,7 +114,8 @@ class AddRacerModal extends Backbone.View
 
     OnRacerSave: (evt) ->
         if not @racer.has('avatar')
-            console.log 'no avatar...'
+            alert('No picture was taken')
+            return cancelEvent(evt)
         @racer.save {
                 name: $('#add-racer-name').val()
                 den:  $('#add-racer-den').val()
@@ -155,13 +154,15 @@ class AddRacerModal extends Backbone.View
 
         avatar = canvas.toDataURL('image/jpeg', 0.9)
         @racer.set('avatar', avatar)
-        $('#avatarImg').attr('src', avatar).show()
         $('#avatarVid').hide()
+        $('#avatarImg').attr('src', avatar).show()
+        $('#add-racer-save').prop('disabled', false)
         return
 
     OnClickImage: () ->
         $('#avatarImg').hide()
         $('#avatarVid').show()
+        $('#add-racer-save').prop('disabled', true)
         @racer.unset('avatar')
 
 module.exports.AddRacerModal = AddRacerModal

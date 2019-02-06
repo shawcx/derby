@@ -83,7 +83,7 @@ class Application(tornado.web.Application):
         self.scheduler.start()
 
         patterns = [
-            ( r'/data/racers/', derby.handlers.Racers ),
+            ( r'/data/racers/([0-9]*)', derby.handlers.Racers ),
             ( r'/serial',   derby.handlers.Serial    ),
             #( r'/(config)', derby.handlers.Template  ),
             ( r'/ws',       derby.handlers.WebSocket ),
@@ -96,7 +96,7 @@ class Application(tornado.web.Application):
             template_path = os.path.join(derby.root, 'templates'),
             debug         = derby.args.debug,
             autoreload    = False,
-            pipe        = localPipe
+            pipe          = localPipe,
             )
 
         super(Application, self).__init__(patterns, **self.settings)

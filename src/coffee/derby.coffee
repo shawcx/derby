@@ -36,6 +36,9 @@ class Derby
 
         @racers = new Racers.Collection
 
+        new Racers.RacersModal
+            collection: @racers
+
         new Racers.AddRacerModal
             collection: @racers
 
@@ -44,11 +47,19 @@ class Derby
         @dispatch.on 'trackState',  @OnTrackState
         @dispatch.on 'raceResults', @OnRaceResults
         @dispatch.on 'serial',      @OnSerial
-        @socket = new Socket
-            onmessage: (bundle) =>
-                #console.log 'WS:', bundle.action, bundle.message
-                @dispatch.trigger(bundle.action, bundle.message)
-                return
+
+        promises = []
+        promises.push @racers.fetch  reset:true
+
+        Promise.all(promises).then () =>
+            @socket = new Socket
+                onmessage: (bundle) =>
+                    #console.log 'WS:', bundle.action, bundle.message
+                    @dispatch.trigger(bundle.action, bundle.message)
+                    return
+            return
+
+        return
 
     # called after the websocket is successfully connected
     OnConnected: (message) ->
@@ -89,6 +100,7 @@ Router = Backbone.Router.extend
 
 
 @$SVG = (name) -> $ document.createElementNS('http://www.w3.org/2000/svg', name)
+
 
 window.cancelEvent = (e) ->
     e.preventDefault()

@@ -22,7 +22,7 @@ body {
 }
 
 .modal-header,.modal-footer {
-    background: lighten($cubBlue, 20%);
+    background: lighten($cubBlue, 25%);
 }
 
 .modal-body {
@@ -59,4 +59,24 @@ body {
     left:50%;
     margin-left:-120px;
     margin-bottom: 10px;
+}
+
+img.avatar {
+    border-radius: 50%;
+}
+
+div.racerRow {
+    padding: 0.5em 0em;
+    .imgframe {
+        margin-right: 2em;
+
+        img {
+            //border: 3px solid $cubBlue; //lighten($cubBlue, 15%);
+            box-shadow: 3px 3px 6px #333;
+        }
+    }
+}
+
+div.racerRow:not(:first-child) {
+    border-top: 1px solid lighten($cubBlue, 25%);
 }

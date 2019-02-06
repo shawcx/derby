@@ -9,9 +9,74 @@ class RacerModel extends Backbone.Model
 
 class RacerCollection extends Backbone.Collection
     model: RacerModel
+    url: RacerModel.prototype.urlRoot
 
 module.exports.Model      = RacerModel
 module.exports.Collection = RacerCollection
+
+
+class RacersModal extends Backbone.View
+    el: () -> $('#racers-modal')
+
+    initialize: (options) ->
+        @$a = @$('.modal-body')
+
+        @listenTo @collection, 'reset', (racers) =>
+            racers.forEach (racer, idx) =>
+                @Add(racer)
+                #console.log idx, JSON.stringify racer.toJSON()
+                return
+            return
+
+        @listenTo @collection, 'add', (racer) =>
+            @Add(racer)
+            #console.log ':::', racer.toJSON()
+            #console.log 'device session:', session.toJSON()
+            #v = new Views.Session
+            #    model: session
+            #v.deviceView = @
+            #@$('.device-sessions').prepend v.$el
+            #@$('.session-count').text @model.sessions.length
+            return
+
+        return @
+
+    Add: (racer) ->
+        racerRow = new RacerRow
+            model: racer
+        console.log '...'
+        @$a.append racerRow.$el
+        return
+
+module.exports.RacersModal = RacersModal
+
+
+class RacerRow extends Backbone.View
+    className: 'racerRow'
+
+    #events:
+    #    'click'  : 'OnClick'
+
+    initialize: () ->
+        _.bindAll @, 'render'
+        @render()
+        @listenTo @model, 'change', @render
+        @listenTo @model, 'remove', () =>
+            @remove()
+            return
+        return @
+
+    render: () ->
+        model = @model.toJSON()
+        #model.created = (new Date(model.created * 1000)).shortdate()
+        @$el.html Templates['racer-row'] model
+        return @
+
+    #OnClick: () ->
+    #    $radio = @$('input[name="persona"]')
+    #    value = $radio.prop('checked')
+    #    $radio.prop('checked', not value)
+    #    return
 
 
 class AddRacerModal extends Backbone.View
@@ -19,22 +84,23 @@ class AddRacerModal extends Backbone.View
 
     events:
         'show.bs.modal'         : 'OnShowModal'
-        #'click #add-racer-save' : 'OnRacerSave'
         'submit form'           : 'OnRacerSave'
         'click #avatarVid'      : 'OnClickVideo'
         'click #avatarImg'      : 'OnClickImage'
 
     initialize: (options) ->
         @reset()
-        console.log 'O:', options
-        console.log 'C:', @collection
         return @
 
     reset: () ->
         @racer = new RacerModel
         $('#add-racer-name').val('')
-        #$('#add-racer-den').val('')
+        $('#add-racer-den').val(null)
         $('#add-racer-car').val('')
+
+        $('#avatarImg').hide()
+        $('#avatarVid').show()
+
         return
 
     OnShowModal: () ->
@@ -58,8 +124,6 @@ class AddRacerModal extends Backbone.View
             },{
                 wait: true,
                 success: () =>
-                    console.log 'ZZZ:', @racer
-                    console.log 'ZZZ:', @collection
                     @collection.add @racer
                     @reset()
                     return
@@ -99,6 +163,5 @@ class AddRacerModal extends Backbone.View
         $('#avatarImg').hide()
         $('#avatarVid').show()
         @racer.unset('avatar')
-
 
 module.exports.AddRacerModal = AddRacerModal

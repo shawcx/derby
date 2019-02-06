@@ -23,7 +23,14 @@ class Serial(tornado.web.RequestHandler):
 
 
 class Racers(tornado.web.RequestHandler):
-    def post(self):
+    def get(self, racer_id=None):
+        if racer_id:
+            pass
+        else:
+            racers = derby.db.find('racers')
+            self.write(json.dumps(racers))
+
+    def post(self, racer_id=None):
         try:
             data = json.loads(self.request.body)
         except:
@@ -31,6 +38,7 @@ class Racers(tornado.web.RequestHandler):
 
         derby.db.insert('racers', data, 'racer_id')
         self.write(data)
+
 
 class WebSocket(tornado.websocket.WebSocketHandler):
     def __init__(self, application, request, **kwargs):

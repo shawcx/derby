@@ -83,8 +83,9 @@ class Application(tornado.web.Application):
         self.scheduler.start()
 
         patterns = [
+            ( r'/data/racers/', derby.handlers.Racers ),
             ( r'/serial',   derby.handlers.Serial    ),
-            ( r'/(config)', derby.handlers.Template  ),
+            #( r'/(config)', derby.handlers.Template  ),
             ( r'/ws',       derby.handlers.WebSocket ),
             ( r'/',         derby.handlers.Template  ),
             ]

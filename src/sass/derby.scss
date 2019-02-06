@@ -1,5 +1,5 @@
 
-$cubBlue: #248;
+$cubBlue: #369;
 
 @import 'bootstrap';
 
@@ -13,28 +13,50 @@ body {
     background: $cubBlue;
 }
 
-
 .bg-derby {
     background: darken($cubBlue, 15%);
 }
 
+.modal-content {
+    background: transparent;
+}
+
+.modal-header,.modal-footer {
+    background: lighten($cubBlue, 20%);
+}
+
+.modal-body {
+    background: #e9ecef;
+}
+
 #avatarVid {
+    position: relative;
+
     width:  240px;
     height: 240px;
-    border-radius: 120px;
+    border-radius: 50%;
     -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+
+    display: inline-block;
+    left:50%;
+    margin-left:-120px;
+    margin-bottom: 10px;
+
     video {
-        width: 320px;
-        max-width: 320px;
-        transform: rotateY(180deg);
-        -webkit-transform:rotateY(180deg);
-        -moz-transform:rotateY(180deg);
+        max-height: 240px;
+                transform: rotateY(180deg);
+           -moz-transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
     }
 }
 
-
-
 #avatarImg {
+    position: relative;
+
     display: none;
-    border-radius: 120px;
+    border-radius: 50%;
+
+    left:50%;
+    margin-left:-120px;
+    margin-bottom: 10px;
 }

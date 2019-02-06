@@ -7,6 +7,9 @@ import uuid
 import tornado.web
 import tornado.websocket
 
+import derby
+
+
 class Template(tornado.web.RequestHandler):
     def get(self, template=None):
         template = template+'.html' if template else 'index.html'
@@ -18,6 +21,16 @@ class Serial(tornado.web.RequestHandler):
         self.write('yep')
         self.settings['pipe'].send(b'LN')
 
+
+class Racers(tornado.web.RequestHandler):
+    def post(self):
+        try:
+            data = json.loads(self.request.body)
+        except:
+            raise tornado.web.HTTPError(500)
+
+        derby.db.insert('racers', data, 'racer_id')
+        self.write(data)
 
 class WebSocket(tornado.websocket.WebSocketHandler):
     def __init__(self, application, request, **kwargs):

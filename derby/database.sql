@@ -13,6 +13,7 @@ CREATE TABLE settings (
 CREATE TABLE racers (
     "name"            TEXT    NOT NULL UNIQUE,
     "den"             TEXT    NOT NULL,
+    "car"             TEXT    NOT NULL,
     "avatar"          BLOB,   -- JPEG of racer or avatar
     "racer_id"        INTEGER PRIMARY KEY
     );

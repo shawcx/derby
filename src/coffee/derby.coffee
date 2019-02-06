@@ -8,7 +8,7 @@ require('bootstrap')
 
 window.Templates = {}
 
-racers = require('./racers.js')
+Racers = require('./racers.js')
 
 $(document).ready () ->
     $('script[type="text/html-template"]').each () ->
@@ -18,7 +18,7 @@ $(document).ready () ->
         Templates[name] = _.template(@text)
         return
 
-    $('#serial').on 'click', () ->
+    $('#gateRelease').on 'click', () ->
         $.ajax
             method: 'GET'
             url: '/serial'
@@ -34,7 +34,10 @@ class Derby
     constructor: () ->
         window.derby = @
 
-        new racers.AddRacerModal
+        @racers = new Racers.Collection
+
+        new Racers.AddRacerModal
+            collection: @racers
 
         @dispatch = _.clone(Backbone.Events)
         @dispatch.on 'connected',   @OnConnected
@@ -43,7 +46,7 @@ class Derby
         @dispatch.on 'serial',      @OnSerial
         @socket = new Socket
             onmessage: (bundle) =>
-                console.log 'WS:', bundle.action, bundle.message
+                #console.log 'WS:', bundle.action, bundle.message
                 @dispatch.trigger(bundle.action, bundle.message)
                 return
 
@@ -56,6 +59,7 @@ class Derby
         return
 
     OnTrackState: (message) ->
+        $('#gateRelease').prop('disabled', !message.gateClosed)
         console.log 'Gate closed is', message.gateClosed
         return
 
@@ -86,7 +90,7 @@ Router = Backbone.Router.extend
 
 @$SVG = (name) -> $ document.createElementNS('http://www.w3.org/2000/svg', name)
 
-@cancelEvent = (e) ->
+window.cancelEvent = (e) ->
     e.preventDefault()
     e.stopPropagation()
     return false

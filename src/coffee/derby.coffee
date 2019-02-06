@@ -71,6 +71,7 @@ class Derby
 
     # called after the websocket is successfully connected
     OnConnected: (message) ->
+        $('#gateRelease').prop('disabled', !message.gateClosed)
         new Router
         Backbone.history.start() if not Backbone.History.started
         #$('#heat-modal').modal()
@@ -82,7 +83,6 @@ class Derby
         return
 
     OnRaceResults: (message) ->
-        console.log 'RESULTS:', message.A, message.B
         console.log @
         derby.heatModal.results(message.A, message.B)
         #@heatModal.results(message.A, message.B)

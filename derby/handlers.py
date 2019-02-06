@@ -59,7 +59,8 @@ class WebSocket(tornado.websocket.WebSocketHandler):
     def open(self):
         self.set_nodelay(True)
         self.application.websockets[self.wsid] = self
-        self.write_message(dict(action='connected', message=self.wsid))
+        state = self.application.trackState.state
+        self.write_message(dict(action='connected', message=state))
 
     def on_message(self, msg):
         if msg == 'ping':

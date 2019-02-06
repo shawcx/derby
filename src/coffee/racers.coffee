@@ -4,7 +4,7 @@ _        = require('underscore')
 Backbone = require('backbone')
 
 class RacerModel extends Backbone.Model
-    urlRoot: '/data/racers/'
+    urlRoot: '/racers/'
     idAttribute: 'racer_id'
 
 class RacerCollection extends Backbone.Collection

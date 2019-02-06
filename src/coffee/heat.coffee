@@ -23,9 +23,19 @@ class HeatModal extends Backbone.View
         return @
 
     results: (timeA, timeB) ->
-        console.log 'results', timeA, timeB
         @selectA.result(timeA)
         @selectB.result(timeB)
+
+        if timeA > timeB
+            console.log 'A is the winner'
+        else if timeB > timeA
+            console.log 'B is the winner'
+        else if timeA == timeB
+            console.log 'it is a tie!'
+        else
+            console.error 'unreachable state', timeA, timeB
+            return
+
         return
 
 module.exports.HeatModal = HeatModal
@@ -70,5 +80,5 @@ class RaceSelect extends Backbone.View
         return
 
     result: (time) ->
-        @$('.time').text time
+        @$('.time').text time.toFixed(4)
         return

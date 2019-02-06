@@ -22,22 +22,20 @@ class RacersModal extends Backbone.View
         # reference to the body of the racers modal
         @$body = @$('#racers-body')
         # bind to the racers collection
+        #@listenTo @collection, 'add', (racer) =>
+        #    @Add(racer)
+        #    return
+        @listenTo @collection, 'add', @Add, @
+        @listenTo @collection, 'reset', (racers) =>
+            racers.forEach @Add, @
+            return
         @listenTo @collection, 'remove', (racers) =>
             $('#racers-count').text(@collection.length)
-            return
-
-        @listenTo @collection, 'reset', (racers) =>
-            racers.forEach (racer, idx) =>
-                @Add(racer)
-                return
-            return
-        @listenTo @collection, 'add', (racer) =>
-            @Add(racer)
             return
         return @
 
     Add: (racer) ->
-        # update the count in the bottom navbar
+        # update the count in the navbar
         $('#racers-count').text(@collection.length)
         # create a new racer row
         racerRow = new RacerRow

@@ -8,7 +8,9 @@ require('bootstrap')
 
 window.Templates = {}
 
-Racers = require('./racers.js')
+Racers  = require('./racers.js')
+Heat    = require('./heat.js')
+Results = require('./results.js')
 
 $(document).ready () ->
     $('script[type="text/html-template"]').each () ->
@@ -36,10 +38,16 @@ class Derby
 
         @racers = new Racers.Collection
 
+        new Racers.AddRacerModal
+            collection: @racers
+
         new Racers.RacersModal
             collection: @racers
 
-        new Racers.AddRacerModal
+        new Heat.HeatModal
+            collection: @racers
+
+        new Results.ResultsTable
             collection: @racers
 
         @dispatch = _.clone(Backbone.Events)
@@ -63,10 +71,12 @@ class Derby
 
     # called after the websocket is successfully connected
     OnConnected: (message) ->
-        console.log message
-        derby.wsid = message
+        #derby.wsid = message
         new Router
         Backbone.history.start() if not Backbone.History.started
+
+        $('#heat-modal').modal()
+
         return
 
     OnTrackState: (message) ->

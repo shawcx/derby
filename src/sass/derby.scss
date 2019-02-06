@@ -42,15 +42,15 @@ body {
     border-radius: 50%;
     -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
 
-    display: inline-block;
+    display: block;
     left:50%;
     margin-left:-120px;
     margin-bottom: 10px;
 
-    i {
+    img {
         position: absolute;
-        top: 64px;
-        left: 71px;
+        top:  0px;
+        left: 0px;
     }
 
     video {
@@ -129,6 +129,6 @@ div.racerRow {
     border-radius: 10px;
     width: 100%;
     text-align: center;
-    font-size: 4em;
-    font-family: fixed;
+    font-size: 3.5em;
+    font-family: monospace;
 }

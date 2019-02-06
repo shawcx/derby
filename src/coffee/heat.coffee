@@ -14,9 +14,11 @@ class HeatModal extends Backbone.View
     render: () ->
         @selectA = new RaceSelect
             collection: @collection
+            lane: 'A'
 
         @selectB = new RaceSelect
             collection: @collection
+            lane: 'B'
 
         @$('#heat-container-a').append(@selectA.$el)
         @$('#heat-container-b').append(@selectB.$el)
@@ -46,6 +48,7 @@ class RaceSelect extends Backbone.View
         'change' : 'OnChange'
 
     initialize: (options) ->
+        @lane = options.lane
         @render()
         @$select = @$('select')
 
@@ -53,15 +56,11 @@ class RaceSelect extends Backbone.View
         @listenTo @collection, 'reset', (racers) =>
             racers.forEach @Add, @
             return
-        #@listenTo @collection, 'remove', (racers) =>
-        #    $('#racers-count').text(@collection.length)
-        #    return
-        #@$el.append($('<option value="-1">Empty</option>'))
         return @
 
     render: () ->
         values =
-            lane: 'A'
+            lane: @lane
         @$el.html Templates['heat-select'] values
         return @
 
@@ -75,7 +74,7 @@ class RaceSelect extends Backbone.View
             racer = @collection.get(@$select.val())
             @$('img.avatar').attr('src', racer.get('avatar'))
         else
-            @$('img.avatar').attr('src', '/static/empty.png')
+            @$('img.avatar').attr('src', '/static/images/empty.png')
 
         return
 

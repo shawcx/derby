@@ -36,8 +36,17 @@ class Racers(tornado.web.RequestHandler):
         except:
             raise tornado.web.HTTPError(500)
 
-        derby.db.insert('racers', data, 'racer_id')
-        self.write(data)
+        try:
+            derby.db.insert('racers', data, 'racer_id')
+            self.write(data)
+        except derby.error:
+            self.set_status(400)
+            self.write('Duplicate name')
+
+    def delete(self, racer_id=None):
+        print('>>>>', racer_id)
+        #derby.db.delete('racers', racer_id, 'racer_id')
+        self.set_status(204)
 
 
 class WebSocket(tornado.websocket.WebSocketHandler):

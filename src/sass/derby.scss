@@ -43,7 +43,16 @@ body {
     margin-left:-120px;
     margin-bottom: 10px;
 
+    i {
+        position: absolute;
+        top: 64px;
+        left: 71px;
+    }
+
     video {
+        position: absolute;
+        top: 0px;
+        left: 0px;
         max-height: 240px;
                 transform: rotateY(180deg);
            -moz-transform: rotateY(180deg);
@@ -93,4 +102,12 @@ div.racerRow:not(:first-child) {
     transition: 0.6s;
     transform: rotateY(180deg);
     transform-style: preserve-3d;
+}
+
+.delete-racer {
+    opacity: 0.125;
+}
+
+.delete-racer:hover {
+    opacity: 1;
 }

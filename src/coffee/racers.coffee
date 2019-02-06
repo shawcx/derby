@@ -22,6 +22,10 @@ class RacersModal extends Backbone.View
         # reference to the body of the racers modal
         @$body = @$('#racers-body')
         # bind to the racers collection
+        @listenTo @collection, 'remove', (racers) =>
+            $('#racers-count').text(@collection.length)
+            return
+
         @listenTo @collection, 'reset', (racers) =>
             racers.forEach (racer, idx) =>
                 @Add(racer)
@@ -30,7 +34,6 @@ class RacersModal extends Backbone.View
         @listenTo @collection, 'add', (racer) =>
             @Add(racer)
             return
-
         return @
 
     Add: (racer) ->
@@ -49,8 +52,8 @@ module.exports.RacersModal = RacersModal
 class RacerRow extends Backbone.View
     className: 'racerRow'
 
-    #events:
-    #    'click'  : 'OnClick'
+    events:
+        'click .delete-racer'  : 'OnDelete'
 
     initialize: () ->
         _.bindAll @, 'render'
@@ -67,11 +70,11 @@ class RacerRow extends Backbone.View
         @$el.html Templates['racer-row'] model
         return @
 
-    #OnClick: () ->
-    #    $radio = @$('input[name="persona"]')
-    #    value = $radio.prop('checked')
-    #    $radio.prop('checked', not value)
-    #    return
+    OnDelete: () ->
+        really = confirm("Remove #{ @model.get('name') }?")
+        return if not really
+        @model.destroy wait: true
+        return
 
 
 class AddRacerModal extends Backbone.View
@@ -91,6 +94,7 @@ class AddRacerModal extends Backbone.View
 
     reset: () ->
         @racer = new RacerModel
+
         $('#add-racer-name').val('')
         $('#add-racer-den').val(null)
         $('#add-racer-car').val('')
@@ -126,6 +130,9 @@ class AddRacerModal extends Backbone.View
                     @collection.add @racer
                     @reset()
                     return
+                error: (model,xhr) =>
+                    alert(xhr.responseText)
+                    return
             }
         return cancelEvent(evt)
 
@@ -144,7 +151,7 @@ class AddRacerModal extends Backbone.View
             @video,                                 # src
             @video.videoWidth - @video.videoHeight, # src offset x
             0,                                      # src offset y
-            @video.videoHeight,                     # src width (using height prop for square)
+            @video.videoHeight,                     # src width (use height for square)
             @video.videoHeight,                     # src height
             0,                                      # dst offset x
             0,                                      # dst offset y

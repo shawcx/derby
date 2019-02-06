@@ -19,6 +19,9 @@
           <li class="nav-item"><a class="nav-link" href="#">Arrow of Lights</a></li>
         </ul>
         <script type="text/html-template" id="t-racer-row">
+          <button class="delete-racer btn btn-sm btn-danger float-right">
+            <i class="fa fa-trash-alt"></i>
+          </button>
           <div class="row">
             <div class="col-auto imgframe">
               <img class="avatar" src="<%- avatar %>" width="120" height="120" />
@@ -53,6 +56,7 @@
         </div>
         <div class="modal-body">
           <div id="avatarVid">
+            <i class="fa fa-7x fa-user"></i>
             <video autoplay></video>
           </div>
           <img id="avatarImg" />

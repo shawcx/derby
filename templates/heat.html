@@ -10,8 +10,8 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col" id="heat-racer-a"></div>
-          <div class="col" id="heat-racer-b"></div>
+          <div class="col" id="heat-container-a"></div>
+          <div class="col" id="heat-container-b"></div>
         </div>
         <hr/>
         <button id="gateRelease" class="btn btn-lg btn-primary">Go</button>
@@ -19,3 +19,13 @@
     </div>
   </div>
 </div>
+
+<script type="text/html-template" id="t-heat-select">
+  <div class="text-center" style="margin-bottom: 10px;">
+    <img class="avatar" src="/static/empty.png" />
+  </div>
+  <select class="form-control" name="select-<%- lane %>">
+    <option value="-1">Empty</option>
+  </select>
+  <div class="time"></div>
+</script>

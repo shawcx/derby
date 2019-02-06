@@ -44,7 +44,7 @@ class Derby
         new Racers.RacersModal
             collection: @racers
 
-        new Heat.HeatModal
+        @heatModal = new Heat.HeatModal
             collection: @racers
 
         new Results.ResultsTable
@@ -71,12 +71,9 @@ class Derby
 
     # called after the websocket is successfully connected
     OnConnected: (message) ->
-        #derby.wsid = message
         new Router
         Backbone.history.start() if not Backbone.History.started
-
-        $('#heat-modal').modal()
-
+        #$('#heat-modal').modal()
         return
 
     OnTrackState: (message) ->
@@ -86,6 +83,9 @@ class Derby
 
     OnRaceResults: (message) ->
         console.log 'RESULTS:', message.A, message.B
+        console.log @
+        derby.heatModal.results(message.A, message.B)
+        #@heatModal.results(message.A, message.B)
         return
 
     OnSerial: (message) ->

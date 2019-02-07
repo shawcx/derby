@@ -20,15 +20,6 @@ $(document).ready () ->
         Templates[name] = _.template(@text)
         return
 
-    $('#gateRelease').on 'click', () ->
-        $.ajax
-            method: 'GET'
-            url: '/serial'
-            success: (data) ->
-                console.log 'ok', data
-                return
-        return
-
     new Derby
     return
 
@@ -72,14 +63,14 @@ class Derby
         return
 
     # called after the websocket is successfully connected
+    # sends current track state
     OnConnected: (message) ->
-        $('#gateRelease').prop('disabled', !message.gateClosed)
+        @heatModal.gate(message.gateClosed)
         #$('#heat-modal').modal()
         return
 
     OnTrackState: (message) ->
-        $('#gateRelease').prop('disabled', !message.gateClosed)
-        console.log 'Gate closed is', message.gateClosed
+        @heatModal.gate(message.gateClosed)
         return
 
     OnRaceResults: (message) ->

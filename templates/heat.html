@@ -1,6 +1,6 @@
 
 <div id="heat-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="heat-label" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="heat-label"><i class="fal fa-flag-checkered"></i> Race Heat</h5>
@@ -10,13 +10,36 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col" id="heat-container-a"></div>
-          <div class="col" id="heat-container-b"></div>
+          <div class="col-5" id="heat-container-a"></div>
+          <div class="col-2" id="race-column">
+
+            <!--
+            <button id="gateRelease" class="btn btn-lg btn-warning">
+              <i class="fal fa-car-side"></i> Go
+            </button>
+            -->
+
+            <div id="lights">
+              <div class="light red" id="gateRelease">
+                <span class="align-middle">GO</span>
+              </div>
+              <div id="lightyellow1" class="light yellow">&nbsp;</div>
+              <div id="lightyellow2" class="light yellow">&nbsp;</div>
+              <div id="lightyellow3" class="light yellow">&nbsp;</div>
+              <div id="lightgreen" class="light green">&nbsp;</div>
+            </div>
+            <button id="acceptTimes" class="btn btn btn-primary" disabled>
+              <i class="fal fa-check"></i> Accept
+            </button>
+            <button id="swapLanes" class="btn btn btn-primary">
+              <i class="fal fa-exchange-alt"></i> Swap
+            </button>
+            <button id="resetTimes" class="btn btn btn-danger">
+              <i class="fal undo"></i> Reset
+            </button>
+          </div>
+          <div class="col-5" id="heat-container-b"></div>
         </div>
-        <hr/>
-        <button id="swapLanes"   class="btn btn-lg btn-primary">Swap</button>
-        <button id="gateRelease" class="btn btn-lg btn-primary">Go</button>
-        <button id="acceptTimes" class="btn btn-lg btn-primary">Accept</button>
       </div>
     </div>
   </div>
@@ -25,11 +48,19 @@
 <script type="text/html-template" id="t-heat-select">
   <select class="form-control" name="select-<%- lane %>">
     <option value="-1">Empty</option>
+    <optgroup label="Lions"           class="den den-lion" ></optgroup>
+    <optgroup label="Tigers"          class="den den-tiger"></optgroup>
+    <optgroup label="Wolves"          class="den den-wolve"></optgroup>
+    <optgroup label="Bears"           class="den den-bear" ></optgroup>
+    <optgroup label="Weblos"          class="den den-weblo"></optgroup>
+    <optgroup label="Arrow of Lights" class="den den-aol"  ></optgroup>
   </select>
+
   <div class="text-center" style="margin: 15px;">
     <img class="avatar" src="/static/images/empty.png" />
   </div>
-  <div class="board">
+
+  <div class="board" id="board-<%- lane %>">
     <p>Lane <%- lane %></p>
     <p class="time">-.----</p>
   </div>

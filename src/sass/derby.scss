@@ -124,12 +124,95 @@ div.racerRow {
 
 
 .board {
-    background: #000;
-    color: #fff;
-    border: 10px solid red;
+    background: $dark;
+    color: $light;
+    border: 10px solid $dark;
     border-radius: 10px;
     width: 100%;
     text-align: center;
     font-size: 3.5em;
     font-family: monospace;
+}
+
+.board-winner {
+    border: 10px solid $green;
+
+            transition: all 0.4s ease-in-out;
+         -o-transition: all 0.4s ease-in-out;
+         -o-transition: all 0.4s ease-in-out;
+        -ms-transition: all 0.4s ease-in-out;
+       -moz-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+
+            animation: blink normal 1.2s infinite ease-in-out;
+         -o-animation: blink normal 1.2s infinite ease-in-out;
+        -ms-animation: blink normal 1.2s infinite ease-in-out;
+       -moz-animation: blink normal 1.2s infinite ease-in-out;
+    -webkit-animation: blink normal 1.2s infinite ease-in-out;
+}
+
+@keyframes blink {
+      0% { border-color: $green; }
+     50% { border-color: $dark;  }
+    100% { border-color: $green; }
+}
+@-webkit-keyframes blink {
+      0% { border-color: $green; }
+     50% { border-color: $dark;  }
+    100% { border-color: $green; }
+}
+
+$light-size: 90px;
+
+#race-column {
+    #lights {
+        margin: 0em auto;
+        text-align: center;
+
+        .light {
+            user-select: none;
+            display: inline-block;
+            width: $light-size;
+            height: $light-size;
+            border-radius: $light-size/2;
+            margin-bottom: 0px;
+            span {
+                display: inline-block;
+                line-height: $light-size;
+            }
+        }
+        .red {
+            background: lighten($red, 20%);
+            border: 3px solid $red;
+            font-size: 1.75em;
+            font-weight: bold;
+            color: white;
+        }
+        .bright-red {
+            background: $red;
+            border: 3px solid darken($red,10%);
+        }
+        .yellow {
+            background: lighten($yellow, 20%);
+            border: 3px solid $yellow;
+        }
+        .bright-yellow {
+            background: $yellow;
+            border: 3px solid darken($yellow,10%);
+        }
+        .green {
+            background: lighten($green, 20%);
+            border: 3px solid $green;
+        }
+        .bright-green {
+            background: $green;
+            border: 3px solid darken($green,10%);
+        }
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        margin-top: 6px;
+    }
 }

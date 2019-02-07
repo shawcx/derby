@@ -109,19 +109,23 @@ class HeatModal extends Backbone.View
         @selectA.result(timeA)
         @selectB.result(timeB)
 
-        if timeA < timeB
-            console.log 'A is the winner'
-            $('#board-A').addClass('board-winner')
-        else if timeA > timeB
-            console.log 'B is the winner'
+        if timeA == 0 and timeB == 0
+            console.log 'both lose'
+        else if timeA == 0
             $('#board-B').addClass('board-winner')
-        else if timeA == timeB
-            console.log 'it is a tie!'
+        else if timeB == 0
             $('#board-A').addClass('board-winner')
-            $('#board-B').addClass('board-winner')
         else
-            console.error 'unreachable state', timeA, timeB
-            return
+            if timeA < timeB
+                $('#board-A').addClass('board-winner')
+            else if timeA > timeB
+                $('#board-B').addClass('board-winner')
+            else if timeA == timeB
+                $('#board-A').addClass('board-winner')
+                $('#board-B').addClass('board-winner')
+            else
+                console.error 'unreachable state', timeA, timeB
+                return
 
         @needAccept = true
         $('#acceptTimes').prop('disabled', false)

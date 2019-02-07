@@ -7,6 +7,9 @@ Backbone = require('backbone')
 class HeatModal extends Backbone.View
     el: () -> $('#heat-modal')
 
+    events:
+        'click #swapLanes' : 'OnSwapLanes'
+
     initialize: (options) ->
         @render()
         return @
@@ -23,6 +26,13 @@ class HeatModal extends Backbone.View
         @$('#heat-container-a').append(@selectA.$el)
         @$('#heat-container-b').append(@selectB.$el)
         return @
+
+    OnSwapLanes: () ->
+        newB = @selectA.racer_id
+        newA = @selectB.racer_id
+        @selectA.set(newA)
+        @selectB.set(newB)
+        return
 
     results: (timeA, timeB) ->
         @selectA.result(timeA)
@@ -48,6 +58,7 @@ class RaceSelect extends Backbone.View
         'change' : 'OnChange'
 
     initialize: (options) ->
+        @racer_id = -1
         @lane = options.lane
         @render()
         @$select = @$('select')
@@ -69,13 +80,18 @@ class RaceSelect extends Backbone.View
         return
 
     OnChange: () ->
-        racer_id = parseInt(@$select.val())
-        if racer_id != -1
-            racer = @collection.get(@$select.val())
-            @$('img.avatar').attr('src', racer.get('avatar'))
-        else
-            @$('img.avatar').attr('src', '/static/images/empty.png')
+        console.log 'changed...'
+        @set(parseInt(@$select.val()))
+        return
 
+    set: (@racer_id) ->
+        if @racer_id == -1
+            src = '/static/images/empty.png'
+        else
+            racer = @collection.get(@racer_id)
+            src = racer.get('avatar')
+        @$select.val(@racer_id)
+        @$('img.avatar').attr('src', src)
         return
 
     result: (time) ->

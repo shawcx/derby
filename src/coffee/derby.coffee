@@ -34,8 +34,6 @@ $(document).ready () ->
 
 class Derby
     constructor: () ->
-        window.derby = @
-
         @racers = new Racers.Collection
 
         new Racers.AddRacerModal
@@ -51,10 +49,10 @@ class Derby
             collection: @racers
 
         @dispatch = _.clone(Backbone.Events)
-        @dispatch.on 'connected',   @OnConnected
-        @dispatch.on 'trackState',  @OnTrackState
-        @dispatch.on 'raceResults', @OnRaceResults
-        @dispatch.on 'serial',      @OnSerial
+        @dispatch.on 'connected',   @OnConnected,   @
+        @dispatch.on 'trackState',  @OnTrackState,  @
+        @dispatch.on 'raceResults', @OnRaceResults, @
+        @dispatch.on 'serial',      @OnSerial,      @
 
         promises = []
         promises.push @racers.fetch  reset:true
@@ -72,8 +70,6 @@ class Derby
     # called after the websocket is successfully connected
     OnConnected: (message) ->
         $('#gateRelease').prop('disabled', !message.gateClosed)
-        new Router
-        Backbone.history.start() if not Backbone.History.started
         #$('#heat-modal').modal()
         return
 
@@ -83,9 +79,7 @@ class Derby
         return
 
     OnRaceResults: (message) ->
-        console.log @
-        derby.heatModal.results(message.A, message.B)
-        #@heatModal.results(message.A, message.B)
+        @heatModal.results(message.A, message.B)
         return
 
     OnSerial: (message) ->
@@ -95,17 +89,6 @@ class Derby
     resizer: () ->
         w = $(document).width()
         h = $(document).height()
-        return
-
-
-Router = Backbone.Router.extend
-    routes:
-        '' : 'OnDefault'
-
-    initialize: () ->
-        return
-
-    OnDefault: () ->
         return
 
 

@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="heat-label">Race Heat</h5>
+        <h5 class="modal-title" id="heat-label"><i class="fal fa-flag-checkered"></i> Race Heat</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -29,5 +29,8 @@
   <div class="text-center" style="margin: 15px;">
     <img class="avatar" src="/static/images/empty.png" />
   </div>
-  <div class="time">-.----</div>
+  <div class="board">
+    <p>Lane <%- lane %></p>
+    <p class="time">-.----</p>
+  </div>
 </script>

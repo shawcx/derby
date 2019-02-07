@@ -48,6 +48,10 @@ class Derby
         new Results.ResultsTable
             collection: @racers
 
+        window.p = (a,b) =>
+            @heatModal.results(a,b)
+            return null
+
         @dispatch = _.clone(Backbone.Events)
         @dispatch.on 'connected',   @OnConnected,   @
         @dispatch.on 'trackState',  @OnTrackState,  @

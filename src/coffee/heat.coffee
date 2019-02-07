@@ -57,13 +57,7 @@ class HeatModal extends Backbone.View
         $('#lightyellow2').removeClass('bright-yellow')
         $('#lightyellow3').removeClass('bright-yellow')
         $('#lightgreen').removeClass('bright-green')
-        $('#acceptTimes').prop('disabled', true)
-
-        @$('.board').removeClass('board-winner')
-        @selectA.$('.time').text '-.----'
-        @selectB.$('.time').text '-.----'
-        @needAccept = false
-        @checkGateReady()
+        @reset()
         return
 
     OnSwapLanes: () ->
@@ -75,7 +69,16 @@ class HeatModal extends Backbone.View
 
     OnReset: () ->
         return if not confirm('Really reset times?')
+        @reset()
+        return
+
+    reset: () ->
+        $('#acceptTimes').prop('disabled', true)
         @$('.board').removeClass('board-winner')
+
+        @selectA.$el.find('.avatar').removeClass('spinner')
+        @selectB.$el.find('.avatar').removeClass('spinner')
+
         @selectA.$('.time').text '-.----'
         @selectB.$('.time').text '-.----'
         @needAccept = false
@@ -109,20 +112,27 @@ class HeatModal extends Backbone.View
         @selectA.result(timeA)
         @selectB.result(timeB)
 
+
         if timeA == 0 and timeB == 0
             console.log 'both lose'
         else if timeA == 0
             $('#board-B').addClass('board-winner')
+            @selectB.$el.find('.avatar').addClass('spinner')
         else if timeB == 0
             $('#board-A').addClass('board-winner')
+            @selectA.$el.find('.avatar').addClass('spinner')
         else
             if timeA < timeB
                 $('#board-A').addClass('board-winner')
+                @selectA.$el.find('.avatar').addClass('spinner')
             else if timeA > timeB
                 $('#board-B').addClass('board-winner')
+                @selectB.$el.find('.avatar').addClass('spinner')
             else if timeA == timeB
                 $('#board-A').addClass('board-winner')
                 $('#board-B').addClass('board-winner')
+                @selectA.$el.find('.avatar').addClass('spinner')
+                @selectB.$el.find('.avatar').addClass('spinner')
             else
                 console.error 'unreachable state', timeA, timeB
                 return

@@ -21,7 +21,7 @@ ioloop = tornado.ioloop.IOLoop.instance()
 
 defaultSerials = {
     'Linux'  : '/dev/ttyUSB0',
-    'Darwin' : '/dev/tty.usbserial',
+    'Darwin' : '/dev/cu.usbserial'
     # TBD: Windows
 }
 
@@ -66,6 +66,8 @@ logging.basicConfig(
     datefmt = '%Y-%m-%d %H:%M:%S',
     level   = logging.DEBUG if derby.args.debug else logging.INFO
     )
+
+logging.info('Serial port: %s', derby.args.serial)
 
 # pipes for the serial reader process
 localPipe,remotePipe = multiprocessing.Pipe()

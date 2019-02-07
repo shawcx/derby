@@ -21,10 +21,10 @@ class SerialWorker(multiprocessing.Process):
 
         self.pipe = pipe
         try:
-            self.serialPort = serial.Serial(derby.args.serial, derby.args.baud)#, timeout=1)
+            self.serialPort = serial.Serial(derby.args.serial, derby.args.baud)
             self.serialPort.flushInput()
         except:
-            raise derby.error('Unable to open serial port: %s', derby.args.serial)
+            raise derby.error('Unable to open serial port: %s', derby.args.serial) from None
 
     def run(self):
         fds = [self.serialPort,self.pipe]

@@ -7,6 +7,7 @@ import configparser
 import json
 import logging
 import multiprocessing
+import platform
 import queue
 import signal
 import socket
@@ -18,11 +19,17 @@ import derby
 
 ioloop = tornado.ioloop.IOLoop.instance()
 
+defaultSerials = {
+    'Linux'  : '/dev/ttyUSB0',
+    'Darwin' : '/dev/tty.usbserial',
+    # TBD: Windows
+}
+
 # parse the command line arguments
 argparser = argparse.ArgumentParser()
 
 argparser.add_argument('--serial',
-    metavar='<tty>', default='/dev/ttyUSB0',
+    metavar='<tty>', default=defaultSerials.get(platform.system()),
     help='serial port to open'
     )
 
@@ -64,8 +71,12 @@ logging.basicConfig(
 localPipe,remotePipe = multiprocessing.Pipe()
 
 # start the serial reader process
-serialWorker = derby.SerialWorker(remotePipe)
-serialWorker.start()
+try:
+    serialWorker = derby.SerialWorker(remotePipe)
+    serialWorker.start()
+except derby.error as e:
+    logging.error('%s', e)
+    sys.exit(-1)
 
 derby.db = derby.Database(derby.args.db)
 

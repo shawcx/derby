@@ -18,8 +18,8 @@ class Template(tornado.web.RequestHandler):
 
 class Serial(tornado.web.RequestHandler):
     def get(self):
-        self.write('yep')
         self.settings['pipe'].send(b'LN')
+        self.set_status(204)
 
 
 class Racers(tornado.web.RequestHandler):

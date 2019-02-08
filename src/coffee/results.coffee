@@ -8,9 +8,8 @@ class ResultsTable extends Backbone.View
     el: () -> $('#results-table')
 
     initialize: (options) ->
+        @rows   = {}
         @$tbody = @$('tbody')
-
-        @rows = {}
 
         new DenFilter
             table: @

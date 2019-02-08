@@ -48,6 +48,12 @@ class Derby
             @heatModal.results(a,b)
             return null
 
+        window.pp = () =>
+            a = Math.random() + 2.0
+            b = Math.random() + 2.0
+            @heatModal.results(a,b)
+            return null
+
         @dispatch = _.clone(Backbone.Events)
         @dispatch.on 'connected',   @OnConnected,   @
         @dispatch.on 'trackState',  @OnTrackState,  @

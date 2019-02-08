@@ -52,8 +52,13 @@ class RacersModal extends Backbone.View
     el: () -> $('#racers-modal')
 
     initialize: (options) ->
+        @rows  = {}
         # reference to the body of the racers modal
         @$body = @$('#racers-body')
+
+        new DenFilter
+            table: @
+
         # bind to the racers collection
         @listenTo @collection, 'add', @Add, @
         @listenTo @collection, 'reset', (racers) =>
@@ -61,6 +66,13 @@ class RacersModal extends Backbone.View
             return
         @listenTo @collection, 'remove', (racer) =>
             $('#racers-count').text(@collection.length)
+            return
+        @listenTo @collection, 'sort', (racers) =>
+            racers.forEach (racer) =>
+                row = @rows[racer.id]
+                row.remove()
+                @$body.append(row.$el)
+                return
             return
         return @
 
@@ -70,11 +82,36 @@ class RacersModal extends Backbone.View
         # create a new racer row
         racerRow = new RacerRow
             model: racer
+        @rows[racer.id] = racerRow
         # and append it to the modal body
         @$body.append racerRow.$el
         return
 
 module.exports.RacersModal = RacersModal
+
+class DenFilter extends Backbone.View
+    el: () -> $('#racers-select-den')
+
+    events:
+        'click .select-den' : 'OnSelectDen'
+
+    initialize: (options) ->
+        @table = options.table
+        return @
+
+    OnSelectDen: (e) ->
+        @$el.find('button').removeClass('btn-primary').addClass('btn-secondary')
+        $(e.target).removeClass('btn-secondary').addClass('btn-primary')
+        den = $(e.target).data('den')
+        den = null if den is 'all'
+        @table.collection.forEach (racer) =>
+            row = @table.rows[racer.id]
+            row.remove()
+            if den and racer.get('den') != den
+                return
+            @table.$body.append(row.$el)
+            return
+        return
 
 
 class RacerRow extends Backbone.View

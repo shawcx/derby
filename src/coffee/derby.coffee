@@ -77,6 +77,8 @@ class Derby
                 #console.log entry.racer_id, entry.lane, entry.time
                 return
 
+            @racers.sort()
+
             @socket = new Socket
                 onmessage: (bundle) =>
                     #console.log 'WS:', bundle.action, bundle.message

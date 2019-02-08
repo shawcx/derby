@@ -9,6 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
+        <!--
         <ul class="nav nav-pills justify-content-center">
           <li class="nav-item"><a class="nav-link active" href="#">All</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Lions</a></li>
@@ -18,6 +19,18 @@
           <li class="nav-item"><a class="nav-link" href="#">Webelos</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Arrow of Lights</a></li>
         </ul>
+        -->
+        <div style="text-align: center;">
+          <div class="btn-group btn-group-lg" role="group" aria-label="Den Selection">
+            <button class="btn btn-primary"   class="select-all"    >All             </a></li>
+            <button class="btn btn-secondary" class="select-lions"  >Lions           </a></li>
+            <button class="btn btn-secondary" class="select-tigers" >Tigers          </a></li>
+            <button class="btn btn-secondary" class="select-wolves" >Wolves          </a></li>
+            <button class="btn btn-secondary" class="select-bears"  >Bears           </a></li>
+            <button class="btn btn-secondary" class="select-webelos">Webelos         </a></li>
+            <button class="btn btn-secondary" class="select-aols"   >Arrow of Lights </a></li>
+          </div>
+        </div>
         <script type="text/html-template" id="t-racer-row">
           <button class="delete-racer btn btn-sm btn-danger float-right">
             <i class="far fa-trash-alt"></i>
@@ -75,7 +88,7 @@
               <option disabled selected value>Den...</option>
               <option value="Lion"  > Lions          </option>
               <option value="Tiger" > Tigers         </option>
-              <option value="Wolf"  > Wolfs          </option>
+              <option value="Wolf"  > Wolves         </option>
               <option value="Bear"  > Bears          </option>
               <option value="Webelo"> Webelos        </option>
               <option value="AoL"   > Arrow of Light </option>

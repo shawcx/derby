@@ -116,9 +116,13 @@ div.racerRow {
     background: #fff;
 
     img.avatar {
-        width:  2em;
-        height: 2em;
+        width:  3em;
+        height: 3em;
         border-radius: 25%;
+    }
+
+    td {
+        vertical-align: middle;
     }
 }
 

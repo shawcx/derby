@@ -41,6 +41,8 @@ class RacerModel extends Backbone.Model
 class RacerCollection extends Backbone.Collection
     model: RacerModel
     url: RacerModel.prototype.urlRoot
+    comparator: (a,b) ->
+        return a.get('total') - b.get('total')
 
 module.exports.Model      = RacerModel
 module.exports.Collection = RacerCollection
@@ -92,6 +94,11 @@ class RacerRow extends Backbone.View
 
     render: () ->
         model = @model.toJSON()
+
+        model.time1='💥' if model.time1 == '0.0000'
+        model.time2='💥' if model.time2 == '0.0000'
+        model.time3='💥' if model.time3 == '0.0000'
+        model.time4='💥' if model.time4 == '0.0000'
 
         model.time1 = '-.----' if model.time1 == ''
         model.time2 = '-.----' if model.time2 == ''

@@ -71,6 +71,8 @@ class Derby
                 update['count'] = count
                 racer.set update
 
+                racer.calculateTotal()
+
                 #console.log entry.racer_id, entry.lane, entry.time
                 return
 

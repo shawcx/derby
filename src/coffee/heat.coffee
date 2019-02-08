@@ -75,6 +75,7 @@ class HeatModal extends Backbone.View
                     update['lane'+count] = 'A'
                     update['count'] = count
                     racer.set update
+                    racer.calculateTotal()
 
                 if @selectB.racer_id != -1
                     racer = @collection.get @selectB.racer_id
@@ -85,10 +86,8 @@ class HeatModal extends Backbone.View
                     update['lane'+count] = 'B'
                     update['count'] = count
                     racer.set update
+                    racer.calculateTotal()
                     return
-
-        #console.log @selectA.racer_id, @timeA
-        #console.log @selectB.racer_id, @timeB
 
         $('#lightyellow1').removeClass('bright-yellow')
         $('#lightyellow2').removeClass('bright-yellow')
@@ -193,6 +192,7 @@ class RaceSelect extends Backbone.View
         @render()
 
         @listenTo @collection, 'add', @Add, @
+        @listenTo @collection, 'change', @RacerChange, @
         @listenTo @collection, 'reset', (racers) =>
             racers.forEach @Add, @
             return
@@ -209,7 +209,15 @@ class RaceSelect extends Backbone.View
         den = racer.get('den').toLocaleLowerCase()
         @$select
             .find('.den-'+den)
-            .append($("<option value=\"#{ racer.id }\">#{ racer.get('name') }</option>"))
+            .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('name') }</option>"))
+        return
+
+    RacerChange: (racer) ->
+        count = racer.get('count')
+        $option = $('.option-'+racer.id)
+        if count < 4
+        then $option.text racer.get('name') + ' ' + count
+        else $option.remove()
         return
 
     OnChange: () ->

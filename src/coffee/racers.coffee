@@ -18,6 +18,26 @@ class RacerModel extends Backbone.Model
         lane4: ''
         total: ''
 
+    calculateTotal: () ->
+        times = []
+        for idx in [1..4]
+            t = @get('time'+idx)
+            t = parseFloat(t)
+            if t == 0
+                times.push(10)
+            else if t
+                times.push(t)
+            # else ignore
+
+        sortNumber = (a, b) -> a - b
+        times.sort(sortNumber)
+        times = times.slice(0,3)
+
+        sumNumber = (a, b) -> a + b
+        total = times.reduce(sumNumber, 0)
+        @set('total', total.toFixed(4))
+        return
+
 class RacerCollection extends Backbone.Collection
     model: RacerModel
     url: RacerModel.prototype.urlRoot

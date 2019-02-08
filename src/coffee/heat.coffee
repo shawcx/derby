@@ -209,15 +209,18 @@ class RaceSelect extends Backbone.View
         den = racer.get('den').toLocaleLowerCase()
         @$select
             .find('.den-'+den)
-            .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('name') }</option>"))
+            .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('count') } - #{ racer.get('name') }</option>"))
         return
 
     RacerChange: (racer) ->
         count = racer.get('count')
         $option = $('.option-'+racer.id)
         if count < 4
-        then $option.text racer.get('name') + ' ' + count
-        else $option.remove()
+            $option.text(count + ' - ' + racer.get('name'))
+        else
+            $option.remove()
+            if @racer_id == racer.id
+                @set(-1)
         return
 
     OnChange: () ->

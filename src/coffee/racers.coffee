@@ -95,7 +95,17 @@ class RacerRow extends Backbone.View
 
     render: () ->
         model = @model.toJSON()
-        #model.created = (new Date(model.created * 1000)).shortdate()
+
+        model.time1 = '-.----' if model.time1 == ''
+        model.time2 = '-.----' if model.time2 == ''
+        model.time3 = '-.----' if model.time3 == ''
+        model.time4 = '-.----' if model.time4 == ''
+
+        model.lane1 = '-' if model.lane1 == ''
+        model.lane2 = '-' if model.lane2 == ''
+        model.lane3 = '-' if model.lane3 == ''
+        model.lane4 = '-' if model.lane4 == ''
+
         @$el.html Templates['racer-row'] model
         return @
 

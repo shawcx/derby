@@ -16,7 +16,7 @@ CREATE TABLE racers (
     "car"             TEXT    NOT NULL,
     "avatar"          TEXT,   -- JPEG of racer or avatar
 
-    "count"           TEXT,
+    "count"           INTEGER,
     "time1"           TEXT,
     "time2"           TEXT,
     "time3"           TEXT,

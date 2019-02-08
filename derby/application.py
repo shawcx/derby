@@ -96,10 +96,11 @@ class Application(tornado.web.Application):
         self.scheduler.start()
 
         patterns = [
-            ( r'/racers/([0-9]*)', derby.handlers.Racers ),
-            ( r'/serial',   derby.handlers.Serial    ),
-            ( r'/ws',       derby.handlers.WebSocket ),
-            ( r'/',         derby.handlers.Template  ),
+            ( r'/racers/([0-9]*)', derby.handlers.Racers    ),
+            ( r'/times/([0-9]*)',  derby.handlers.Times     ),
+            ( r'/serial',          derby.handlers.Serial    ),
+            ( r'/ws',              derby.handlers.WebSocket ),
+            ( r'/',                derby.handlers.Template  ),
             ]
 
         # Tornado settings

@@ -36,11 +36,11 @@
         <tr>
           <th>Name</th>
           <th>Den</th>
-          <th>1st</th>
-          <th>2nd</th>
-          <th>3rd</th>
-          <th>4th</th>
-          <th>Total</th>
+          <th style="text-align: center;">1st</th>
+          <th style="text-align: center;">2nd</th>
+          <th style="text-align: center;">3rd</th>
+          <th style="text-align: center;">4th</th>
+          <th style="text-align: center;">Total</th>
         </tr>
       </thead>
       <tbody>
@@ -49,11 +49,11 @@
     <script type="text/html-template" id="t-result-row">
       <td><img class="avatar" src="<%- avatar %>" /> <a href="#" class="racer"><%- name %></a></td>
       <td><%- den %></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td class="td-times"><%- time1 %> <%- lane1 %></td>
+      <td class="td-times"><%- time2 %> <%- lane2 %></td>
+      <td class="td-times"><%- time3 %> <%- lane3 %></td>
+      <td class="td-times"><%- time4 %> <%- lane4 %></td>
+      <td class="td-times"><%- total %></td>
     </script>
   </div>
 

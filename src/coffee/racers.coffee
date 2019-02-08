@@ -6,6 +6,17 @@ Backbone = require('backbone')
 class RacerModel extends Backbone.Model
     urlRoot: '/racers/'
     idAttribute: 'racer_id'
+    defaults:
+        count: 0
+        time1: ''
+        time2: ''
+        time3: ''
+        time4: ''
+        lane1: ''
+        lane2: ''
+        lane3: ''
+        lane4: ''
+        total: ''
 
 class RacerCollection extends Backbone.Collection
     model: RacerModel

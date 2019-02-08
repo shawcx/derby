@@ -43,6 +43,9 @@ class ResultsRow extends Backbone.View
 
     render: () ->
         model = @model.toJSON()
+
+        model.time1='😞' if model.time1 == '0.0000'
+
         #model.created = (new Date(model.created * 1000)).shortdate()
         @$el.html Templates['result-row'] model
         return @

@@ -50,9 +50,46 @@ class HeatModal extends Backbone.View
                 _.delay(lightUp, delay * 1, '#lightyellow2', 'bright-yellow')
                 _.delay(lightUp, delay * 2, '#lightyellow3', 'bright-yellow')
                 _.delay(lightUp, delay * 3, '#lightgreen',   'bright-green')
+                return
         return
 
     OnAccept: () ->
+        $.ajax
+            method: 'POST'
+            url: '/times/'
+            data: JSON.stringify
+                laneA:
+                    racer: @selectA.racer_id
+                    time:  @timeA
+                laneB:
+                    racer: @selectB.racer_id
+                    time:   @timeB
+
+            success: (data) =>
+                if @selectA.racer_id != -1
+                    racer = @collection.get @selectA.racer_id
+                    count = racer.get('count')
+                    count += 1
+                    update = {}
+                    update['time'+count] = @timeA.toFixed(4)
+                    update['lane'+count] = 'A'
+                    update['count'] = count
+                    racer.set update
+
+                if @selectB.racer_id != -1
+                    racer = @collection.get @selectB.racer_id
+                    count = racer.get('count')
+                    count += 1
+                    update = {}
+                    update['time'+count] = @timeB.toFixed(4)
+                    update['lane'+count] = 'B'
+                    update['count'] = count
+                    racer.set update
+                    return
+
+        #console.log @selectA.racer_id, @timeA
+        #console.log @selectB.racer_id, @timeB
+
         $('#lightyellow1').removeClass('bright-yellow')
         $('#lightyellow2').removeClass('bright-yellow')
         $('#lightyellow3').removeClass('bright-yellow')
@@ -109,9 +146,10 @@ class HeatModal extends Backbone.View
         return true
 
     results: (timeA, timeB) ->
+        @timeA = timeA
+        @timeB = timeB
         @selectA.result(timeA)
         @selectB.result(timeB)
-
 
         if timeA == 0 and timeB == 0
             console.log 'both lose'
@@ -135,7 +173,6 @@ class HeatModal extends Backbone.View
                 @selectB.$el.find('.avatar').addClass('spinner')
             else
                 console.error 'unreachable state', timeA, timeB
-                return
 
         @needAccept = true
         $('#acceptTimes').prop('disabled', false)

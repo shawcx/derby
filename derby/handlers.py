@@ -28,6 +28,7 @@ class Racers(tornado.web.RequestHandler):
             pass
         else:
             racers = derby.db.find('racers')
+            times  = derby.db.find('times')
             self.write(json.dumps(racers))
 
     def post(self, racer_id=None):
@@ -45,6 +46,46 @@ class Racers(tornado.web.RequestHandler):
 
     def delete(self, racer_id=None):
         derby.db.delete('racers', racer_id, 'racer_id')
+        self.set_status(204)
+
+
+class Times(tornado.web.RequestHandler):
+    def get(self, time_id=None):
+        if time_id:
+            pass
+        else:
+            times = derby.db.find('times')
+            self.write(json.dumps(times))
+
+    def post(self, time_id=None):
+        results = json.loads(self.request.body)
+
+        laneA = results.get('laneA')
+        entry1 = dict(
+            racer_id = laneA.get('racer'),
+            lane     = 'A',
+            time     = laneA.get('time'),
+            )
+        if entry1['racer_id'] != -1:
+            try:
+                derby.db.insert('times', entry1, 'time_id')
+            except derby.error as e:
+                self.set_status(400)
+                self.write('%s', e)
+
+        laneB = results.get('laneB')
+        entry2 = dict(
+            racer_id = laneB.get('racer'),
+            lane     = 'B',
+            time     = laneB.get('time'),
+            )
+        if entry2['racer_id'] != -1:
+            try:
+                derby.db.insert('times', entry2, 'time_id')
+            except derby.error as e:
+                self.set_status(400)
+                self.write('%s', e)
+
         self.set_status(204)
 
 

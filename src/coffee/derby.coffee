@@ -62,6 +62,7 @@ class Derby
                 entry = timeModel.toJSON()
                 entry.time = parseFloat(entry.time)
                 racer = @racers.get(entry.racer_id)
+                return if not racer
 
                 count = racer.get('count')
                 count += 1

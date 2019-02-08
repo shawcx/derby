@@ -196,6 +196,10 @@ class RaceSelect extends Backbone.View
         @listenTo @collection, 'reset', (racers) =>
             racers.forEach @Add, @
             return
+        @listenTo @collection, 'remove', (racer) =>
+            $option = $('.option-'+racer.id)
+            $option.remove()
+            return
         return @
 
     render: () ->

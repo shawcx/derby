@@ -46,6 +46,7 @@ class Racers(tornado.web.RequestHandler):
 
     def delete(self, racer_id=None):
         derby.db.delete('racers', racer_id, 'racer_id')
+        derby.db.delete('times', racer_id, 'racer_id')
         self.set_status(204)
 
 

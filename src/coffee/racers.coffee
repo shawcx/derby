@@ -53,14 +53,11 @@ class RacersModal extends Backbone.View
         # reference to the body of the racers modal
         @$body = @$('#racers-body')
         # bind to the racers collection
-        #@listenTo @collection, 'add', (racer) =>
-        #    @Add(racer)
-        #    return
         @listenTo @collection, 'add', @Add, @
         @listenTo @collection, 'reset', (racers) =>
             racers.forEach @Add, @
             return
-        @listenTo @collection, 'remove', (racers) =>
+        @listenTo @collection, 'remove', (racer) =>
             $('#racers-count').text(@collection.length)
             return
         return @
@@ -121,6 +118,7 @@ class AddRacerModal extends Backbone.View
 
     events:
         'show.bs.modal'          : 'OnShowModal'
+        'hide.bs.modal'          : 'OnHideModal'
         'submit form'            : 'OnRacerSave'
         'click #add-racer-reset' : 'reset'
         'click #avatarVid'       : 'OnClickVideo'
@@ -146,14 +144,20 @@ class AddRacerModal extends Backbone.View
 
     OnShowModal: () ->
         @vidSize = $('#avatarVid').height()
-        if not @video
+        if not @stream
             constraints =
                 video: true
             @video = document.querySelector('video')
             navigator.mediaDevices.getUserMedia(constraints).then (stream) =>
-                @video.srcObject = stream
+                @video.srcObject = @stream = stream
                 return
         return
+
+    OnHideModal: () ->
+        return if not @stream
+        for track in @stream.getTracks()
+            track.stop()
+        @stream = null
 
     OnRacerSave: (evt) ->
         if not @racer.has('avatar')

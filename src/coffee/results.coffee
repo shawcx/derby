@@ -22,7 +22,7 @@ class ResultsTable extends Backbone.View
         @listenTo @collection, 'sort', (racers) =>
             racers.forEach (racer) =>
                 row = @rows[racer.id]
-                row.remove()
+                row.$el.remove()
                 @$tbody.append(row.$el)
                 return
             return
@@ -54,7 +54,7 @@ class DenFilter extends Backbone.View
         den = null if den is 'all'
         @table.collection.forEach (racer) =>
             row = @table.rows[racer.id]
-            row.remove()
+            row.$el.remove()
             if den and racer.get('den') != den
                 return
             @table.$tbody.append(row.$el)
@@ -69,9 +69,9 @@ class ResultsRow extends Backbone.View
     initialize: () ->
         _.bindAll @, 'render'
         @render()
-        @listenTo @model, 'change',  @render
-        @listenTo @model, 'remove',  @remove
-        @listenTo @model, 'destroy', @remove
+        @listenTo @model, 'change',  @render, @
+        @listenTo @model, 'remove',  @remove, @
+        @listenTo @model, 'destroy', @remove, @
         return @
 
     render: () ->
@@ -92,6 +92,5 @@ class ResultsRow extends Backbone.View
         model.lane3 = '-' if model.lane3 == ''
         model.lane4 = '-' if model.lane4 == ''
 
-        #model.created = (new Date(model.created * 1000)).shortdate()
         @$el.html Templates['result-row'] model
         return @

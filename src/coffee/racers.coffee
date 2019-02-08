@@ -70,7 +70,7 @@ class RacersModal extends Backbone.View
         @listenTo @collection, 'sort', (racers) =>
             racers.forEach (racer) =>
                 row = @rows[racer.id]
-                row.remove()
+                row.$el.remove()
                 @$body.append(row.$el)
                 return
             return
@@ -106,7 +106,7 @@ class DenFilter extends Backbone.View
         den = null if den is 'all'
         @table.collection.forEach (racer) =>
             row = @table.rows[racer.id]
-            row.remove()
+            row.$el.remove()
             if den and racer.get('den') != den
                 return
             @table.$body.append(row.$el)

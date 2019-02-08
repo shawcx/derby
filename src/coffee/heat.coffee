@@ -76,7 +76,6 @@ class HeatModal extends Backbone.View
                     update['count'] = count
                     racer.set update
                     racer.calculateTotal()
-
                 if @selectB.racer_id != -1
                     racer = @collection.get @selectB.racer_id
                     count = racer.get('count')
@@ -87,7 +86,7 @@ class HeatModal extends Backbone.View
                     update['count'] = count
                     racer.set update
                     racer.calculateTotal()
-                    return
+                return
 
         $('#lightyellow1').removeClass('bright-yellow')
         $('#lightyellow2').removeClass('bright-yellow')

@@ -48,9 +48,9 @@ class Derby
             @heatModal.results(a,b)
             return null
 
-        window.pp = () =>
-            a = Math.random() + 2.0
-            b = Math.random() + 2.0
+        window.pp = (base) =>
+            a = Math.random() + base
+            b = Math.random() + base
             @heatModal.results(a,b)
             return null
 
@@ -82,12 +82,15 @@ class Derby
                 if count == 4
                     worse = worse.toFixed(4)
                     row = @resultsTable.rows[racer.id]
-                    console.log racer.get('name'), worse
-                    row.$el.find('.td-times').each (idx, el) ->
-                        return if idx is 4
+                    if worse == '10.0000'
+                        worse = '💥'
+
+                    for el,idx in row.$el.find('.td-times')
+                        break if idx is 4
+                        console.log idx,el
                         if $(el).text().startsWith(worse)
-                            $(el).css('opacity', '0.125')
-                        return
+                            $(el).css('opacity', '0.5').css('text-decoration', 'line-through')
+                            break
                 return
 
             @racers.sort()

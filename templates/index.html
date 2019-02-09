@@ -2,7 +2,7 @@
 
 {% block body %}
   <nav id="devices-nav" class="navbar fixed-top navbar-expand-lg navbar-dark bg-derby">
-    <span class="navbar-brand" href="#"><i class="fal fa-tire"></i> Derby</span>
+    <span class="navbar-brand" href="#"><img src="/static/images/logo.png" /></span>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#device-navbar-collapse" aria-controls="device-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -33,7 +33,7 @@
 
   <div id="results-body" class="container">
     <div style="text-align: center; margin-bottom: 0.5em;">
-      <h1><i class="fal fa-crown"></i> Race Results</h1>
+      <img src="/static/images/leaderboard.png" />
       <div id="results-select-den" class="btn-group btn-group-lg" role="group" aria-label="Den Selection">
         <button class="btn btn-primary   select-den" data-den="all"   >All             </a></li>
         <button class="btn btn-secondary select-den" data-den="Lion"  >Lions           </a></li>
@@ -70,7 +70,7 @@
       <td class="td-times"><%- time2 %> <%- lane2 %></td>
       <td class="td-times"><%- time3 %> <%- lane3 %></td>
       <td class="td-times"><%- time4 %> <%- lane4 %></td>
-      <td class="td-times"><%- total %></td>
+      <td class="td-times td-total"><%- total %></td>
     </script>
   </div>
 

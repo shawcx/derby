@@ -8,11 +8,13 @@
     </button>
     <div class="collapse navbar-collapse" id="device-navbar-collapse">
       <ul class="navbar-nav mr-auto">
+        <!--
         <li class="nav-item">
           <a class="nav-link" href="#" data-toggle="modal" data-target="#racers-modal">
             <i class="fal fa-users"></i> Racers <span id="racers-count" class="badge badge-dark">0</span>
           </a>
         </li>
+        -->
         <li class="nav-item">
           <a class="nav-link" href="#" data-toggle="modal" data-target="#heat-modal">
             <i class="fal fa-flag-checkered"></i> Heat
@@ -30,7 +32,6 @@
   </nav>
 
   <div id="results-body" class="container">
-
     <div style="text-align: center; margin-bottom: 0.5em;">
       <h1><i class="fal fa-crown"></i> Race Results</h1>
       <div id="results-select-den" class="btn-group btn-group-lg" role="group" aria-label="Den Selection">
@@ -43,12 +44,13 @@
         <button class="btn btn-secondary select-den" data-den="AoL"   >Arrow of Lights </a></li>
       </div>
     </div>
-
     <table id="results-table" class="table table-hover table-sm">
       <thead class="thead-dark">
         <tr>
-          <th>Name</th>
-          <th>Den</th>
+          <th style=""></th>
+          <th style="">Name</th>
+          <th style="">Den</th>
+          <th style="">Car</th>
           <th style="text-align: center;">1st</th>
           <th style="text-align: center;">2nd</th>
           <th style="text-align: center;">3rd</th>
@@ -60,8 +62,10 @@
       </tbody>
     </table>
     <script type="text/html-template" id="t-result-row">
-      <td><img class="avatar" src="<%- avatar %>" /> <a href="#" class="racer"><%- name %></a></td>
+      <td><img class="avatar" src="<%- avatar %>" /></td>
+      <td><%- name %></td>
       <td><%- den %></td>
+      <td><%- car %></td>
       <td class="td-times"><%- time1 %> <%- lane1 %></td>
       <td class="td-times"><%- time2 %> <%- lane2 %></td>
       <td class="td-times"><%- time3 %> <%- lane3 %></td>

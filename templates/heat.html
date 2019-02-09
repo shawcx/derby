@@ -21,14 +21,14 @@
               <div id="lightyellow3" class="light yellow">&nbsp;</div>
               <div id="lightgreen" class="light green">&nbsp;</div>
             </div>
-            <button id="acceptTimes" class="btn btn btn-primary" disabled>
+            <button id="acceptTimes" class="btn btn btn-success" disabled>
               <i class="fal fa-check"></i> Accept
             </button>
-            <button id="swapLanes" class="btn btn btn-primary">
+            <button id="swapLanes" class="btn btn btn-secondary">
               <i class="fal fa-exchange-alt"></i> Swap
             </button>
             <button id="resetTimes" class="btn btn btn-danger">
-              <i class="fal undo"></i> Reset
+              <i class="fal fa-undo"></i> Reset
             </button>
           </div>
           <div class="col-5" id="heat-container-b"></div>
@@ -50,8 +50,17 @@
   </select>
 
   <div class="text-center" style="margin: 15px;">
-    <img class="avatar" src="/static/images/empty.png" />
-    <div class="heat-times">
+    <div class="row">
+      <div class="col">
+        <img class="avatar" src="/static/images/empty.png" />
+      </div>
+      <div class="col-auto align-middle" style="padding-left: 0px;">
+        <p>Times</p>
+        <p class="heat-times"><small class="text-muted">1st:</small> <span class="heat-time1"><%- time1 %> <%- lane1 %></span></p>
+        <p class="heat-times"><small class="text-muted">2nd:</small> <span class="heat-time2"><%- time2 %> <%- lane2 %></span></p>
+        <p class="heat-times"><small class="text-muted">3rd:</small> <span class="heat-time3"><%- time3 %> <%- lane3 %></span></p>
+        <p class="heat-times"><small class="text-muted">4th:</small> <span class="heat-time4"><%- time4 %> <%- lane4 %></span></p>
+      </div>
     </div>
   </div>
 

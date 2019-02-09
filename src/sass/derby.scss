@@ -119,10 +119,10 @@ div.racerRow {
 #results-table {
     background: rgba(255,255,255,0.9);
 
-    img.avatar {
+    .avatar {
         width:  3em;
         height: 3em;
-        border-radius: 25%;
+        margin-left: 0.5em;
     }
 
     td {
@@ -267,8 +267,13 @@ $light-size: 90px;
 }
 
 
+#heat-modal .modal-body {
+    //background: #333 url("/static/images/road.jpg") no-repeat fixed bottom;
+    //background-size: cover;
 
-.td-times, .col-times {
+}
+
+.td-times, .col-times, .heat-times {
     font-family: 'Andale Mono', monospace;
     text-align: center;
     white-space: nowrap;

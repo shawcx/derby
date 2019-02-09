@@ -86,6 +86,8 @@ class HeatModal extends Backbone.View
                     update['count'] = count
                     racer.set update
                     racer.calculateTotal()
+                @collection.sort()
+                @OnSwapLanes()
                 return
 
         $('#lightyellow1').removeClass('bright-yellow')
@@ -204,6 +206,11 @@ class RaceSelect extends Backbone.View
     render: () ->
         values =
             lane: @lane
+
+        if @racer_id == -1
+            values.time1 = values.time2 = values.time3 = values.time4 = '----.-'
+            values.lane1 = values.lane2 = values.lane3 = values.lane4 = '-'
+
         @$el.html Templates['heat-select'] values
         @$select = @$('select')
         return @
@@ -220,6 +227,8 @@ class RaceSelect extends Backbone.View
         $option = $('.option-'+racer.id)
         if count < 4
             $option.text(count + ' - ' + racer.get('name'))
+            if @racer_id == racer.id
+                @updateTimes(racer.toJSON())
         else
             $option.remove()
             if @racer_id == racer.id
@@ -233,13 +242,41 @@ class RaceSelect extends Backbone.View
     set: (@racer_id) ->
         if @racer_id == -1
             src = '/static/images/empty.png'
+            values = {}
+            values.time1 = values.time2 = values.time3 = values.time4 = '----.-'
+            values.lane1 = values.lane2 = values.lane3 = values.lane4 = '-'
+            @updateTimes(values)
         else
             racer = @collection.get(@racer_id)
             src = racer.get('avatar')
+            @updateTimes(racer.toJSON())
+
         @$select.val(@racer_id)
         @$('img.avatar').attr('src', src)
         @parent.checkGateReady()
         return
+
+    updateTimes: (model) ->
+        model.time1='💥' if model.time1 == '0.0000'
+        model.time2='💥' if model.time2 == '0.0000'
+        model.time3='💥' if model.time3 == '0.0000'
+        model.time4='💥' if model.time4 == '0.0000'
+
+        model.time1 = '-.----' if model.time1 == ''
+        model.time2 = '-.----' if model.time2 == ''
+        model.time3 = '-.----' if model.time3 == ''
+        model.time4 = '-.----' if model.time4 == ''
+
+        model.lane1 = '-' if model.lane1 == ''
+        model.lane2 = '-' if model.lane2 == ''
+        model.lane3 = '-' if model.lane3 == ''
+        model.lane4 = '-' if model.lane4 == ''
+
+        @$('.heat-time1').text model.time1 + ' ' + model.lane1
+        @$('.heat-time2').text model.time2 + ' ' + model.lane2
+        @$('.heat-time3').text model.time3 + ' ' + model.lane3
+        @$('.heat-time4').text model.time4 + ' ' + model.lane4
+
 
     result: (time) ->
         if time != 0

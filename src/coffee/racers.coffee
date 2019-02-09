@@ -31,18 +31,18 @@ class RacerModel extends Backbone.Model
 
         sortNumber = (a, b) -> a - b
         times.sort(sortNumber)
+        worse = times[3]
         times = times.slice(0,3)
 
         sumNumber = (a, b) -> a + b
         total = times.reduce(sumNumber, 0)
         @set('total', total.toFixed(4))
-        return
+        return worse
 
 class RacerCollection extends Backbone.Collection
     model: RacerModel
     url: RacerModel.prototype.urlRoot
-    comparator: (a,b) ->
-        return a.get('total') - b.get('total')
+    comparator: (a,b) -> a.get('total') - b.get('total')
 
 module.exports.Model      = RacerModel
 module.exports.Collection = RacerCollection

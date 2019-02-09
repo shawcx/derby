@@ -41,7 +41,7 @@ class Derby
         @heatModal = new Heat.HeatModal
             collection: @racers
 
-        new Results.ResultsTable
+        @resultsTable = new Results.ResultsTable
             collection: @racers
 
         window.p = (a,b) =>
@@ -78,16 +78,22 @@ class Derby
                 update['count'] = count
                 racer.set update
 
-                racer.calculateTotal()
-
-                #console.log entry.racer_id, entry.lane, entry.time
+                worse = racer.calculateTotal()
+                if count == 4
+                    worse = worse.toFixed(4)
+                    row = @resultsTable.rows[racer.id]
+                    console.log racer.get('name'), worse
+                    row.$el.find('.td-times').each (idx, el) ->
+                        return if idx is 4
+                        if $(el).text().startsWith(worse)
+                            $(el).css('opacity', '0.125')
+                        return
                 return
 
             @racers.sort()
 
             @socket = new Socket
                 onmessage: (bundle) =>
-                    #console.log 'WS:', bundle.action, bundle.message
                     @dispatch.trigger(bundle.action, bundle.message)
                     return
             return
@@ -100,8 +106,8 @@ class Derby
 
 # dev -------------------------------
         #$('#heat-modal').modal()
-        #@heatModal.selectA.set(3)
-        #@heatModal.selectB.set(4)
+        #@heatModal.selectA.set(1)
+        #@heatModal.selectB.set(2)
 # -----------------------------------
         return
 

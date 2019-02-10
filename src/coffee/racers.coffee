@@ -42,7 +42,12 @@ class RacerModel extends Backbone.Model
 class RacerCollection extends Backbone.Collection
     model: RacerModel
     url: RacerModel.prototype.urlRoot
-    comparator: (a,b) -> a.get('total') - b.get('total')
+    comparator: (a,b) ->
+        aTotal = a.get('total')
+        bTotal = b.get('total')
+        return bTotal if not aTotal
+        return aTotal if not bTotal
+        return aTotal - bTotal
 
 module.exports.Model      = RacerModel
 module.exports.Collection = RacerCollection

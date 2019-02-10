@@ -11,7 +11,7 @@ class ResultsTable extends Backbone.View
         @rows   = {}
         @$tbody = @$('tbody')
 
-        new DenFilter
+        @denFilter = new DenFilter
             table: @
 
         # bind to the racers collection
@@ -25,6 +25,7 @@ class ResultsTable extends Backbone.View
                 row.$el.remove()
                 @$tbody.append(row.$el)
                 return
+            @denFilter.FilterDen()
             return
         return @
 
@@ -50,12 +51,15 @@ class DenFilter extends Backbone.View
     OnSelectDen: (e) ->
         @$el.find('button').removeClass('btn-primary').addClass('btn-secondary')
         $(e.target).removeClass('btn-secondary').addClass('btn-primary')
-        den = $(e.target).data('den')
-        den = null if den is 'all'
+        @den = $(e.target).data('den')
+        @FilterDen()
+
+    FilterDen: () ->
+        @den = null if @den is 'all'
         @table.collection.forEach (racer) =>
             row = @table.rows[racer.id]
             row.$el.remove()
-            if den and racer.get('den') != den
+            if @den and racer.get('den') != @den
                 return
             @table.$tbody.append(row.$el)
             return
@@ -93,4 +97,17 @@ class ResultsRow extends Backbone.View
         model.lane4 = '-' if model.lane4 == ''
 
         @$el.html Templates['result-row'] model
+
+        if @model.get('count') == 4
+            worse = @model.calculateTotal()
+            worse = worse.toFixed(4)
+            if worse == '10.0000'
+                worse = '💥'
+
+            for el,idx in @$el.find('.td-times')
+                break if idx is 4
+                if $(el).text().startsWith(worse)
+                    $(el).css('opacity', '0.5').css('text-decoration', 'line-through')
+                    break
+
         return @

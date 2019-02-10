@@ -78,19 +78,7 @@ class Derby
                 update['count'] = count
                 racer.set update
 
-                worse = racer.calculateTotal()
-                if count == 4
-                    worse = worse.toFixed(4)
-                    row = @resultsTable.rows[racer.id]
-                    if worse == '10.0000'
-                        worse = '💥'
-
-                    for el,idx in row.$el.find('.td-times')
-                        break if idx is 4
-                        console.log idx,el
-                        if $(el).text().startsWith(worse)
-                            $(el).css('opacity', '0.5').css('text-decoration', 'line-through')
-                            break
+                racer.calculateTotal()
                 return
 
             @racers.sort()

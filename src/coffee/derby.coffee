@@ -35,7 +35,7 @@ class Derby
         new Racers.AddRacerModal
             collection: @racers
 
-        new Racers.RacersModal
+        new Racers.RacerModal
             collection: @racers
 
         @heatModal = new Heat.HeatModal

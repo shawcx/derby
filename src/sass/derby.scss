@@ -210,28 +210,41 @@ $light-size: 90px;
         }
         .red {
             background: lighten($red, 20%);
+            opacity: 0.5;
             border: 3px solid $red;
             font-size: 1.75em;
             font-weight: bold;
             color: white;
         }
         .bright-red {
+            opacity: 1.0;
             background: $red;
             border: 3px solid darken($red,10%);
         }
         .yellow {
+            opacity: 0.25;
+
             background: lighten($yellow, 20%);
+            //background: -webkit-linear-gradient(top, lighten($yellow,20%) 0%, $yellow 100%); /* Chrome10-25,Safari5.1-6 */
+            //background:    -moz-linear-gradient(top, lighten($yellow,20%) 0%, $yellow 100%); /* FF3.6-15 */
+            //background:         linear-gradient(to bottom, lighten($yellow,20%) 0%, $yellow 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            //filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='lighten($yellow,20%)', endColorstr='$yellow',GradientType=0 ); /* IE6-9 */
+
             border: 3px solid $yellow;
         }
         .bright-yellow {
+            opacity: 1.0;
             background: $yellow;
             border: 3px solid darken($yellow,10%);
         }
         .green {
+            opacity: 0.25;
+
             background: lighten($green, 20%);
             border: 3px solid $green;
         }
         .bright-green {
+            opacity: 1.0;
             background: $green;
             border: 3px solid darken($green,10%);
         }

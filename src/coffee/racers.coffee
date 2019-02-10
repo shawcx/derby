@@ -45,8 +45,8 @@ class RacerCollection extends Backbone.Collection
     comparator: (a,b) ->
         aTotal = a.get('total')
         bTotal = b.get('total')
-        return bTotal if not aTotal
-        return aTotal if not bTotal
+        return -bTotal if not aTotal
+        return -aTotal if not bTotal
         return aTotal - bTotal
 
 module.exports.Model      = RacerModel
@@ -57,56 +57,33 @@ class RacerModal extends Backbone.View
     el: () -> $('#racer-modal')
 
     events:
-        'show.bs.modal'          : 'OnShowModal'
-        'click .delete-racer'  : 'OnDelete'
+        'show.bs.modal'        : 'OnShowModal'
+        'click #save-racer'    : 'OnSave'
+        'click #delete-racer'  : 'OnDelete'
 
     initialize: (options) ->
-        #@render()
-        # reference to the body of the racers modal
-        @$body = @$('#racer-body')
-
-        @listenTo @model, 'change', @render
-        @listenTo @model, 'remove', () =>
-            @$el.modal('hide')
-            return
         return @
 
-    OnShowModal: () ->
-        @vidSize = $('#avatarVid').height()
-        if not @stream
-            constraints =
-                video: true
-            @video = document.querySelector('video')
-            navigator.mediaDevices.getUserMedia(constraints).then (stream) =>
-                @video.srcObject = @stream = stream
-                return
+    OnShowModal: (evt) ->
+        @racer = @collection.get $(evt.relatedTarget).data('racer')
+        model = @racer.toJSON()
+        @$el.find('img.avatar').attr('src', model.avatar)
+        @$el.find('#race-modal-name').text model.name
+        @$el.find('#race-modal-den').text model.den
+        @$el.find('#race-modal-car').text model.car
         return
 
-    render: () ->
-        model = @model.toJSON()
-
-        model.time1='💥' if model.time1 == '0.0000'
-        model.time2='💥' if model.time2 == '0.0000'
-        model.time3='💥' if model.time3 == '0.0000'
-        model.time4='💥' if model.time4 == '0.0000'
-
-        model.time1 = '-.----' if model.time1 == ''
-        model.time2 = '-.----' if model.time2 == ''
-        model.time3 = '-.----' if model.time3 == ''
-        model.time4 = '-.----' if model.time4 == ''
-
-        model.lane1 = '-' if model.lane1 == ''
-        model.lane2 = '-' if model.lane2 == ''
-        model.lane3 = '-' if model.lane3 == ''
-        model.lane4 = '-' if model.lane4 == ''
-
-        @$el.html Templates['racer-row'] model
-        return @
+    OnSave: () ->
+        @racer.save
+            name: @$el.find('#race-modal-name').text()
+            car:  @$el.find('#race-modal-car').text()
+        return
 
     OnDelete: () ->
-        really = confirm("Remove #{ @model.get('name') }?")
+        really = confirm("Remove #{ @racer.get('name') }?")
         return if not really
-        @model.destroy wait: true
+        @racer.destroy wait: true
+        @$el.modal('hide')
         return
 
 module.exports.RacerModal = RacerModal

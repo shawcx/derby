@@ -44,6 +44,15 @@ class Racers(tornado.web.RequestHandler):
             self.set_status(400)
             self.write('Duplicate name')
 
+    def put(self, racer_id=None):
+        try:
+            data = json.loads(self.request.body)
+        except:
+            raise tornado.web.HTTPError(500)
+
+        derby.db.update('racers', data, 'racer_id')
+        self.write(data)
+
     def delete(self, racer_id=None):
         derby.db.delete('racers', racer_id, 'racer_id')
         derby.db.delete('times', racer_id, 'racer_id')

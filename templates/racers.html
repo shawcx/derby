@@ -1,40 +1,28 @@
 
 <div id="racer-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="racer-label" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="racer-label"><i class="fal fa-users"></i> Derby Racers</h5>
+        <h5 class="modal-title" id="racer-label"><i class="fal fa-user"></i> Derby Racer</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <script type="text/html-template" id="t-racer-row">
-          <button class="delete-racer btn btn-sm btn-danger float-right">
-            <i class="far fa-trash-alt"></i>
-          </button>
-          <div class="row">
-            <div class="col-auto imgframe">
-              <img class="avatar" src="<%- avatar %>" width="120" height="120" />
-            </div>
-            <div class="col">
-              <p><i class="fal fa-user"></i>    <b><%- name %></b></p>
-              <p><i class="fal fa-diamond"></i> <b>Den:</b> <%- den  %></p>
-              <p><i class="fal fa-car-alt"></i> <b>Car:</b> <%- car  %></p>
-            </div>
-            <div class="col col-times">
-              <!--<p><b>Times</b></p>-->
-              <p><small class="text-muted">1st:</small> <%- time1 %> <%- lane1 %></p>
-              <p><small class="text-muted">2nd:</small> <%- time2 %> <%- lane2 %></p>
-            </div>
-            <div class="col col-times">
-              <p><small class="text-muted">3rd:</small> <%- time3 %> <%- lane3 %></p>
-              <p><small class="text-muted">4th:</small> <%- time4 %> <%- lane4 %></p>
-              <p><b>Total:</b> <i><%- total %></i></p>
-            </div>
+        <div class="row align-items-center">
+          <div class="col-auto imgframe">
+            <img class="avatar" width="240" height="240" />
           </div>
-        </script>
-        <div id="racer-body">
+          <div class="col">
+            <p><i class="fal fa-user"></i>    <b><span id="race-modal-name" contenteditable="true"></b></p>
+            <p><i class="fal fa-diamond"></i> <b>Den:</b> <span id="race-modal-den"></span></p>
+            <p><i class="fal fa-car-alt"></i> <b>Car:</b> <span id="race-modal-car" contenteditable="true"></span></p>
+          </div>
+          <div class="col-auto">
+            <button id="save-racer"   class="btn btn-primary"><i class="far fa-save"     ></i></button>
+            <br/>
+            <button id="delete-racer" class="btn btn-danger" ><i class="far fa-trash-alt"></i></button>
+          </div>
         </div>
       </div>
     </div>

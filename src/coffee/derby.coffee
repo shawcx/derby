@@ -31,7 +31,6 @@ class Derby
         @racers = new Racers.Collection
         @times  = new Times.Collection
 
-        window.t = @times
         new Racers.AddRacerModal
             collection: @racers
 

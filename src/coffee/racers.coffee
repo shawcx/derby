@@ -45,8 +45,8 @@ class RacerCollection extends Backbone.Collection
     comparator: (a,b) ->
         aTotal = a.get('total')
         bTotal = b.get('total')
-        return -bTotal if not aTotal
-        return -aTotal if not bTotal
+        aTotal = if aTotal then parseFloat(aTotal) else Infinity
+        bTotal = if bTotal then parseFloat(bTotal) else Infinity
         return aTotal - bTotal
 
 module.exports.Model      = RacerModel

@@ -283,7 +283,8 @@ class RaceSelect extends Backbone.View
 
 
     result: (time) ->
-        if time != 0
-        then @$('.time').text time.toFixed(4)
-        else @$('.time').text '💥'
+        if @racer_id != -1
+            if time != 0
+            then @$('.time').text time.toFixed(4)
+            else @$('.time').text '💥'
         return

@@ -20,7 +20,6 @@ class ResultsTable extends Backbone.View
             racers.forEach @Add, @
             return
         @listenTo @collection, 'sort', (racers) =>
-            console.log 'sort called...'
             racers.forEach (racer) =>
                 row = @rows[racer.id]
                 row.$el.remove()

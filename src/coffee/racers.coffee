@@ -39,6 +39,14 @@ class RacerModel extends Backbone.Model
         @set('total', total.toFixed(4))
         return worse
 
+_denCompare =
+    Lion   : 1
+    Tiger  : 2
+    Wolf   : 3
+    Bear   : 4
+    Webelo : 5
+    AoL    : 6
+
 class RacerCollection extends Backbone.Collection
     model: RacerModel
     url: RacerModel.prototype.urlRoot
@@ -47,6 +55,9 @@ class RacerCollection extends Backbone.Collection
         bTotal = b.get('total')
         aTotal = if aTotal then parseFloat(aTotal) else Infinity
         bTotal = if bTotal then parseFloat(bTotal) else Infinity
+        if aTotal == bTotal
+            console.log a.get('den'), b.get('den')
+            return _denCompare[a.get('den')] - _denCompare[b.get('den')]
         return aTotal - bTotal
 
 module.exports.Model      = RacerModel

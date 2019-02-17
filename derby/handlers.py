@@ -3,6 +3,7 @@ import sys
 import os
 import json
 import uuid
+import logging
 
 import tornado.web
 import tornado.websocket
@@ -17,8 +18,18 @@ class Template(tornado.web.RequestHandler):
 
 
 class Serial(tornado.web.RequestHandler):
-    def get(self):
-        self.settings['pipe'].send(b'LN')
+    def post(self):
+        racerA = self.get_argument('racerA')
+        racerB = self.get_argument('racerB')
+
+        self.settings['pipe'].send(b'MG\r')
+        if racerA == '-1':
+            logging.info('Masking Lane A')
+            self.settings['pipe'].send(b'MA\r')
+        if racerB == '-1':
+            logging.info('Masking Lane B')
+            self.settings['pipe'].send(b'MB\r')
+        self.settings['pipe'].send(b'LN\r')
         self.set_status(204)
 
 
@@ -95,6 +106,8 @@ class Times(tornado.web.RequestHandler):
             except derby.error as e:
                 self.set_status(400)
                 self.write('%s', e)
+
+        self.settings['pipe'].send(b'MG\r')
 
         self.set_status(204)
 

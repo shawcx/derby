@@ -29,7 +29,7 @@ class SerialWorker(multiprocessing.Process):
     def run(self):
         fds = [self.serialPort,self.pipe]
         while True:
-            ready = select.select(fds,[],[], 0.2)[0]
+            ready = select.select(fds,[],[], 0.1)[0]
             if not ready:
                 continue
 
@@ -42,5 +42,6 @@ class SerialWorker(multiprocessing.Process):
                 if data == None:
                     break
                 self.serialPort.write(data)
+                time.sleep(0.1)
 
         self.serialPort.close()

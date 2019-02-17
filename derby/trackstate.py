@@ -29,7 +29,13 @@ class TrackState:
             return
 
         # append data to the input queue to be processed
-        self._input += b''.join(data).decode('ascii')
+        while data:
+            try:
+                self._input += b''.join(data).decode('ascii')
+                break
+            except UnicodeDecodeError:
+                logging.warn('Discarding data: %s', repr(data[0]))
+                data = data[1:]
 
         # iterate over the input data to parse values
         while self._input:

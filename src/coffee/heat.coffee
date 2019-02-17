@@ -43,8 +43,12 @@ class HeatModal extends Backbone.View
 
         delay = 750
         $.ajax
-            method: 'GET'
+            method: 'POST'
             url: '/serial'
+            data:
+                action: 'release'
+                racerA: @selectA.racer_id
+                racerB: @selectB.racer_id
             success: (data) ->
                 _.delay(lightUp, delay * 0, '#lightyellow1', 'bright-yellow')
                 _.delay(lightUp, delay * 1, '#lightyellow2', 'bright-yellow')

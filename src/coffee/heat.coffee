@@ -116,10 +116,8 @@ class HeatModal extends Backbone.View
     reset: () ->
         $('#acceptTimes').prop('disabled', true)
         @$('.board').removeClass('board-winner')
-
         @selectA.$el.find('.avatar').removeClass('spinner')
         @selectB.$el.find('.avatar').removeClass('spinner')
-
         @selectA.$('.time').text '-.----'
         @selectB.$('.time').text '-.----'
         @needAccept = false
@@ -155,6 +153,8 @@ class HeatModal extends Backbone.View
         @selectA.result(timeA)
         @selectB.result(timeB)
 
+        @$('.board').removeClass('board-winner')
+
         if timeA == 0 and timeB == 0
             console.log 'both lose'
         else if timeA == 0
@@ -177,6 +177,13 @@ class HeatModal extends Backbone.View
                 @selectB.$el.find('.avatar').addClass('spinner')
             else
                 console.error 'unreachable state', timeA, timeB
+
+        _.delay () =>
+            @selectA.$el.find('.avatar').removeClass('spinner')
+            @selectB.$el.find('.avatar').removeClass('spinner')
+            return
+          ,
+            1500
 
         @needAccept = true
         $('#acceptTimes').prop('disabled', false)

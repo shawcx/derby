@@ -35,7 +35,7 @@ class RacerModel extends Backbone.Model
         times = times.slice(0,3)
 
         sumNumber = (a, b) -> a + b
-        total = times.reduce(sumNumber, 0)
+        total = times.reduce(sumNumber, 0) / times.length
         @set('total', total.toFixed(4))
         return worse
 
@@ -56,7 +56,6 @@ class RacerCollection extends Backbone.Collection
         aTotal = if aTotal then parseFloat(aTotal) else Infinity
         bTotal = if bTotal then parseFloat(bTotal) else Infinity
         if aTotal == bTotal
-            console.log a.get('den'), b.get('den')
             return _denCompare[a.get('den')] - _denCompare[b.get('den')]
         return aTotal - bTotal
 

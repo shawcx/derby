@@ -92,6 +92,8 @@ class Derby
     # called after the websocket is successfully connected
     # sends current track state
     OnConnected: (message) ->
+        if message.gateClosed is null
+            alert('Serial interface not connected')
         @heatModal.gate(message.gateClosed)
 
 # dev -------------------------------

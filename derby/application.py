@@ -77,8 +77,9 @@ try:
     serialWorker = derby.SerialWorker(remotePipe)
     serialWorker.start()
 except derby.error as e:
+    serialWorker = None
     logging.error('%s', e)
-    sys.exit(-1)
+    #sys.exit(-1)
 
 derby.db = derby.Database(derby.args.db)
 
@@ -138,9 +139,10 @@ class Application(tornado.web.Application):
 
     def Stop(self):
         self.scheduler.stop()
-        ioloop.add_callback(ioloop.stop)
+        ioloop.add_callback_from_signal(ioloop.stop)
         localPipe.send(None)
-        serialWorker.join()
+        if serialWorker:
+            serialWorker.join()
 
     def SignalHandler(self, signum, frame):
         print()

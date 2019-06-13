@@ -79,7 +79,7 @@ try:
 except derby.error as e:
     serialWorker = None
     logging.error('%s', e)
-    #sys.exit(-1)
+    sys.exit(-1)
 
 derby.db = derby.Database(derby.args.db)
 

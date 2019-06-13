@@ -46,6 +46,8 @@ _denCompare =
     Bear   : 4
     Webelo : 5
     AoL    : 6
+    Sibling : 7
+    Adult   : 8
 
 class RacerCollection extends Backbone.Collection
     model: RacerModel

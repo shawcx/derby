@@ -1,16 +1,17 @@
+#!/usr/bin/env python3
 
-import sys
-import os
 import argparse
 import collections
 import configparser
 import json
 import logging
 import multiprocessing
+import os
 import platform
 import queue
 import signal
 import socket
+import sys
 
 import tornado.web
 import tornado.ioloop
@@ -20,9 +21,9 @@ import derby
 ioloop = tornado.ioloop.IOLoop.instance()
 
 defaultSerials = {
-    'Linux'  : '/dev/ttyUSB0',
-    'Darwin' : '/dev/cu.usbserial'
-    # TBD: Windows
+    'Linux'   : '/dev/ttyUSB0',
+    'Darwin'  : '/dev/cu.usbserial',
+    'Windows' : 'COM3',
 }
 
 # parse the command line arguments
@@ -39,7 +40,7 @@ argparser.add_argument('--baud',
     )
 
 argparser.add_argument('--db',
-    metavar='<sqlite db>', type=str, default='derby.sqlite',
+    metavar='<sqlite db>', default='derby.sqlite',
     help='Path to database'
     )
 
@@ -67,30 +68,19 @@ logging.basicConfig(
     level   = logging.DEBUG if derby.args.debug else logging.INFO
     )
 
-logging.info('Serial port: %s', derby.args.serial)
-
-# pipes for the serial reader process
-localPipe,remotePipe = multiprocessing.Pipe()
-
-# start the serial reader process
-try:
-    serialWorker = derby.SerialWorker(remotePipe)
-    serialWorker.start()
-except derby.error as e:
-    serialWorker = None
-    logging.error('%s', e)
-    sys.exit(-1)
-
-derby.db = derby.Database(derby.args.db)
 
 class Application(tornado.web.Application):
-    def __init__(self):
+    def __init__(self, localPipe):
+        derby.db = derby.Database(derby.args.db)
+
         derby.app = self
+
+        self.localPipe = localPipe
 
         self.websockets = {}
 
         # class to manage the state of the track
-        self.trackState = derby.TrackState(localPipe)
+        self.trackState = derby.TrackState(self.localPipe)
 
         # periodically check the serial pipe for data
         self.scheduler = tornado.ioloop.PeriodicCallback(self.trackState.readSerialPort, 50)
@@ -110,7 +100,7 @@ class Application(tornado.web.Application):
             template_path = os.path.join(derby.root, 'templates'),
             debug         = derby.args.debug,
             autoreload    = False,
-            pipe          = localPipe,
+            pipe          = self.localPipe,
             )
 
         super(Application, self).__init__(patterns, **self.settings)
@@ -140,11 +130,18 @@ class Application(tornado.web.Application):
     def Stop(self):
         self.scheduler.stop()
         ioloop.add_callback_from_signal(ioloop.stop)
-        localPipe.send(None)
-        if serialWorker:
-            serialWorker.join()
+        self.localPipe.send(None)
 
     def SignalHandler(self, signum, frame):
         print()
         logging.info('Terminating')
         self.Stop()
+
+
+if '__main__' == __name__:
+    multiprocessing.freeze_support()
+    try:
+        Application()
+    except derby.error as e:
+        logging.error('%s', e)
+        sys.exit(-1)

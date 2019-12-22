@@ -3,7 +3,7 @@ COFFEE     = ./node_modules/.bin/coffee
 SASS       = ./node_modules/.bin/sass
 BROWSERIFY = ./node_modules/.bin/browserify
 
-STATIC_ROOT = ../static
+STATIC_ROOT = ../derby/static
 
 COFFEE_FILES := $(wildcard coffee/*.coffee)
 JS_FILES     := $(patsubst coffee/%.coffee, js/%.js, $(COFFEE_FILES))

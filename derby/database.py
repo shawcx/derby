@@ -14,7 +14,7 @@ class Database:
 
         schema = None
         if not os.path.isfile(path):
-            schemaPath = os.path.join(derby.root, 'derby', 'database.sql')
+            schemaPath = os.path.join(derby.root, 'database.sql')
             try:
                 schema = open(schemaPath, 'r').read()
             except:

@@ -1,0 +1,38 @@
+{% extends 'base.template' %}
+
+{% block body %}
+  <nav id="devices-nav" class="navbar fixed-top navbar-expand-lg navbar-dark bg-derby">
+    <span class="navbar-brand" href="#"><img src="/static/images/logo.png" /></span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#device-navbar-collapse" aria-controls="device-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="device-navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <!--
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#racers-modal">
+            <i class="fal fa-users"></i> Racers <span id="racers-count" class="badge badge-dark">0</span>
+          </a>
+        </li>
+        -->
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#heat-modal">
+            <i class="fal fa-flag-checkered"></i> Heat
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#add-racer-modal"><i class="fal fa-user-circle"></i> Add Racer </a></li>
+        <!--<li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#settings-modal" ><i class="fal fa-cog"        ></i> Settings  </a></li>-->
+      </ul>
+      <span class="navbar-text" id="ws-status">
+        <i class="fa fa-plug" title="Server Status"></i>
+      </span>
+    </div>
+  </nav>
+
+  {% include 'results.html' %}
+  {% include 'racers.html' %}
+  {% include 'heat.html'   %}
+  {% include 'config.html' %}
+{% end %}

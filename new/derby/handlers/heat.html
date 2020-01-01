@@ -1,0 +1,73 @@
+
+<div id="heat-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="heat-label" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="heat-label"><i class="fal fa-flag-checkered"></i> Heat</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-5" id="heat-container-a"></div>
+          <div class="col-2" id="race-column">
+            <div id="lights">
+              <div class="light red" id="gateRelease">
+                <span class="align-middle">GO</span>
+              </div>
+              <div id="lightyellow1" class="light yellow">&nbsp;</div>
+              <div id="lightyellow2" class="light yellow">&nbsp;</div>
+              <div id="lightyellow3" class="light yellow">&nbsp;</div>
+              <div id="lightgreen" class="light green">&nbsp;</div>
+            </div>
+            <button id="acceptTimes" class="btn btn btn-success" disabled>
+              <i class="fal fa-check"></i> Accept
+            </button>
+            <button id="swapLanes" class="btn btn btn-secondary">
+              <i class="fal fa-exchange-alt"></i> Swap
+            </button>
+            <button id="resetTimes" class="btn btn btn-danger">
+              <i class="fal fa-undo"></i> Reset
+            </button>
+          </div>
+          <div class="col-5" id="heat-container-b"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html-template" id="t-heat-select">
+  <select class="form-control" name="select-<%- lane %>">
+    <option value="-1">Empty</option>
+    <optgroup label="Lions"           class="den den-lion"  ></optgroup>
+    <optgroup label="Tigers"          class="den den-tiger" ></optgroup>
+    <optgroup label="Wolves"          class="den den-wolf"  ></optgroup>
+    <optgroup label="Bears"           class="den den-bear"  ></optgroup>
+    <optgroup label="Webelos"         class="den den-webelo"></optgroup>
+    <optgroup label="Arrow of Lights" class="den den-aol"   ></optgroup>
+    <optgroup label="Siblings" class="den den-sibling" ></optgroup>
+    <optgroup label="Adults"   class="den den-adult"   ></optgroup>
+  </select>
+
+  <div class="text-center" style="margin: 15px;">
+    <div class="row">
+      <div class="col">
+        <img class="avatar" src="/static/images/empty.png" />
+      </div>
+      <div class="col-auto align-middle" style="padding-left: 0px;">
+        <p>Times</p>
+        <p class="heat-times"><small class="text-muted">1st:</small> <span class="heat-time1"><%- time1 %> <%- lane1 %></span></p>
+        <p class="heat-times"><small class="text-muted">2nd:</small> <span class="heat-time2"><%- time2 %> <%- lane2 %></span></p>
+        <p class="heat-times"><small class="text-muted">3rd:</small> <span class="heat-time3"><%- time3 %> <%- lane3 %></span></p>
+        <p class="heat-times"><small class="text-muted">4th:</small> <span class="heat-time4"><%- time4 %> <%- lane4 %></span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="board" id="board-<%- lane %>">
+    <p>Lane <%- lane %></p>
+    <p class="time">-.----</p>
+  </div>
+</script>

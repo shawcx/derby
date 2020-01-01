@@ -5,7 +5,6 @@ import collections
 import configparser
 import json
 import logging
-import multiprocessing
 import os
 import platform
 import queue
@@ -17,65 +16,69 @@ import serial
 import tornado.web
 import tornado.ioloop
 
+import derby
+
 
 ioloop = tornado.ioloop.IOLoop.instance()
 
-defaultSerials = {
-    #'Linux'   : '/dev/ttyUSB0',
-    'Linux'   : '/dev/ttyDERBY',
-    'Darwin'  : '/dev/cu.usbserial',
-    'Windows' : 'COM3',
-}
 
-# parse the command line arguments
-argparser = argparse.ArgumentParser()
+def main():
+    defaultSerials = {
+        #'Linux'   : '/dev/ttyUSB0',
+        'Linux'   : '/dev/ttyDERBY',
+        'Darwin'  : '/dev/cu.usbserial',
+        'Windows' : 'COM3',
+    }
 
-argparser.add_argument('--serial',
-    metavar='<tty>', default=defaultSerials.get(platform.system()),
-    help='serial port to open'
-    )
+    # parse the command line arguments
+    argparser = argparse.ArgumentParser()
 
-argparser.add_argument('--baud',
-    metavar='<speed>', type=int, default=9600,
-    help='serial port speed'
-    )
+    argparser.add_argument('--serial',
+        metavar='<tty>', default=defaultSerials.get(platform.system()),
+        help='serial port to open'
+        )
 
-argparser.add_argument('--addr',
-    metavar='<ip>', default='0.0.0.0',
-    help='address to listen on'
-    )
+    argparser.add_argument('--baud',
+        metavar='<speed>', type=int, default=9600,
+        help='serial port speed'
+        )
 
-argparser.add_argument('--port',
-    metavar='<port>', type=int, default=8000,
-    help='port to bind to'
-    )
+    argparser.add_argument('--addr',
+        metavar='<ip>', default='0.0.0.0',
+        help='address to listen on'
+        )
 
-argparser.add_argument('--debug',
-    action='store_true',
-    help='enable debug options'
-    )
+    argparser.add_argument('--port',
+        metavar='<port>', type=int, default=8000,
+        help='port to bind to'
+        )
 
-args = argparser.parse_args()
+    argparser.add_argument('--debug',
+        action='store_true',
+        help='enable debug options'
+        )
 
-# Setting default stdout logging
-logging.basicConfig(
-    format  = '%(asctime)s %(levelname)-8s %(message)s',
-    datefmt = '%Y-%m-%d %H:%M:%S',
-    level   = logging.DEBUG if args.debug else logging.INFO
-    )
+    derby.args = argparser.parse_args()
 
+    # Setting default stdout logging
+    logging.basicConfig(
+        format  = '%(asctime)s %(levelname)-8s %(message)s',
+        datefmt = '%Y-%m-%d %H:%M:%S',
+        level   = logging.DEBUG if derby.args.debug else logging.INFO
+        )
 
-class Template(tornado.web.RequestHandler):
-    def get(self, template=None):
-        template = template+'.html' if template else 'index.html'
-        self.render(template)
+    try:
+        Application()
+    except derby.error as e:
+        logging.error('%s', e)
+        sys.exit(-1)
 
 
 class Application(tornado.web.Application):
     def __init__(self):
         self.websockets = {}
 
-        self.serialPort = serial.Serial(args.serial, args.baud)
+        self.serialPort = serial.Serial(derby.args.serial, derby.args.baud)
 
         ioloop.add_handler(self.serialPort, self.tapReadCb, ioloop.READ)
 
@@ -94,18 +97,18 @@ class Application(tornado.web.Application):
 
         # Tornado settings
         self.settings = dict(
-            debug         = args.debug,
+            debug         = derby.args.debug,
             autoreload    = False,
             )
 
         super(Application, self).__init__(patterns, **self.settings)
 
         try:
-            self.listen(args.port, args.addr, xheaders=True)
+            self.listen(derby.args.port, derby.args.addr, xheaders=True)
         except Exception as e:
             raise
 
-        logging.info('Listening on %s:%d', args.addr, args.port)
+        logging.info('Listening on %s:%d', derby.args.addr, derby.args.port)
 
         signal.signal(signal.SIGINT,  self.SignalHandler)
         signal.signal(signal.SIGTERM, self.SignalHandler)
@@ -137,9 +140,7 @@ class Application(tornado.web.Application):
         self.Stop()
 
 
-if '__main__' == __name__:
-    try:
-        Application()
-    except derby.error as e:
-        logging.error('%s', e)
-        sys.exit(-1)
+class Template(tornado.web.RequestHandler):
+    def get(self, template=None):
+        template = template+'.html' if template else 'index.html'
+        self.render(template)

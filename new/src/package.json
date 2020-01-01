@@ -1,6 +1,6 @@
 {
   "name": "derby",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Pinewood Derby Race Management",
   "browser": "derby.js",
   "scripts": {

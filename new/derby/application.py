@@ -65,12 +65,10 @@ logging.basicConfig(
     )
 
 
-
 class Template(tornado.web.RequestHandler):
     def get(self, template=None):
         template = template+'.html' if template else 'index.html'
         self.render(template)
-
 
 
 class Application(tornado.web.Application):
@@ -78,7 +76,6 @@ class Application(tornado.web.Application):
         self.websockets = {}
 
         self.serialPort = serial.Serial(args.serial, args.baud)
-        print(self.serialPort)
 
         ioloop.add_handler(self.serialPort, self.tapReadCb, ioloop.READ)
 
@@ -118,9 +115,7 @@ class Application(tornado.web.Application):
 
     def tapReadCb(self, fd, event):
         data = fd.read(fd.in_waiting)
-        print()
-        print(repr(data))
-        print()
+        print(data.decode('utf-8').strip())
 
     def Broadcast(self, action, message):
         'Broadcast a message to all connected sockets'

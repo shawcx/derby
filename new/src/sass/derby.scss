@@ -1,0 +1,320 @@
+
+$cubBlue: #258;
+
+@import 'bootstrap';
+
+@import "fontawesome";
+@import "solid";
+@import "light";
+@import "regular";
+@import "brands";
+
+// OVERALL
+
+body {
+    font-size: 16pt;
+    background: #c4d4e5;
+
+    background: #c4d4e5 url("/static/images/bg.jpg") no-repeat fixed top;
+    background-size: cover;
+
+}
+
+.navbar-brand {
+    margin-left: -16px;
+    padding: 0px;
+}
+
+.modal-content {
+    background: transparent;
+}
+
+.modal-header {
+    background: #e9ecef;
+}
+
+.modal-footer {
+    border-top: none;
+    background: lighten($dark,10%);
+}
+
+.modal-body {
+    background: #e9ecef;
+    background: -webkit-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* Chrome10-25,Safari5.1-6 */
+    background:    -moz-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* FF3.6-15 */
+    background:         linear-gradient(to bottom, #e9ecef 0%, lighten($dark,10%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9ecef', endColorstr='lighten($dark,10%)',GradientType=0 ); /* IE6-9 */
+}
+
+// NAV BAR
+.bg-derby {
+    background: darken($cubBlue, 15%);
+}
+
+#avatarVid {
+    position: relative;
+
+    width:  240px;
+    height: 240px;
+    border-radius: 50%;
+    -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+
+    display: block;
+    left:50%;
+    margin-left:-120px;
+    margin-bottom: 10px;
+
+    img {
+        position: absolute;
+        top:  0px;
+        left: 0px;
+    }
+
+    video {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        max-height: 240px;
+                transform: rotateY(180deg);
+           -moz-transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
+    }
+}
+
+#avatarImg {
+    position: relative;
+
+    display: none;
+    border-radius: 50%;
+
+    left:50%;
+    margin-left:-120px;
+    margin-bottom: 10px;
+
+    transform: rotateY(180deg);
+}
+
+img.avatar {
+    border-radius: 50%;
+}
+
+div.racerRow {
+    padding: 0.5em 0em;
+    .imgframe {
+        //flex-grow: 0;
+        //flex-shrink: 1;
+        img {
+            margin-left: 1em;
+            //border: 3px solid $cubBlue; //lighten($cubBlue, 15%);
+            box-shadow: 1px 3px 8px #555;
+        }
+    }
+    border-top: 1px solid lighten($cubBlue, 25%);
+}
+
+#racers-body {
+    margin-top: 1em;
+}
+
+//.delete-racer {
+//    opacity: 0.125;
+//}
+//
+//.delete-racer:hover {
+//    opacity: 1;
+//}
+
+
+#results-body {
+    margin-top: 3.5em;
+}
+
+#results-table {
+    background: #fff;
+    //background: rgba(255,255,255,0.9);
+
+    .avatar {
+        width:  3em;
+        height: 3em;
+        margin-left: 0.5em;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+}
+
+
+.board {
+    background: $dark;
+    color: $light;
+    border: 10px solid $dark;
+    border-radius: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 3.5em;
+    font-family: 'Andale Mono' monospace;
+}
+
+.board-winner {
+    border: 10px solid $green;
+
+            transition: all 0.4s ease-in-out;
+         -o-transition: all 0.4s ease-in-out;
+         -o-transition: all 0.4s ease-in-out;
+        -ms-transition: all 0.4s ease-in-out;
+       -moz-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+
+            animation: blink normal 1.2s infinite ease-in-out;
+         -o-animation: blink normal 1.2s infinite ease-in-out;
+        -ms-animation: blink normal 1.2s infinite ease-in-out;
+       -moz-animation: blink normal 1.2s infinite ease-in-out;
+    -webkit-animation: blink normal 1.2s infinite ease-in-out;
+}
+
+@keyframes blink {
+      0% { border-color: $green; }
+     50% { border-color: $dark;  }
+    100% { border-color: $green; }
+}
+@-webkit-keyframes blink {
+      0% { border-color: $green; }
+     50% { border-color: $dark;  }
+    100% { border-color: $green; }
+}
+
+$light-size: 90px;
+
+#race-column {
+    #gateRelease {
+        span {
+            text-shadow: 1px 1px 2px $dark;
+        }
+    }
+    #lights {
+        margin: 0em auto;
+        text-align: center;
+
+        .light {
+            user-select: none;
+            display: inline-block;
+            width: $light-size;
+            height: $light-size;
+            border-radius: $light-size/2;
+            margin-bottom: 0px;
+            span {
+                display: inline-block;
+                line-height: $light-size;
+            }
+        }
+        .red {
+            background: lighten($red, 20%);
+            opacity: 0.5;
+            border: 3px solid $red;
+            font-size: 1.75em;
+            font-weight: bold;
+            color: white;
+        }
+        .bright-red {
+            opacity: 1.0;
+            background: $red;
+            border: 3px solid darken($red,10%);
+        }
+        .yellow {
+            opacity: 0.25;
+
+            background: lighten($yellow, 20%);
+            //background: -webkit-linear-gradient(top, lighten($yellow,20%) 0%, $yellow 100%); /* Chrome10-25,Safari5.1-6 */
+            //background:    -moz-linear-gradient(top, lighten($yellow,20%) 0%, $yellow 100%); /* FF3.6-15 */
+            //background:         linear-gradient(to bottom, lighten($yellow,20%) 0%, $yellow 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            //filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='lighten($yellow,20%)', endColorstr='$yellow',GradientType=0 ); /* IE6-9 */
+
+            border: 3px solid $yellow;
+        }
+        .bright-yellow {
+            opacity: 1.0;
+            background: $yellow;
+            border: 3px solid darken($yellow,10%);
+        }
+        .green {
+            opacity: 0.25;
+
+            background: lighten($green, 20%);
+            border: 3px solid $green;
+        }
+        .bright-green {
+            opacity: 1.0;
+            background: $green;
+            border: 3px solid darken($green,10%);
+        }
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        margin-top: 6px;
+    }
+}
+
+
+.spinner {
+    -webkit-animation-name: spin;
+       -moz-animation-name: spin;
+        -ms-animation-name: spin;
+            animation-name: spin;
+    -webkit-animation-duration: 200ms;
+       -moz-animation-duration: 200ms;
+        -ms-animation-duration: 200ms;
+            animation-duration: 200ms;
+    -webkit-animation-iteration-count: 6;
+       -moz-animation-iteration-count: 6;
+        -ms-animation-iteration-count: 6;
+            animation-iteration-count: 6;
+    -webkit-animation-timing-function: linear;
+       -moz-animation-timing-function: linear;
+        -ms-animation-timing-function: linear;
+            animation-timing-function: linear;
+}
+@-ms-keyframes spin {
+    from { -ms-transform: rotate(0deg);   }
+    to   { -ms-transform: rotate(360deg); }
+}
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg);   }
+    to   { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg);   }
+    to   { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    from { transform:rotate(0deg);   }
+    to   { transform:rotate(360deg); }
+}
+
+
+#heat-modal .modal-body {
+    //background: #333 url("/static/images/road.jpg") no-repeat fixed bottom;
+    //background-size: cover;
+
+    background: #e9ecef; /* Old browsers */
+    background: -webkit-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* Chrome10-25,Safari5.1-6 */
+    background:    -moz-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* FF3.6-15 */
+    background:         linear-gradient(to bottom, #e9ecef 0%, lighten($dark,10%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9ecef', endColorstr='lighten($dark,10%)',GradientType=0 ); /* IE6-9 */
+
+}
+
+.td-times, .col-times, .heat-times {
+    font-family: 'Andale Mono', monospace;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.td-total {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: right;
+    padding-right: 0.5em !important;
+}

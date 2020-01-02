@@ -43,6 +43,11 @@ def main():
         help='serial port speed'
         )
 
+    argparser.add_argument('--db',
+        metavar='<sqlite db>', default='derby.sqlite',
+        help='Path to database'
+        )
+
     argparser.add_argument('--addr',
         metavar='<ip>', default='0.0.0.0',
         help='address to listen on'
@@ -78,27 +83,27 @@ class Application(tornado.web.Application):
     def __init__(self):
         self.websockets = {}
 
-        self.serialPort = serial.Serial(derby.args.serial, derby.args.baud)
+        derby.db = derby.Database(derby.args.db)
 
-        ioloop.add_handler(self.serialPort, self.tapReadCb, ioloop.READ)
+        # class to manage the state of the track
+        self.trackState = derby.TrackState()
 
-
-        ## periodically check the serial pipe for data
-        #self.scheduler = tornado.ioloop.PeriodicCallback(self.trackState.readSerialPort, 50)
-        #self.scheduler.start()
+        #self.serialPort = serial.Serial(derby.args.serial, derby.args.baud)
+        #ioloop.add_handler(self.serialPort, self.tapReadCb, ioloop.READ)
 
         patterns = [
-            #( r'/racers/([0-9]*)', derby.handlers.Racers    ),
-            #( r'/times/([0-9]*)',  derby.handlers.Times     ),
-            #( r'/serial',          derby.handlers.Serial    ),
-            #( r'/ws',              derby.handlers.WebSocket ),
+            ( r'/racers/([0-9]*)', derby.handlers.Racers    ),
+            ( r'/times/([0-9]*)',  derby.handlers.Times     ),
+            ( r'/serial',          derby.handlers.Serial    ),
+            ( r'/ws',              derby.handlers.WebSocket ),
             ( r'/',                Template  ),
             ]
 
         # Tornado settings
         self.settings = dict(
+            static_path   = os.path.join(derby.root, 'static'),
+            template_path = os.path.join(derby.root, 'templates'),
             debug         = derby.args.debug,
-            autoreload    = False,
             )
 
         super(Application, self).__init__(patterns, **self.settings)
@@ -130,12 +135,11 @@ class Application(tornado.web.Application):
             websocket.write_message(bundle)
 
     def Stop(self):
-        #self.scheduler.stop()
         ioloop.add_callback_from_signal(ioloop.stop)
-        #self.localPipe.send(None)
 
     def SignalHandler(self, signum, frame):
-        print()
+        if signal.SIGINT == signum:
+            print()
         logging.info('Terminating')
         self.Stop()
 

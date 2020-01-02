@@ -39,13 +39,13 @@ class RacerModel extends Backbone.Model
         @set('total', total.toFixed(4))
         return worse
 
-_denCompare =
-    Lion   : 1
-    Tiger  : 2
-    Wolf   : 3
-    Bear   : 4
-    Webelo : 5
-    AoL    : 6
+_groupCompare =
+    Lion    : 1
+    Tiger   : 2
+    Wolf    : 3
+    Bear    : 4
+    Webelo  : 5
+    AoL     : 6
     Sibling : 7
     Adult   : 8
 
@@ -58,7 +58,7 @@ class RacerCollection extends Backbone.Collection
         aTotal = if aTotal then parseFloat(aTotal) else Infinity
         bTotal = if bTotal then parseFloat(bTotal) else Infinity
         if aTotal == bTotal
-            return _denCompare[a.get('den')] - _denCompare[b.get('den')]
+            return _groupCompare[a.get('group')] - _groupCompare[b.get('group')]
         return aTotal - bTotal
 
 module.exports.Model      = RacerModel
@@ -81,7 +81,7 @@ class RacerModal extends Backbone.View
         model = @racer.toJSON()
         @$el.find('img.avatar').attr('src', model.avatar)
         @$el.find('#race-modal-name').text model.name
-        @$el.find('#race-modal-den').text model.den
+        @$el.find('#race-modal-group').text model.group
         @$el.find('#race-modal-car').text model.car
         return
 
@@ -121,7 +121,7 @@ class AddRacerModal extends Backbone.View
         @racer = new RacerModel
 
         $('#add-racer-name').val('')
-        $('#add-racer-den').val(null)
+        $('#add-racer-group').val(null)
         $('#add-racer-car').val('')
 
         $('#avatarImg').hide()
@@ -152,9 +152,9 @@ class AddRacerModal extends Backbone.View
             alert('No picture was taken')
             return cancelEvent(evt)
         @racer.save {
-                name: $('#add-racer-name').val()
-                den:  $('#add-racer-den').val()
-                car:  $('#add-racer-car').val()
+                name:  $('#add-racer-name').val()
+                group: $('#add-racer-group').val()
+                car:   $('#add-racer-car').val()
             },{
                 wait: true,
                 success: () =>

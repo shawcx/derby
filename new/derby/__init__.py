@@ -12,8 +12,7 @@ class error(Exception):
         return self.message
 
 from . import handlers
-#from .database     import Database
-#from .trackstate   import TrackState
-#from .serialworker import SerialWorker
+from .database     import Database
+from .trackstate   import TrackState
 from .application  import Application
 

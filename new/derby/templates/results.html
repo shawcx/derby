@@ -1,16 +1,16 @@
 <div id="results-body" class="container">
   <div style="text-align: center; margin-bottom: 0.5em;">
     <img src="/static/images/leaderboard.png" />
-    <div id="results-select-den" class="btn-group btn-group-lg" role="group" aria-label="Den Selection">
-      <button class="btn btn-primary   select-den" data-den="all"   >All             </a></li>
-      <button class="btn btn-secondary select-den" data-den="Lion"  >Lions           </a></li>
-      <button class="btn btn-secondary select-den" data-den="Tiger" >Tigers          </a></li>
-      <button class="btn btn-secondary select-den" data-den="Wolf"  >Wolves          </a></li>
-      <button class="btn btn-secondary select-den" data-den="Bear"  >Bears           </a></li>
-      <button class="btn btn-secondary select-den" data-den="Webelo">Webelos         </a></li>
-      <button class="btn btn-secondary select-den" data-den="AoL"   >Arrow of Lights </a></li>
-      <button class="btn btn-secondary select-den" data-den="Sibling">Siblings </a></li>
-      <button class="btn btn-secondary select-den" data-den="Adult"  >Adults   </a></li>
+    <div id="results-select-group" class="btn-group btn-group-lg" role="group" aria-label="Den Selection">
+      <button class="btn btn-primary   select-group" data-group="all"   >All             </a></li>
+      <button class="btn btn-secondary select-group" data-group="Lion"  >Lions           </a></li>
+      <button class="btn btn-secondary select-group" data-group="Tiger" >Tigers          </a></li>
+      <button class="btn btn-secondary select-group" data-group="Wolf"  >Wolves          </a></li>
+      <button class="btn btn-secondary select-group" data-group="Bear"  >Bears           </a></li>
+      <button class="btn btn-secondary select-group" data-group="Webelo">Webelos         </a></li>
+      <button class="btn btn-secondary select-group" data-group="AoL"   >Arrow of Lights </a></li>
+      <button class="btn btn-secondary select-group" data-group="Sibling">Siblings </a></li>
+      <button class="btn btn-secondary select-group" data-group="Adult"  >Adults   </a></li>
     </div>
   </div>
   <table id="results-table" class="table table-hover table-sm">
@@ -33,7 +33,7 @@
   <script type="text/html-template" id="t-result-row">
     <td><img class="avatar" src="<%- avatar %>" /></td>
     <td><a href="#" data-toggle="modal" data-target="#racer-modal" data-racer="<%- racer_id %>"><%- name %></a></td>
-    <td><%- den %></td>
+    <td><%- group %></td>
     <td><%- car %></td>
     <td class="td-times"><%- time1 %> <%- lane1 %></td>
     <td class="td-times"><%- time2 %> <%- lane2 %></td>

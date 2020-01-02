@@ -227,9 +227,9 @@ class RaceSelect extends Backbone.View
         return @
 
     Add: (racer) ->
-        den = racer.get('den').toLocaleLowerCase()
+        group = racer.get('group').toLocaleLowerCase()
         @$select
-            .find('.den-'+den)
+            .find('.group-'+group)
             .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('count') } - #{ racer.get('name') }</option>"))
         return
 

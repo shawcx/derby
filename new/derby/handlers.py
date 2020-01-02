@@ -5,6 +5,8 @@ import json
 import uuid
 import logging
 
+import serial
+import serial.tools.list_ports
 import tornado.web
 import tornado.websocket
 
@@ -12,12 +14,19 @@ import derby
 
 
 class Template(tornado.web.RequestHandler):
-    def get(self, template=None):
-        template = template+'.html' if template else 'index.html'
-        self.render(template)
+    def get(self, path=None):
+        template = path+'.html' if path else 'index.html'
+        self.render(template, active=path)
 
 
 class Serial(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header('Content-Type', 'application/json')
+        ports = [port.device for port in serial.tools.list_ports.comports()]
+        if derby.args.debug:
+            ports.append('/dev/ttyDERBY')
+        self.write({'ports':ports})
+
     def post(self):
         racerA = self.get_argument('racerA')
         racerB = self.get_argument('racerB')

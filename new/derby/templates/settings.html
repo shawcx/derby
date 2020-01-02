@@ -1,0 +1,35 @@
+{% extends 'base.template' %}
+
+{% block body %}
+<div class="card bg-light" id="settings-ports">
+  <div class="card-header">
+    Settings
+  </div>
+  <div class="card-body">
+    <table id="settings-ports-table" class="table table-hover table-condensed">
+      <thead class="thead-light">
+        <tr>
+          <th></th>
+          <th style="width:100%;">Serial Port</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="btn-toolbar" role="toolbar" aria-label="Serial Port Options">
+      <div class="btn-group mr-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-dark"><i class="fa fa-redo"></i> Refresh</button>
+        <button type="button" class="btn btn-danger"><i class="fa fa-exchange"></i> Test</button>
+      </div>
+      <div class="btn-group mr-2" role="group" aria-label="Save">
+        <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html-template" id="t-port-row">
+  <td><input type="radio" name="port" value="<%- port %>" /></td>
+  <td><a href="#" class="port"><%- port %></a></td>
+</script>
+{% end %}

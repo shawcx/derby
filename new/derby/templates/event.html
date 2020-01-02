@@ -1,0 +1,19 @@
+{% extends 'base.template' %}
+
+{% block links-left %}
+  <li class="nav-item">
+    <a class="nav-link" href="#" data-toggle="modal" data-target="#heat-modal">
+      <i class="fal fa-flag-checkered"></i> Heat
+    </a>
+  </li>
+{% end %}
+
+{% block links-right %}
+  <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#add-racer-modal"><i class="fal fa-user-circle"></i> Add Racer </a></li>
+{% end %}
+
+{% block body %}
+  {% include 'results.html' %}
+  {% include 'racers.html' %}
+  {% include 'heat.html'   %}
+{% end %}

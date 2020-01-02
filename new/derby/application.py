@@ -96,7 +96,9 @@ class Application(tornado.web.Application):
             ( r'/times/([0-9]*)',  derby.handlers.Times     ),
             ( r'/serial',          derby.handlers.Serial    ),
             ( r'/ws',              derby.handlers.WebSocket ),
-            ( r'/',                Template  ),
+            ( r'/(event)',         derby.handlers.Template  ),
+            ( r'/(settings)',      derby.handlers.Template  ),
+            ( r'/',                derby.handlers.Template  ),
             ]
 
         # Tornado settings

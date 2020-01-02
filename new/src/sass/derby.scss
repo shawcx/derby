@@ -7,6 +7,7 @@ $cubBlue: #258;
 @import "solid";
 @import "light";
 @import "regular";
+@import "duotone";
 @import "brands";
 
 // OVERALL
@@ -17,7 +18,7 @@ body {
 
     background: #c4d4e5 url("/static/images/bg.jpg") no-repeat fixed top;
     background-size: cover;
-
+    padding-top: 4em;
 }
 
 .navbar-brand {
@@ -123,11 +124,6 @@ div.racerRow {
 //.delete-racer:hover {
 //    opacity: 1;
 //}
-
-
-#results-body {
-    margin-top: 3.5em;
-}
 
 #results-table {
     background: #fff;

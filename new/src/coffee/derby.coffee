@@ -8,7 +8,8 @@ require('bootstrap')
 
 window.Templates = {}
 
-Derby    = require('./event.js')
+Events   = require('./events.js')
+Event    = require('./event.js')
 Settings = require('./settings.js')
 
 
@@ -20,9 +21,11 @@ $(document).ready () ->
         Templates[name] = _.template(@text)
         return
 
+    console.log window.location.pathname
     switch window.location.pathname
+        when '/'         then new Events.Events
+        when '/event'    then new Event.Derby
         when '/settings' then new Settings.Settings
-        when '/event'    then new Derby.Derby
     return
 
 @$SVG = (name) -> $ document.createElementNS('http://www.w3.org/2000/svg', name)

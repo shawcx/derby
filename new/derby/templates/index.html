@@ -1,6 +1,50 @@
 {% extends 'base.template' %}
 
 {% block body %}
-  <h1>yep</h1>
+
+<div class="card bg-light" id="settings-ports">
+  <div class="card-body">
+    <a class="float-right text-primary" href="#" data-toggle="modal" data-target="#add-event-modal"><i class="fal fa-2x fa-fw fa-plus-circle"></i></a>
+    <h1>Events</h1>
+    <table id="settings-ports-table" class="table table-hover table-condensed">
+      <thead class="thead-light">
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="add-event-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-event-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="add-event-form" action="#">
+        <div class="modal-header">
+          <h5 class="modal-title" id="add-event-label">Add Event</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" class="form-control" name="name" id="add-event-name" placeholder="Name" required>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="date" id="add-event-date" placeholder="Date" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger"  id="add-event-reset">Reset</button>
+          <button type="submit" class="btn btn-primary" id="add-event-save" >Save </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 {% end %}

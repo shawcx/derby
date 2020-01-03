@@ -30,7 +30,7 @@ setup(
     url              = 'https://github.com/moertle/derby',
     entry_points = {
         'console_scripts' : [
-            'derby = derby.main:entry',
+            'derby = derby.application:main',
             ]
         },
     packages = [

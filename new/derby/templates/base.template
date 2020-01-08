@@ -29,21 +29,14 @@
         </li>
         -->
 {% block links-left %}
-        <li class="nav-item">
-          <a class="nav-link" href="/event">
-            <i class="fal fa-flag-checkered"></i> Event
-          </a>
-        </li>
 {% end %}
       </ul>
       <ul class="navbar-nav ml-auto">
 {% block links-right %}
 {% end %}
         <li class="nav-item {% if active == 'settings' %} active {% end %}"><a class="nav-link" href="/settings" ><i class="fal fa-cog"></i> Settings</a></li>
+        <span class="navbar-text"><i id="ws-status" class="fa fa-wifi-slash d-none" title="Server Status"></i></span>
       </ul>
-      <span class="navbar-text" id="ws-status">
-        <i class="fa fa-plug" title="Server Status"></i>
-      </span>
     </div>
   </nav>
   <div class="container">

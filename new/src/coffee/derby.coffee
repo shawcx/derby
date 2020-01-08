@@ -21,14 +21,13 @@ $(document).ready () ->
         Templates[name] = _.template(@text)
         return
 
-    console.log window.location.pathname
+    #console.log window.location.pathname
     switch window.location.pathname
         when '/'         then new Events.Events
         when '/event'    then new Event.Derby
         when '/settings' then new Settings.Settings
     return
 
-@$SVG = (name) -> $ document.createElementNS('http://www.w3.org/2000/svg', name)
 
 window.cancelEvent = (e) ->
     e.preventDefault()

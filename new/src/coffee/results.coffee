@@ -11,7 +11,7 @@ class ResultsTable extends Backbone.View
         @rows   = {}
         @$tbody = @$('tbody')
 
-        @groupFilter = new GroupFilter
+        @denFilter = new DenFilter
             table: @
 
         # bind to the racers collection
@@ -25,7 +25,7 @@ class ResultsTable extends Backbone.View
                 row.$el.remove()
                 @$tbody.append(row.$el)
                 return
-            @groupFilter.FilterDen()
+            @denFilter.FilterDen()
             return
         return @
 
@@ -38,11 +38,11 @@ class ResultsTable extends Backbone.View
 
 module.exports.ResultsTable = ResultsTable
 
-class GroupFilter extends Backbone.View
-    el: () -> $('#results-select-group')
+class DenFilter extends Backbone.View
+    el: () -> $('#results-select-den')
 
     events:
-        'click .select-group' : 'OnSelectDen'
+        'click .select-den' : 'OnSelectDen'
 
     initialize: (options) ->
         @table = options.table
@@ -51,15 +51,15 @@ class GroupFilter extends Backbone.View
     OnSelectDen: (e) ->
         @$el.find('button').removeClass('btn-primary').addClass('btn-secondary')
         $(e.target).removeClass('btn-secondary').addClass('btn-primary')
-        @group = $(e.target).data('group')
+        @den = $(e.target).data('den')
         @FilterDen()
 
     FilterDen: () ->
-        @group = null if @group is 'all'
+        @den = null if @den is 'all'
         @table.collection.forEach (racer) =>
             row = @table.rows[racer.id]
             row.$el.remove()
-            if @group and racer.get('group') != @group
+            if @den and racer.get('den') != @den
                 return
             @table.$tbody.append(row.$el)
             return

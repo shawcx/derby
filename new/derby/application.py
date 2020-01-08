@@ -92,6 +92,7 @@ class Application(tornado.web.Application):
         #ioloop.add_handler(self.serialPort, self.tapReadCb, ioloop.READ)
 
         patterns = [
+            ( r'/events/([0-9]*)', derby.handlers.Events  ),
             ( r'/racers/([0-9]*)', derby.handlers.Racers    ),
             ( r'/times/([0-9]*)',  derby.handlers.Times     ),
             ( r'/serial',          derby.handlers.Serial    ),

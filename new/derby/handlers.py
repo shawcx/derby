@@ -42,6 +42,41 @@ class Serial(tornado.web.RequestHandler):
         self.set_status(204)
 
 
+class Events(tornado.web.RequestHandler):
+    def get(self, event_id=None):
+        if event_id:
+            pass
+        else:
+            events = derby.db.find('events')
+            self.write(json.dumps(events))
+
+    def post(self, event_id=None):
+        try:
+            data = json.loads(self.request.body)
+        except:
+            raise tornado.web.HTTPError(500)
+
+        try:
+            derby.db.insert('events', data, 'event_id')
+            self.write(data)
+        except derby.error:
+            self.set_status(400)
+            self.write('Duplicate name')
+
+    def put(self, event_id=None):
+        try:
+            data = json.loads(self.request.body)
+        except:
+            raise tornado.web.HTTPError(500)
+
+        derby.db.update('events', data, 'event_id')
+        self.write(data)
+
+    def delete(self, event_id=None):
+        derby.db.delete('events', event_id, 'event_id')
+        self.set_status(204)
+
+
 class Racers(tornado.web.RequestHandler):
     def get(self, racer_id=None):
         if racer_id:

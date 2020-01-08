@@ -1,21 +1,26 @@
 {% extends 'base.template' %}
 
-{% block body %}
+{% block links-left %}
+{% end %}
 
+{% block body %}
 <div class="card bg-light" id="settings-ports">
   <div class="card-body">
     <a class="float-right text-primary" href="#" data-toggle="modal" data-target="#add-event-modal"><i class="fal fa-2x fa-fw fa-plus-circle"></i></a>
     <h1>Events</h1>
-    <table id="settings-ports-table" class="table table-hover table-condensed">
+    <table id="events-table" class="table table-hover table-condensed">
       <thead class="thead-light">
         <tr>
-          <th></th>
           <th>Name</th>
           <th>Date</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
+    <script type="text/html-template" id="t-event-row">
+      <td><a href="/event#<%- name %>"><%- name %></a></td>
+      <td><%- date %></td>
+    </script>
   </div>
 </div>
 
@@ -45,6 +50,4 @@
     </div>
   </div>
 </div>
-
-
 {% end %}

@@ -56,7 +56,7 @@ class GroupButton extends Backbone.View
 
     render: () ->
         @model.toJSON()
-        @$el.text @model.get('name')
+        @$el.text @model.get('group')
         return @
 
 

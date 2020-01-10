@@ -55,7 +55,7 @@ class Database:
         return dict(row) if row else None
 
     def insert(self, table, values, id_column='id'):
-        cols = ','.join(values.keys())
+        cols = ','.join('"%s"' % s for s in values.keys())
         placeholder = ','.join('?' * len(values))
         statement = 'INSERT INTO {0} ({1}) VALUES ({2})'.format(table, cols, placeholder)
 
@@ -74,7 +74,7 @@ class Database:
 
     def update(self, table, values, id_column='id'):
         _id = values[id_column]
-        columns = ','.join(s + '=?' for s in values.keys())
+        columns = ','.join('"%s"=?' % s for s in values.keys())
         statement = 'UPDATE {0} SET {1} WHERE {2}=?'.format(table, columns, id_column)
         cursor = self.connection.cursor()
         try:

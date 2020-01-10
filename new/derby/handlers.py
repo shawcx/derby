@@ -71,13 +71,21 @@ class Groups(tornado.web.RequestHandler):
         except:
             raise tornado.web.HTTPError(500)
 
-        print(data)
         try:
             derby.db.insert('groups', data, 'group_id')
             self.write(data)
         except derby.error as e:
             self.set_status(400)
             self.write(str(e))
+
+    def put(self, racer_id=None):
+        try:
+            data = json.loads(self.request.body)
+        except:
+            raise tornado.web.HTTPError(500)
+
+        derby.db.update('groups', data, 'group_id')
+        self.write(data)
 
     def delete(self, group_id=None):
         derby.db.delete('groups', group_id, 'group_id')

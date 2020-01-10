@@ -19,18 +19,13 @@
         <script type="text/html-template" id="t-group-row">
           <td>
             <div class="input-group">
-              <input type="text" class="form-control group-name" value="<%- name %>" placeholder="Enter name of the group">
+              <input type="text" class="form-control add-group-group" value="<%- group %>" placeholder="Enter name of the group" required>
               <div class="input-group-append">
                 <button class="btn btn-primary group-save"  ><i class="fa fa-lg fa-save"     ></i></button>
                 <button class="btn btn-danger  group-delete"><i class="fa fa-lg fa-trash-alt"></i></button>
               </div>
             </div>
           </td>
-        </script>
-        <script type="text/html-template" id="t-group-row2">
-          <td><input type="checkbox" name="group" value="<%- name %>" /></td>
-          <td width="100%"><input style="width: 100%;" type="text" value="<%- name %>" placeholder="Enter name of the group" /></td>
-          <td><button class="btn btn-sm btn-dark group-delete"><i class="fa fa-save"></i></button></td>
         </script>
       </div>
     </div>

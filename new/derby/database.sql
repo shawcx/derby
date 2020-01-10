@@ -11,7 +11,7 @@ CREATE TABLE settings (
 -- Events
 --
 CREATE TABLE events (
-    "name"     TEXT NOT NULL UNIQUE,
+    "event"     TEXT NOT NULL UNIQUE,
     "date"     TEXT NOT NULL,
     "event_id" INTEGER PRIMARY KEY
     );
@@ -20,10 +20,11 @@ CREATE TABLE events (
 -- Groups
 --
 CREATE TABLE groups (
-    "name"     TEXT NOT NULL UNIQUE,
+    "group"    TEXT    NOT NULL,
     "event_id" INTEGER NOT NULL,
     "group_id" INTEGER PRIMARY KEY,
 
+    UNIQUE("group", "event_id"),
     FOREIGN KEY(event_id) REFERENCES events(event_id)
     );
 
@@ -31,7 +32,7 @@ CREATE TABLE groups (
 -- Contestants
 --
 CREATE TABLE racers (
-    "name"     TEXT    NOT NULL UNIQUE,
+    "racer"    TEXT    NOT NULL UNIQUE,
     "group_id" INTEGER NOT NULL,
     "car"      TEXT    NOT NULL,
     "avatar"   TEXT, -- JPEG of racer or avatar

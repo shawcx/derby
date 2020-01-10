@@ -39,7 +39,7 @@ class RacerModel extends Backbone.Model
         @set('total', total.toFixed(4))
         return worse
 
-_denCompare =
+_groupCompare =
     Lion    : 1
     Tiger   : 2
     Wolf    : 3
@@ -58,7 +58,7 @@ class RacerCollection extends Backbone.Collection
         aTotal = if aTotal then parseFloat(aTotal) else Infinity
         bTotal = if bTotal then parseFloat(bTotal) else Infinity
         if aTotal == bTotal
-            return _denCompare[a.get('den')] - _denCompare[b.get('den')]
+            return _groupCompare[a.get('group')] - _groupCompare[b.get('group')]
         return aTotal - bTotal
 
 module.exports.Model      = RacerModel
@@ -80,19 +80,19 @@ class RacerModal extends Backbone.View
         @racer = @collection.get $(evt.relatedTarget).data('racer')
         model = @racer.toJSON()
         @$el.find('img.avatar').attr('src', model.avatar)
-        @$el.find('#race-modal-name').text model.name
-        @$el.find('#race-modal-den').text model.den
-        @$el.find('#race-modal-car').text model.car
+        @$el.find('#race-modal-racer').text model.racer
+        @$el.find('#race-modal-group').text model.group
+        @$el.find('#race-modal-car'  ).text model.car
         return
 
     OnSave: () ->
         @racer.save
-            name: @$el.find('#race-modal-name').text()
+            racer: @$el.find('#race-modal-racer').text()
             car:  @$el.find('#race-modal-car').text()
         return
 
     OnDelete: () ->
-        really = confirm("Remove #{ @racer.get('name') }?")
+        really = confirm("Remove #{ @racer.get('racer') }?")
         return if not really
         @racer.destroy wait: true
         @$el.modal('hide')
@@ -120,8 +120,8 @@ class AddRacerModal extends Backbone.View
     reset: () ->
         @racer = new RacerModel
 
-        $('#add-racer-name').val('')
-        $('#add-racer-den').val(null)
+        $('#add-racer-racer').val('')
+        $('#add-racer-group').val(null)
         $('#add-racer-car').val('')
 
         $('#avatarImg').hide()
@@ -152,8 +152,8 @@ class AddRacerModal extends Backbone.View
             alert('No picture was taken')
             return cancelEvent(evt)
         @racer.save {
-                name:  $('#add-racer-name').val()
-                den: $('#add-racer-den').val()
+                racer: $('#add-racer-racer').val()
+                group: $('#add-racer-group').val()
                 car:   $('#add-racer-car').val()
             },{
                 wait: true,

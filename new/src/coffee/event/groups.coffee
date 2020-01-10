@@ -27,7 +27,6 @@ class GroupsModal extends Backbone.View
     initialize: (options) ->
         new GroupsTable
             collection: @collection
-
         @render()
         return @
 
@@ -38,7 +37,7 @@ class GroupsModal extends Backbone.View
         return
 
     OnAddGroup: () ->
-        @collection.add event_id: event_id, name: ''
+        @collection.add event_id: event_id, group: ''
         return
 
 
@@ -85,15 +84,19 @@ class GroupsRow extends Backbone.View
         return @
 
     render: () ->
+        console.log @model.toJSON()
         @$el.html Templates['group-row'] @model.toJSON()
         return @
 
     OnSave: () ->
-        name = @$('input.group-name').val()
-        return if not name
-        @model.set name: name
-        console.log @model.toJSON()
-        @model.save()
+        group = @$('input.add-group-group').val()
+        return if not group
+        @model.save group: group,
+            wait: true
+            error: (msg) =>
+                console.log 'error:', arguments
+                @$('input.add-group-group').addClass('bg-danger')
+                return
         return
 
     OnDelete: () ->

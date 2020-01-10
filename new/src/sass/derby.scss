@@ -27,26 +27,26 @@ body {
 }
 
 .modal-content {
-    background: transparent;
+    //background: transparent;
 }
 
 .modal-header {
-    background: #e9ecef;
+    //background: #e9ecef;
     border-bottom: none;
 }
 
 .modal-footer {
     border-top: none;
-    background: lighten($dark,10%);
+    //background: lighten($dark,10%);
 }
 
-.modal-body {
-    background: #e9ecef;
-    background: -webkit-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* Chrome10-25,Safari5.1-6 */
-    background:    -moz-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* FF3.6-15 */
-    background:         linear-gradient(to bottom, #e9ecef 0%, lighten($dark,10%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9ecef', endColorstr='lighten($dark,10%)',GradientType=0 ); /* IE6-9 */
-}
+//.modal-body {
+//    background: #e9ecef;
+//    background: -webkit-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* Chrome10-25,Safari5.1-6 */
+//    background:    -moz-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* FF3.6-15 */
+//    background:         linear-gradient(to bottom, #e9ecef 0%, lighten($dark,10%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+//    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9ecef', endColorstr='lighten($dark,10%)',GradientType=0 ); /* IE6-9 */
+//}
 
 // NAV BAR
 .bg-derby {
@@ -114,8 +114,16 @@ div.racerRow {
     border-top: 1px solid lighten($cubBlue, 25%);
 }
 
-#racers-body {
-    margin-top: 1em;
+#event-name {
+    font-size: 4rem;
+    text-shadow: 4px 4px 4px #2e3436;
+    font-weight: bold;
+}
+
+tr.eventRow {
+    a {
+        text-decoration: none;
+    }
 }
 
 //.delete-racer {

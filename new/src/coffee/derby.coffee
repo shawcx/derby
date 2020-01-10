@@ -24,7 +24,7 @@ $(document).ready () ->
     #console.log window.location.pathname
     switch window.location.pathname
         when '/'         then new Events.Events
-        when '/event'    then new Event.Derby
+        when '/event'    then new Event.DerbyEvent
         when '/settings' then new Settings.Settings
     return
 

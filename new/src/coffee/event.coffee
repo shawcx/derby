@@ -3,6 +3,7 @@ $        = require('jquery')
 _        = require('underscore')
 Backbone = require('backbone')
 
+Groups  = require('./groups.js')
 Racers  = require('./racers.js')
 Times   = require('./times.js')
 Heat    = require('./heat.js')
@@ -10,10 +11,17 @@ Results = require('./results.js')
 Socket  = require('./socket.js')
 
 
-class Derby
+class DerbyEvent
     constructor: () ->
+        $('#event-name').text decodeURIComponent window.location.hash[1..]
+
+        @groups = new Groups.Collection
+
         @racers = new Racers.Collection
         @times  = new Times.Collection
+
+        new Groups.GroupsModal
+            collection: @groups
 
         new Racers.AddRacerModal
             collection: @racers
@@ -81,7 +89,7 @@ class Derby
         @heatModal.gate(message.gateClosed)
 
 # dev -------------------------------
-        #$('#heat-modal').modal()
+        $('#groups-modal').modal()
         #@heatModal.selectA.set(1)
         #@heatModal.selectB.set(2)
 # -----------------------------------
@@ -100,4 +108,4 @@ class Derby
         h = $(document).height()
         return
 
-module.exports.Derby = Derby
+module.exports.DerbyEvent = DerbyEvent

@@ -34,7 +34,7 @@
       <ul class="navbar-nav ml-auto">
 {% block links-right %}
 {% end %}
-        <li class="nav-item {% if active == 'settings' %} active {% end %}"><a class="nav-link" href="/settings" ><i class="fal fa-cog"></i> Settings</a></li>
+        <li class="nav-item {% if active == 'settings' %} active {% end %}"><a class="nav-link" href="/settings" ><i class="fad fa-fw fa-lg fa-tools"></i> Settings</a></li>
         <span class="navbar-text"><i id="ws-status" class="fa fa-wifi-slash d-none" title="Server Status"></i></span>
       </ul>
     </div>

@@ -6,12 +6,12 @@
 {% block body %}
 <div class="card bg-light" id="settings-ports">
   <div class="card-body">
-    <a class="float-right text-primary" href="#" data-toggle="modal" data-target="#add-event-modal"><i class="fal fa-2x fa-fw fa-plus-circle"></i></a>
-    <h1>Events</h1>
-    <table id="events-table" class="table table-hover table-condensed">
+    <a class="float-right" href="#" data-toggle="modal" data-target="#add-event-modal"><i class="fal fa-2x fa-fw fa-plus-circle"></i></a>
+    <h1><i class="fad fa-flag-checkered"></i> Events</h1>
+    <table id="events-table" class="table table-condensed">
       <thead class="thead-light">
         <tr>
-          <th>Name</th>
+          <th>Event Name</th>
           <th>Date</th>
         </tr>
       </thead>
@@ -29,9 +29,9 @@
     <div class="modal-content">
       <form id="add-event-form" action="#">
         <div class="modal-header">
-          <h5 class="modal-title" id="add-event-label">Add Event</h5>
+          <h3 class="modal-title" id="add-event-label">Add Event</h3>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span class="fal fa-2x fa-times-circle" aria-hidden="true"></span>
           </button>
         </div>
         <div class="modal-body">

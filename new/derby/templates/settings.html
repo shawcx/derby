@@ -1,42 +1,45 @@
 {% extends 'base.template' %}
 
 {% block body %}
-<div class="card bg-light" id="settings-ports">
-  <div class="card-header">
-    Settings
-  </div>
+
+<!--
+<div class="card bg-light mt-4" id="settings-groups">
   <div class="card-body">
-    <table id="settings-ports-table" class="table table-hover table-condensed">
-      <thead class="thead-light">
+    <a class="float-right text-primary" href="#" data-toggle="modal" data-target="#add-event-modal"><i class="fal fa-2x fa-fw fa-plus-circle"></i></a>
+    <h1><i class="fad fa-users"></i> Groups</h1>
+    <table id="settings-ports-table" class="table table-condensed table-borderless">
+      <thead class="thead-dark">
         <tr>
-          <th></th>
-          <th style="width:100%;">Serial Port</th>
+          <th width="1"></th>
+          <th style="">Group Name</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
+  </div>
+</div>
+-->
+<script type="text/html-template" id="t-group-row">
+  <td><input type="check" name="group" value="<%- group %>" /></td>
+  <td width="100%"><a href="#"><%- group %></a></td>
+</script>
 
+<div class="card bg-light mt-4" id="settings-ports">
+  <div class="card-body">
+    <h1><i class="fad fa-usb-drive"></i> Serial Port</h1>
+    <table id="settings-ports-table" class="table table-condensed table-borderless">
+      <tbody></tbody>
+    </table>
     <div class="text-right">
-      <button type="button" class="btn btn-dark"><i class="fa fa-redo"></i> Refresh</button>
-      <button type="button" class="btn btn-danger"><i class="fa fa-exchange"></i> Test</button>
-      <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+      <button type="button" class="btn btn-dark"   ><i class="fa fa-redo"    ></i> Refresh </button>
+      <button type="button" class="btn btn-danger" ><i class="fa fa-exchange"></i> Test    </button>
+      <button type="button" class="btn btn-primary"><i class="fa fa-save"    ></i> Save    </button>
     </div>
-    <!--
-    <div class="btn-toolbar" role="toolbar" aria-label="Serial Port Options">
-      <div class="btn-group mr-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-dark"><i class="fa fa-redo"></i> Refresh</button>
-        <button type="button" class="btn btn-danger"><i class="fa fa-exchange"></i> Test</button>
-      </div>
-      <div class="btn-group mr-2" role="group" aria-label="Save">
-        <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
-      </div>
-    </div>
-    -->
   </div>
 </div>
 
 <script type="text/html-template" id="t-port-row">
   <td><input type="radio" name="port" value="<%- port %>" /></td>
-  <td><a href="#" class="port"><%- port %></a></td>
+  <td width="100%"><a href="#" class="port"><%- port %></a></td>
 </script>
 {% end %}

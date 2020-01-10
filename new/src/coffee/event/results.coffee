@@ -4,6 +4,62 @@ _        = require('underscore')
 Backbone = require('backbone')
 
 
+class GroupFilter extends Backbone.View
+    el: () -> $('#results-select-group')
+
+    events:
+        'click .select-group' : 'OnSelectGroup'
+
+    initialize: (options) ->
+        @table = options.table
+        @listenTo @collection, 'add', @Add, @
+        @listenTo @collection, 'reset', (groups) =>
+            groups.forEach @Add, @
+            return
+        return @
+
+    Add: (group) ->
+        btn = new GroupButton
+            model: group
+        @$el.append(btn.$el)
+        return
+
+    OnSelectGroup: (e) ->
+        @$el.find('button').removeClass('btn-primary').addClass('btn-secondary')
+        $(e.target).removeClass('btn-secondary').addClass('btn-primary')
+        @group = $(e.target).data('group')
+        @FilterGroup()
+
+    FilterGroup: () ->
+        @group = null if @group is 'all'
+        @table.collection.forEach (racer) =>
+            row = @table.rows[racer.id]
+            row.$el.remove()
+            if @group and racer.get('group') != @group
+                return
+            @table.$tbody.append(row.$el)
+            return
+        return
+
+class GroupButton extends Backbone.View
+    tagName: 'button'
+    className: 'btn btn-secondary select-group'
+    attributes: () ->
+        'data-group': @model.id
+
+    initialize: (options) ->
+        @render()
+        @listenTo @model, 'change',  @render, @
+        @listenTo @model, 'remove',  @remove, @
+        @listenTo @model, 'destroy', @remove, @
+        return @
+
+    render: () ->
+        @model.toJSON()
+        @$el.text @model.get('name')
+        return @
+
+
 class ResultsTable extends Backbone.View
     el: () -> $('#results-table')
 
@@ -11,7 +67,8 @@ class ResultsTable extends Backbone.View
         @rows   = {}
         @$tbody = @$('tbody')
 
-        @denFilter = new DenFilter
+        @groupFilter = new GroupFilter
+            collection: options.groups
             table: @
 
         # bind to the racers collection
@@ -25,7 +82,7 @@ class ResultsTable extends Backbone.View
                 row.$el.remove()
                 @$tbody.append(row.$el)
                 return
-            @denFilter.FilterDen()
+            @groupFilter.FilterGroup()
             return
         return @
 
@@ -37,33 +94,6 @@ class ResultsTable extends Backbone.View
         return
 
 module.exports.ResultsTable = ResultsTable
-
-class DenFilter extends Backbone.View
-    el: () -> $('#results-select-den')
-
-    events:
-        'click .select-den' : 'OnSelectDen'
-
-    initialize: (options) ->
-        @table = options.table
-        return @
-
-    OnSelectDen: (e) ->
-        @$el.find('button').removeClass('btn-primary').addClass('btn-secondary')
-        $(e.target).removeClass('btn-secondary').addClass('btn-primary')
-        @den = $(e.target).data('den')
-        @FilterDen()
-
-    FilterDen: () ->
-        @den = null if @den is 'all'
-        @table.collection.forEach (racer) =>
-            row = @table.rows[racer.id]
-            row.$el.remove()
-            if @den and racer.get('den') != @den
-                return
-            @table.$tbody.append(row.$el)
-            return
-        return
 
 
 class ResultsRow extends Backbone.View

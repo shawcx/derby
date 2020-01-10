@@ -38,7 +38,6 @@ class GroupsModal extends Backbone.View
         return
 
     OnAddGroup: () ->
-        console.log 'adding new...', event_id
         @collection.add event_id: event_id, name: ''
         return
 
@@ -62,7 +61,6 @@ class GroupsTable extends Backbone.View
         return @
 
     Add: (group) ->
-        console.log 'hello add', group
         groupRow = new GroupsRow
             model: group
         @rows[group.id] = groupRow
@@ -93,7 +91,6 @@ class GroupsRow extends Backbone.View
     OnSave: () ->
         name = @$('input.group-name').val()
         return if not name
-
         @model.set name: name
         console.log @model.toJSON()
         @model.save()

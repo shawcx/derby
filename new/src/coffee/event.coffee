@@ -3,11 +3,11 @@ $        = require('jquery')
 _        = require('underscore')
 Backbone = require('backbone')
 
-Groups  = require('./groups.js')
-Racers  = require('./racers.js')
-Times   = require('./times.js')
-Heat    = require('./heat.js')
-Results = require('./results.js')
+Groups  = require('./event/groups.js')
+Racers  = require('./event/racers.js')
+Times   = require('./event/times.js')
+Heat    = require('./event/heat.js')
+Results = require('./event/results.js')
 Socket  = require('./socket.js')
 
 
@@ -35,6 +35,7 @@ class DerbyEvent
 
         @resultsTable = new Results.ResultsTable
             collection: @racers
+            groups: @groups
 
 #        window.p = (a,b) =>
 #            @heatModal.results(a,b)

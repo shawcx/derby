@@ -6,6 +6,7 @@ BROWSERIFY = ./node_modules/.bin/browserify
 STATIC_ROOT = ../derby/static
 
 COFFEE_FILES := $(wildcard coffee/*.coffee)
+COFFEE_FILES := $(COFFEE_FILES) $(wildcard coffee/*/*.coffee)
 JS_FILES     := $(patsubst coffee/%.coffee, js/%.js, $(COFFEE_FILES))
 MAP_FILES    := $(patsubst %, %.map, $(JS_FILES))
 

@@ -8,14 +8,6 @@ CREATE TABLE settings (
     );
 
 --
--- Groups
---
-CREATE TABLE dens (
-    "name"   TEXT NOT NULL UNIQUE,
-    "den_id" INTEGER PRIMARY KEY
-    );
-
---
 -- Events
 --
 CREATE TABLE events (
@@ -25,11 +17,22 @@ CREATE TABLE events (
     );
 
 --
+-- Groups
+--
+CREATE TABLE groups (
+    "name"     TEXT NOT NULL UNIQUE,
+    "event_id" INTEGER NOT NULL,
+    "group_id" INTEGER PRIMARY KEY,
+
+    FOREIGN KEY(event_id) REFERENCES events(event_id)
+    );
+
+--
 -- Contestants
 --
 CREATE TABLE racers (
     "name"     TEXT    NOT NULL UNIQUE,
-    "den_id"   INTEGER NOT NULL,
+    "group_id" INTEGER NOT NULL,
     "car"      TEXT    NOT NULL,
     "avatar"   TEXT, -- JPEG of racer or avatar
 
@@ -46,7 +49,7 @@ CREATE TABLE racers (
 
     "racer_id" INTEGER PRIMARY KEY,
 
-    FOREIGN KEY(den_id) REFERENCES dens(den_id)
+    FOREIGN KEY(group_id) REFERENCES groups(group_id)
     );
 
 --

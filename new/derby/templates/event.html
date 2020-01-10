@@ -10,13 +10,13 @@
 
 {% block links-right %}
   <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#add-racer-modal"><i class="fad fa-fw fa-lg fa-user-circle"></i> Add Racer </a></li>
-  <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#groups-modal"><i class="fad fa-fw fa-lg fa-users"      ></i> Groups    </a></li>
+  <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#groups-modal"   ><i class="fad fa-fw fa-lg fa-users"      ></i> Groups    </a></li>
 {% end %}
 
 {% block body %}
 <div id="results-body" class="container">
   <div style="text-align: center; margin-bottom: 0.5em;">
-    <h1 id="event-name" class="text-light">Event</h1>
+    <h1 id="event-name" class="text-light">{{ event['name'] }}</h1>
     <div id="results-select-group" class="btn-group btn-group-lg" role="group" aria-label="Den Selection">
       <button class="btn btn-primary   select-group" data-group="all"   >All             </a></li>
       <!--
@@ -61,180 +61,11 @@
   </script>
 </div>
 
-<div id="racer-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="racer-label" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="racer-label"><i class="fal fa-user"></i> Derby Racer</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row align-items-center">
-          <div class="col-auto imgframe">
-            <img class="avatar" width="240" height="240" />
-          </div>
-          <div class="col">
-            <p><i class="fal fa-user"></i>    <b><span id="race-modal-name" contenteditable="true"></b></p>
-            <p><i class="fal fa-diamond"></i> <b>Den:</b> <span id="race-modal-group"></span></p>
-            <p><i class="fal fa-car-alt"></i> <b>Car:</b> <span id="race-modal-car" contenteditable="true"></span></p>
-          </div>
-          <div class="col-auto">
-            <button id="save-racer"   class="btn btn-primary"><i class="far fa-save"     ></i></button>
-            <br/>
-            <button id="delete-racer" class="btn btn-danger" ><i class="far fa-trash-alt"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{% include './event/racer.html' %}
+{% include './event/group.html' %}
+{% include './event/heat.html' %}
+{% end %}
 
-<div id="add-racer-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-racer-label" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <form id="add-racer-form" action="#">
-        <div class="modal-header">
-          <h2 class="modal-title" id="add-racer-label"><i class="fad fa-fw fa-lg fa-user-circle"></i> Add Racer</h2>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div id="avatarVid">
-            <img src="/static/images/racer.png" />
-            <video autoplay></video>
-          </div>
-          <img id="avatarImg" />
-          <div class="form-group">
-            <input type="text" class="form-control" name="name" id="add-racer-name" placeholder="Name" required>
-          </div>
-          <div class="form-group">
-            <select name="group" id="add-racer-group" class="form-control" required>
-              <option disabled selected value>Group...</option>
-              <option value="Lion"  > Lions          </option>
-              <option value="Tiger" > Tigers         </option>
-              <option value="Wolf"  > Wolves         </option>
-              <option value="Bear"  > Bears          </option>
-              <option value="Webelo"> Webelos        </option>
-              <option value="AoL"   > Arrow of Light </option>
-              <option value="Sibling" > Siblings </option>
-              <option value="Adult"   > Adults   </option>
-            </select>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" name="car" id="add-racer-car" placeholder="Car" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger"  id="add-racer-reset">Reset</button>
-          <button type="submit" class="btn btn-primary" id="add-racer-save" >Save </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div id="groups-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="groups-label" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="groups-label"><i class="fad fa-fw fa-lg fa-users"></i> Groups</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span class="fal fa-2x fa-times-circle" aria-hidden="true"></span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table id="groups-table" class="table table-condensed table-borderless">
-          <thead class="thead-light">
-            <tr>
-              <th width="1"><a href="javascript:void(0);" id="groups-add-group"><i class="fal fa-plus-circle"></i></button></th>
-              <th style="">Group Name</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <script type="text/html-template" id="t-group-row">
-          <td><input type="check" name="group" value="<%- group %>" /></td>
-          <td width="100%"><a href="#"><%- group %></a></td>
-        </script>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="heat-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="heat-label" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="heat-label"><i class="fal fa-flag-checkered"></i> Heat</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-5" id="heat-container-a"></div>
-          <div class="col-2" id="race-column">
-            <div id="lights">
-              <div class="light red" id="gateRelease">
-                <span class="align-middle">GO</span>
-              </div>
-              <div id="lightyellow1" class="light yellow">&nbsp;</div>
-              <div id="lightyellow2" class="light yellow">&nbsp;</div>
-              <div id="lightyellow3" class="light yellow">&nbsp;</div>
-              <div id="lightgreen" class="light green">&nbsp;</div>
-            </div>
-            <button id="acceptTimes" class="btn btn btn-success" disabled>
-              <i class="fal fa-check"></i> Accept
-            </button>
-            <button id="swapLanes" class="btn btn btn-secondary">
-              <i class="fal fa-exchange-alt"></i> Swap
-            </button>
-            <button id="resetTimes" class="btn btn btn-danger">
-              <i class="fal fa-undo"></i> Reset
-            </button>
-          </div>
-          <div class="col-5" id="heat-container-b"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="text/html-template" id="t-heat-select">
-  <select class="form-control" name="select-<%- lane %>">
-    <option value="-1">Empty</option>
-    <optgroup label="Lions"           class="group group-lion"    ></optgroup>
-    <optgroup label="Tigers"          class="group group-tiger"   ></optgroup>
-    <optgroup label="Wolves"          class="group group-wolf"    ></optgroup>
-    <optgroup label="Bears"           class="group group-bear"    ></optgroup>
-    <optgroup label="Webelos"         class="group group-webelo"  ></optgroup>
-    <optgroup label="Arrow of Lights" class="group group-aol"     ></optgroup>
-    <optgroup label="Siblings"        class="group group-sibling" ></optgroup>
-    <optgroup label="Adults"          class="group group-adult"   ></optgroup>
-  </select>
-
-  <div class="text-center" style="margin: 15px;">
-    <div class="row">
-      <div class="col">
-        <img class="avatar" src="/static/images/empty.png" />
-      </div>
-      <div class="col-auto align-middle" style="padding-left: 0px;">
-        <p>Times</p>
-        <p class="heat-times"><small class="text-muted">1st:</small> <span class="heat-time1"><%- time1 %> <%- lane1 %></span></p>
-        <p class="heat-times"><small class="text-muted">2nd:</small> <span class="heat-time2"><%- time2 %> <%- lane2 %></span></p>
-        <p class="heat-times"><small class="text-muted">3rd:</small> <span class="heat-time3"><%- time3 %> <%- lane3 %></span></p>
-        <p class="heat-times"><small class="text-muted">4th:</small> <span class="heat-time4"><%- time4 %> <%- lane4 %></span></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="board" id="board-<%- lane %>">
-    <p>Lane <%- lane %></p>
-    <p class="time">-.----</p>
-  </div>
-</script>
-
+{% block scripts %}
+<script>var event_id = {{ event['event_id'] }};</script>
 {% end %}

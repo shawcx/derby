@@ -19,36 +19,16 @@ class Template(tornado.web.RequestHandler):
         self.render(template, active=path)
 
 
-class Serial(tornado.web.RequestHandler):
-    def get(self):
-        self.set_header('Content-Type', 'application/json')
-        ports = [port.device for port in serial.tools.list_ports.comports()]
-        if derby.args.debug:
-            ports.append('/dev/ttyDERBY')
-        self.write({'ports':ports})
-
-    def post(self):
-        racerA = self.get_argument('racerA')
-        racerB = self.get_argument('racerB')
-
-        self.settings['pipe'].send(b'MG\r')
-        if racerA == '-1':
-            logging.info('Masking Lane A')
-            self.settings['pipe'].send(b'MA\r')
-        if racerB == '-1':
-            logging.info('Masking Lane B')
-            self.settings['pipe'].send(b'MB\r')
-        self.settings['pipe'].send(b'LN\r')
-        self.set_status(204)
-
-
 class Events(tornado.web.RequestHandler):
     def get(self, event_id=None):
-        if event_id:
-            pass
-        else:
+        if not event_id:
             events = derby.db.find('events')
+            self.set_header('Content-Type', 'application/json')
             self.write(json.dumps(events))
+        else:
+            event = derby.db.findOne('events', 'event_id', event_id)
+            print('....', event_id, event)
+            self.render('event.html', event=event)
 
     def post(self, event_id=None):
         try:
@@ -74,6 +54,33 @@ class Events(tornado.web.RequestHandler):
 
     def delete(self, event_id=None):
         derby.db.delete('events', event_id, 'event_id')
+        self.set_status(204)
+
+
+class Groups(tornado.web.RequestHandler):
+    def get(self, event_id=None):
+        if event_id:
+            groups = derby.db.find('groups', 'event_id='+event_id)
+            self.write(json.dumps(groups))
+        else:
+            raise tornado.web.HTTPError(500)
+
+    def post(self, group_id=None):
+        try:
+            data = json.loads(self.request.body)
+        except:
+            raise tornado.web.HTTPError(500)
+
+        print(data)
+        try:
+            derby.db.insert('groups', data, 'group_id')
+            self.write(data)
+        except derby.error as e:
+            self.set_status(400)
+            self.write(str(e))
+
+    def delete(self, group_id=None):
+        derby.db.delete('groups', group_id, 'group_id')
         self.set_status(204)
 
 
@@ -184,3 +191,26 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             del self.application.websockets[self.wsid]
         except KeyError:
             pass
+
+
+class Serial(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header('Content-Type', 'application/json')
+        ports = [port.device for port in serial.tools.list_ports.comports()]
+        if derby.args.debug:
+            ports.append('/dev/ttyDERBY')
+        self.write({'ports':ports})
+
+    def post(self):
+        racerA = self.get_argument('racerA')
+        racerB = self.get_argument('racerB')
+
+        self.settings['pipe'].send(b'MG\r')
+        if racerA == '-1':
+            logging.info('Masking Lane A')
+            self.settings['pipe'].send(b'MA\r')
+        if racerB == '-1':
+            logging.info('Masking Lane B')
+            self.settings['pipe'].send(b'MB\r')
+        self.settings['pipe'].send(b'LN\r')
+        self.set_status(204)

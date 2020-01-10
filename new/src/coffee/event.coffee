@@ -13,10 +13,11 @@ Socket  = require('./socket.js')
 
 class DerbyEvent
     constructor: () ->
-        $('#event-name').text decodeURIComponent window.location.hash[1..]
+        #window._eventName = decodeURIComponent window.location.hash[1..]
+        #$('#event-name').text window._eventName
 
         @groups = new Groups.Collection
-
+            event_id : event_id
         @racers = new Racers.Collection
         @times  = new Times.Collection
 
@@ -51,8 +52,9 @@ class DerbyEvent
         @dispatch.on 'raceResults', @OnRaceResults, @
 
         promises = []
-        promises.push @racers.fetch  reset:true
-        promises.push @times.fetch   reset:true
+        promises.push @groups.fetch reset:true
+        promises.push @racers.fetch reset:true
+        promises.push @times.fetch  reset:true
 
         Promise.all(promises).then () =>
             @times.forEach (timeModel) =>
@@ -60,7 +62,6 @@ class DerbyEvent
                 entry.time = parseFloat(entry.time)
                 racer = @racers.get(entry.racer_id)
                 return if not racer
-
                 count = racer.get('count')
                 count += 1
                 update = {}
@@ -68,7 +69,6 @@ class DerbyEvent
                 update['lane'+count] = entry.lane
                 update['count'] = count
                 racer.set update
-
                 racer.calculateTotal()
                 return
 
@@ -89,7 +89,7 @@ class DerbyEvent
         @heatModal.gate(message.gateClosed)
 
 # dev -------------------------------
-        $('#groups-modal').modal()
+        #$('#groups-modal').modal()
         #@heatModal.selectA.set(1)
         #@heatModal.selectB.set(2)
 # -----------------------------------

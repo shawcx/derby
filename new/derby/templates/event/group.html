@@ -1,0 +1,38 @@
+<div id="groups-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="groups-label" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="groups-label"><i class="fad fa-fw fa-lg fa-users"></i> Groups</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class="fal fa-2x fa-times-circle" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table id="groups-table" class="table table-condensed table-borderless">
+          <thead class="thead-light">
+            <tr>
+              <th style=""><a href="javascript:void(0);" id="groups-add-group"><i class="fal fa-fw fa-plus-circle"></i></a> Group Name</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <script type="text/html-template" id="t-group-row">
+          <td>
+            <div class="input-group">
+              <input type="text" class="form-control group-name" value="<%- name %>" placeholder="Enter name of the group">
+              <div class="input-group-append">
+                <button class="btn btn-primary group-save"  ><i class="fa fa-lg fa-save"     ></i></button>
+                <button class="btn btn-danger  group-delete"><i class="fa fa-lg fa-trash-alt"></i></button>
+              </div>
+            </div>
+          </td>
+        </script>
+        <script type="text/html-template" id="t-group-row2">
+          <td><input type="checkbox" name="group" value="<%- name %>" /></td>
+          <td width="100%"><input style="width: 100%;" type="text" value="<%- name %>" placeholder="Enter name of the group" /></td>
+          <td><button class="btn btn-sm btn-dark group-delete"><i class="fa fa-save"></i></button></td>
+        </script>
+      </div>
+    </div>
+  </div>
+</div>

@@ -303,11 +303,11 @@ $light-size: 90px;
     //background: #333 url("/static/images/road.jpg") no-repeat fixed bottom;
     //background-size: cover;
 
-    background: #e9ecef; /* Old browsers */
-    background: -webkit-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* Chrome10-25,Safari5.1-6 */
-    background:    -moz-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* FF3.6-15 */
-    background:         linear-gradient(to bottom, #e9ecef 0%, lighten($dark,10%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9ecef', endColorstr='lighten($dark,10%)',GradientType=0 ); /* IE6-9 */
+    //background: #e9ecef; /* Old browsers */
+    //background: -webkit-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* Chrome10-25,Safari5.1-6 */
+    //background:    -moz-linear-gradient(top, #e9ecef 0%, lighten($dark,10%) 100%); /* FF3.6-15 */
+    //background:         linear-gradient(to bottom, #e9ecef 0%, lighten($dark,10%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    //filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9ecef', endColorstr='lighten($dark,10%)',GradientType=0 ); /* IE6-9 */
 
 }
 

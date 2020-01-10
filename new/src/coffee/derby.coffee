@@ -21,11 +21,11 @@ $(document).ready () ->
         Templates[name] = _.template(@text)
         return
 
-    #console.log window.location.pathname
-    switch window.location.pathname
-        when '/'         then new Events.Events
-        when '/event'    then new Event.DerbyEvent
-        when '/settings' then new Settings.Settings
+    components = window.location.pathname.split('/')
+    switch components[1]
+        when ''         then new Events.Events
+        when 'events'   then new Event.DerbyEvent
+        when 'settings' then new Settings.Settings
     return
 
 

@@ -17,8 +17,8 @@ class DerbyEvent
         #$('#event-name').text window._eventName
 
         @groups = new Groups.Collection
-            event_id : event_id
         @racers = new Racers.Collection
+        @racers.groups = @groups
         @times  = new Times.Collection
 
         new Groups.GroupsModal
@@ -35,7 +35,6 @@ class DerbyEvent
 
         @resultsTable = new Results.ResultsTable
             collection: @racers
-            groups: @groups
 
 #        window.p = (a,b) =>
 #            @heatModal.results(a,b)

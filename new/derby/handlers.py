@@ -27,7 +27,6 @@ class Events(tornado.web.RequestHandler):
             self.write(json.dumps(events))
         else:
             event = derby.db.findOne('events', 'event_id', event_id)
-            print('....', event_id, event)
             self.render('event.html', event=event)
 
     def post(self, event_id=None):
@@ -93,13 +92,12 @@ class Groups(tornado.web.RequestHandler):
 
 
 class Racers(tornado.web.RequestHandler):
-    def get(self, racer_id=None):
-        if racer_id:
-            pass
-        else:
-            racers = derby.db.find('racers')
-            #times  = derby.db.find('times')
+    def get(self, event_id=None):
+        if event_id:
+            racers = derby.db.find('racers', 'event_id='+event_id)
             self.write(json.dumps(racers))
+        else:
+            raise tornado.web.HTTPError(500)
 
     def post(self, racer_id=None):
         try:
@@ -120,8 +118,12 @@ class Racers(tornado.web.RequestHandler):
         except:
             raise tornado.web.HTTPError(500)
 
-        derby.db.update('racers', data, 'racer_id')
-        self.write(data)
+        try:
+            derby.db.update('racers', data, 'racer_id')
+            self.write(data)
+        except derby.error:
+            self.set_status(400)
+            self.write('Duplicate name')
 
     def delete(self, racer_id=None):
         derby.db.delete('racers', racer_id, 'racer_id')

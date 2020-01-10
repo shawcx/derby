@@ -227,10 +227,13 @@ class RaceSelect extends Backbone.View
         return @
 
     Add: (racer) ->
-        den = racer.get('den').toLocaleLowerCase()
-        @$select
-            .find('.den-'+den)
-            .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('count') } - #{ racer.get('racer') }</option>"))
+        group = @collection.groups.get(racer.get('group_id')).get('group')
+        group = group.toLocaleLowerCase()
+        console.log 'TODO: add racer in heat.coffee', group
+
+        #@$select
+        #    .find('.group-'+group)
+        #    .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('count') } - #{ racer.get('racer') }</option>"))
         return
 
     RacerChange: (racer) ->

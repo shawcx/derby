@@ -79,8 +79,10 @@ class Database:
         cursor = self.connection.cursor()
         try:
             cursor.execute(statement, list(values.values()) + [_id])
-        except sqlite3.ProgrammingError:
-            raise derby.error('Problem executing statement')
+        except sqlite3.ProgrammingError as e:
+            raise derby.error('Problem executing statement: %s', e)
+        except sqlite3.IntegrityError as e:
+            raise derby.error('Integrity error: %s', e)
         self.connection.commit()
 
     def delete(self, table, value, col='id'):

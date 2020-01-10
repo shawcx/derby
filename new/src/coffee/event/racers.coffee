@@ -39,26 +39,15 @@ class RacerModel extends Backbone.Model
         @set('total', total.toFixed(4))
         return worse
 
-_groupCompare =
-    Lion    : 1
-    Tiger   : 2
-    Wolf    : 3
-    Bear    : 4
-    Webelo  : 5
-    AoL     : 6
-    Sibling : 7
-    Adult   : 8
 
 class RacerCollection extends Backbone.Collection
     model: RacerModel
-    url: RacerModel.prototype.urlRoot
+    url: () -> "/racers/#{ event_id }"
     comparator: (a,b) ->
         aTotal = a.get('total')
         bTotal = b.get('total')
         aTotal = if aTotal then parseFloat(aTotal) else Infinity
         bTotal = if bTotal then parseFloat(bTotal) else Infinity
-        if aTotal == bTotal
-            return _groupCompare[a.get('group')] - _groupCompare[b.get('group')]
         return aTotal - bTotal
 
 module.exports.Model      = RacerModel
@@ -79,16 +68,22 @@ class RacerModal extends Backbone.View
     OnShowModal: (evt) ->
         @racer = @collection.get $(evt.relatedTarget).data('racer')
         model = @racer.toJSON()
-        @$el.find('img.avatar').attr('src', model.avatar)
-        @$el.find('#race-modal-racer').text model.racer
-        @$el.find('#race-modal-group').text model.group
-        @$el.find('#race-modal-car'  ).text model.car
+        @$('img.avatar').attr 'src', model.avatar
+        @$('#race-modal-racer').text model.racer
+        @$('#race-modal-group').text model.group
+        @$('#race-modal-car'  ).text model.car
         return
 
     OnSave: () ->
         @racer.save
-            racer: @$el.find('#race-modal-racer').text()
-            car:  @$el.find('#race-modal-car').text()
+            racer: @$('#race-modal-racer').text()
+            car:   @$('#race-modal-car').text()
+          ,
+            wait: true
+            error: (model,xhr) =>
+                @$('#race-modal-racer').addClass('border border-danger bg-danger text-light rounded')
+                #alert(xhr.responseText)
+                return
         return
 
     OnDelete: () ->
@@ -115,7 +110,17 @@ class AddRacerModal extends Backbone.View
 
     initialize: (options) ->
         @reset()
+        @listenTo @collection.groups, 'add', @AddGroup, @
+        @listenTo @collection.groups, 'reset', (groups) =>
+            groups.forEach @AddGroup, @
+            return
         return @
+
+    AddGroup: (group) ->
+        groupOption = new GroupOption
+            model: group
+        @$('#add-racer-group').append groupOption.$el
+        return
 
     reset: () ->
         @racer = new RacerModel
@@ -151,20 +156,20 @@ class AddRacerModal extends Backbone.View
         if not @racer.has('avatar')
             alert('No picture was taken')
             return cancelEvent(evt)
-        @racer.save {
-                racer: $('#add-racer-racer').val()
-                group: $('#add-racer-group').val()
-                car:   $('#add-racer-car').val()
-            },{
-                wait: true,
-                success: () =>
-                    @collection.add @racer
-                    @reset()
-                    return
-                error: (model,xhr) =>
-                    alert(xhr.responseText)
-                    return
-            }
+        @racer.save
+            event_id: event_id
+            group_id: $('#add-racer-group').val()
+            racer:    $('#add-racer-racer').val()
+            car:      $('#add-racer-car').val()
+          ,
+            wait: true,
+            success: () =>
+                @collection.add @racer
+                @reset()
+                return
+            error: (model,xhr) =>
+                alert(xhr.responseText)
+                return
         return cancelEvent(evt)
 
     OnClickVideo: () ->
@@ -202,5 +207,21 @@ class AddRacerModal extends Backbone.View
         $('#avatarVid').show()
         $('#add-racer-save').prop('disabled', true)
         @racer.unset('avatar')
+
+
+class GroupOption extends Backbone.View
+    tagName: 'option'
+
+    initialize: (options) ->
+        @$el.attr('value', @model.id)
+        @render()
+        @listenTo @model, 'change',  @render, @
+        @listenTo @model, 'remove',  @remove, @
+        @listenTo @model, 'destroy', @remove, @
+        return @
+
+    render: () ->
+        @$el.text @model.get('group')
+        return @
 
 module.exports.AddRacerModal = AddRacerModal

@@ -93,8 +93,8 @@ class Application(tornado.web.Application):
 
         patterns = [
             ( r'/events/([0-9]*)', derby.handlers.Events    ),
-            ( r'/groups/([0-9]*)', derby.handlers.Groups    ),
             ( r'/racers/([0-9]*)', derby.handlers.Racers    ),
+            ( r'/groups/([0-9]*)', derby.handlers.Groups    ),
             ( r'/times/([0-9]*)',  derby.handlers.Times     ),
             ( r'/serial',          derby.handlers.Serial    ),
             ( r'/ws',              derby.handlers.WebSocket ),

@@ -68,7 +68,7 @@ class ResultsTable extends Backbone.View
         @$tbody = @$('tbody')
 
         @groupFilter = new GroupFilter
-            collection: options.groups
+            collection: @collection.groups
             table: @
 
         # bind to the racers collection
@@ -110,6 +110,8 @@ class ResultsRow extends Backbone.View
 
     render: () ->
         model = @model.toJSON()
+
+        model.group = @model.collection.groups.get(@model.get('group_id')).get('group')
 
         model.time1='💥' if model.time1 == '0.0000'
         model.time2='💥' if model.time2 == '0.0000'

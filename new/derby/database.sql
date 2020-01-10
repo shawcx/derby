@@ -32,8 +32,9 @@ CREATE TABLE groups (
 -- Contestants
 --
 CREATE TABLE racers (
-    "racer"    TEXT    NOT NULL UNIQUE,
+    "event_id" INTEGER NOT NULL,
     "group_id" INTEGER NOT NULL,
+    "racer"    TEXT    NOT NULL UNIQUE,
     "car"      TEXT    NOT NULL,
     "avatar"   TEXT, -- JPEG of racer or avatar
 
@@ -50,6 +51,7 @@ CREATE TABLE racers (
 
     "racer_id" INTEGER PRIMARY KEY,
 
+    FOREIGN KEY(event_id) REFERENCES events(event_id),
     FOREIGN KEY(group_id) REFERENCES groups(group_id)
     );
 

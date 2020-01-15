@@ -142,6 +142,9 @@ class Application(tornado.web.Application):
             self.serialPort.close()
             self.serialPort = None
 
+        if not port:
+            return
+
         try:
             self.serialPort = serial.Serial(port, 9600)
         except:

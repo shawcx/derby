@@ -18,23 +18,38 @@ class DerbyEvent
 
         @groups = new Groups.Collection
         @racers = new Racers.Collection
-        @racers.groups = @groups
         @times  = new Times.Collection
 
+        @groups.on 'destroy', (groupModel) =>
+            console.log 'main destroy', groupModel
+            racer_ids = []
+            @racers.forEach (racerModel) =>
+                if racerModel.get('group_id') is groupModel.id
+                    racer_ids.push racerModel.id
+                #console.log JSON.stringify racerModel.toJSON()
+                return
+            console.log racer_ids
+            @racers.remove racer_ids
+            return
+
         new Groups.GroupsModal
-            collection: @groups
+            groups: @groups
 
         new Racers.AddRacerModal
-            collection: @racers
+            racers: @racers
+            groups: @groups
 
         new Racers.RacerModal
-            collection: @racers
+            racers: @racers
+            groups: @groups
 
         @heatModal = new Heat.HeatModal
-            collection: @racers
+            racers: @racers
+            groups: @groups
 
         @resultsTable = new Results.ResultsTable
-            collection: @racers
+            racers: @racers
+            groups: @groups
 
 #        window.p = (a,b) =>
 #            @heatModal.results(a,b)

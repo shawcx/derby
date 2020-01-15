@@ -32,7 +32,7 @@ class GroupFilter extends Backbone.View
 
     FilterGroup: () ->
         @group = null if @group is 'all'
-        @table.collection.forEach (racer) =>
+        @table.racers.forEach (racer) =>
             row = @table.rows[racer.id]
             row.$el.remove()
             if @group and racer.get('group') != @group
@@ -64,19 +64,22 @@ class ResultsTable extends Backbone.View
     el: () -> $('#results-table')
 
     initialize: (options) ->
+        @racers = options.racers
+        @groups = options.groups
+
         @rows   = {}
         @$tbody = @$('tbody')
 
         @groupFilter = new GroupFilter
-            collection: @collection.groups
+            collection: @groups
             table: @
 
         # bind to the racers collection
-        @listenTo @collection, 'add', @Add, @
-        @listenTo @collection, 'reset', (racers) =>
+        @listenTo @racers, 'add', @Add, @
+        @listenTo @racers, 'reset', (racers) =>
             racers.forEach @Add, @
             return
-        @listenTo @collection, 'sort', (racers) =>
+        @listenTo @racers, 'sort', (racers) =>
             racers.forEach (racer) =>
                 row = @rows[racer.id]
                 row.$el.remove()
@@ -89,6 +92,7 @@ class ResultsTable extends Backbone.View
     Add: (racer) ->
         resultRow = new ResultsRow
             model: racer
+            collection: @groups
         @rows[racer.id] = resultRow
         @$tbody.append resultRow.$el
         return
@@ -111,7 +115,7 @@ class ResultsRow extends Backbone.View
     render: () ->
         model = @model.toJSON()
 
-        model.group = @model.collection.groups.get(@model.get('group_id')).get('group')
+        model.group = @collection.get(@model.get('group_id')).get('group')
 
         model.time1='💥' if model.time1 == '0.0000'
         model.time2='💥' if model.time2 == '0.0000'

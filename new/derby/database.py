@@ -25,6 +25,8 @@ class Database:
         self.connection.text_factory = str
         self.connection.row_factory  = sqlite3.Row
 
+        self.connection.execute('PRAGMA foreign_keys = ON;')
+
         if schema:
             cursor = self.connection.cursor()
             cursor.executescript(schema)
@@ -83,10 +85,13 @@ class Database:
             raise derby.error('Problem executing statement: %s', e)
         except sqlite3.IntegrityError as e:
             raise derby.error('Integrity error: %s', e)
+        finally:
+            cursor.close()
         self.connection.commit()
 
     def delete(self, table, value, col='id'):
         statement = 'DELETE FROM {0} WHERE {1} = ?'.format(table, col)
         cursor = self.connection.cursor()
         cursor.execute(statement, (value,))
+        cursor.close()
         self.connection.commit()

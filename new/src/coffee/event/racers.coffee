@@ -109,9 +109,12 @@ class AddRacerModal extends Backbone.View
         'click #avatarImg'       : 'OnClickImage'
 
     initialize: (options) ->
+        @racers = options.racers
+        @groups = options.groups
+
         @reset()
-        @listenTo @collection.groups, 'add', @AddGroup, @
-        @listenTo @collection.groups, 'reset', (groups) =>
+        @listenTo @groups, 'add', @AddGroup, @
+        @listenTo @groups, 'reset', (groups) =>
             groups.forEach @AddGroup, @
             return
         return @
@@ -135,7 +138,13 @@ class AddRacerModal extends Backbone.View
 
         return
 
-    OnShowModal: () ->
+    OnShowModal: (evt) ->
+        if @groups.length is 0
+            alert('Please add group first')
+            @$el.modal('hide')
+            #e.stopPropagation()
+            return cancelEvent(evt)
+
         @vidSize = $('#avatarVid').height()
         if not @stream
             constraints =
@@ -151,6 +160,7 @@ class AddRacerModal extends Backbone.View
         for track in @stream.getTracks()
             track.stop()
         @stream = null
+        return
 
     OnRacerSave: (evt) ->
         if not @racer.has('avatar')
@@ -158,13 +168,13 @@ class AddRacerModal extends Backbone.View
             return cancelEvent(evt)
         @racer.save
             event_id: event_id
-            group_id: $('#add-racer-group').val()
+            group_id: parseInt($('#add-racer-group').val())
             racer:    $('#add-racer-racer').val()
             car:      $('#add-racer-car').val()
           ,
             wait: true,
-            success: () =>
-                @collection.add @racer
+            success: (m) =>
+                @racers.add @racer
                 @reset()
                 return
             error: (model,xhr) =>
@@ -207,6 +217,7 @@ class AddRacerModal extends Backbone.View
         $('#avatarVid').show()
         $('#add-racer-save').prop('disabled', true)
         @racer.unset('avatar')
+        return
 
 
 class GroupOption extends Backbone.View

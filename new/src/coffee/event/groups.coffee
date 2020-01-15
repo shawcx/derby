@@ -26,7 +26,7 @@ class GroupsModal extends Backbone.View
 
     initialize: (options) ->
         @groupsTable = new GroupsTable
-            collection: @collection
+            collection: options.groups
         @render()
         return @
 
@@ -108,5 +108,7 @@ class GroupsRow extends Backbone.View
         return
 
     OnDelete: () ->
-        @model.destroy(wait: true)
+        really = confirm("Remove #{ @model.get('group') }?")
+        return if not really
+        @model.destroy wait: true
         return

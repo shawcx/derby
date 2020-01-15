@@ -14,6 +14,8 @@ class HeatModal extends Backbone.View
         'click #swapLanes'   : 'OnSwapLanes'
 
     initialize: (options) ->
+        @racers = options.racers
+
         @needAccept = false
         @ready = false
         @render()
@@ -21,12 +23,12 @@ class HeatModal extends Backbone.View
 
     render: () ->
         @selectA = new RaceSelect
-            collection: @collection
+            collection: @racers
             parent: @
             lane: 'A'
 
         @selectB = new RaceSelect
-            collection: @collection
+            collection: @racers
             parent: @
             lane: 'B'
 
@@ -71,7 +73,7 @@ class HeatModal extends Backbone.View
 
             success: (data) =>
                 if @selectA.racer_id != -1
-                    racer = @collection.get @selectA.racer_id
+                    racer = @racers.get @selectA.racer_id
                     count = racer.get('count')
                     count += 1
                     update = {}
@@ -81,7 +83,7 @@ class HeatModal extends Backbone.View
                     racer.set update
                     racer.calculateTotal()
                 if @selectB.racer_id != -1
-                    racer = @collection.get @selectB.racer_id
+                    racer = @racers.get @selectB.racer_id
                     count = racer.get('count')
                     count += 1
                     update = {}
@@ -90,7 +92,7 @@ class HeatModal extends Backbone.View
                     update['count'] = count
                     racer.set update
                     racer.calculateTotal()
-                @collection.sort()
+                @racers.sort()
                 @OnSwapLanes()
                 return
 
@@ -227,9 +229,9 @@ class RaceSelect extends Backbone.View
         return @
 
     Add: (racer) ->
-        group = @collection.groups.get(racer.get('group_id')).get('group')
-        group = group.toLocaleLowerCase()
-        console.log 'TODO: add racer in heat.coffee', group
+        #group = @collection.groups.get(racer.get('group_id')).get('group')
+        #group = group.toLocaleLowerCase()
+        console.log 'TODO: add racer in heat.coffee', racer.get('group_id')
 
         #@$select
         #    .find('.group-'+group)

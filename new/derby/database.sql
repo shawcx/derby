@@ -14,7 +14,7 @@ INSERT INTO settings (name,value) VALUES ('speed','9600');
 -- Events
 --
 CREATE TABLE events (
-    "event"     TEXT NOT NULL UNIQUE,
+    "event"    TEXT NOT NULL UNIQUE,
     "date"     TEXT NOT NULL,
     "event_id" INTEGER PRIMARY KEY
     );

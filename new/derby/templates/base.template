@@ -28,6 +28,7 @@
           </a>
         </li>
         -->
+        <li class="nav-item"><a class="nav-link" href="/" ><i class="fad fa-fw fa-lg fa-flag-checkered"></i> Events</a></li>
 {% block links-left %}
 {% end %}
       </ul>

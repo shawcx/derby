@@ -11,13 +11,20 @@ class VirtualTrack:
         self.serialPort = serial.Serial('/dev/ttyTRACK')
 
         while True:
-            fds = select.select([self.serialPort,sys.stdin],[],[],1.0)
+            try:
+                fds = select.select([self.serialPort,sys.stdin],[],[])
+            except KeyboardInterrupt:
+                print()
+                break
+
             rfds = fds[0]
             if not rfds:
                 continue
             if rfds[0] == self.serialPort:
                 d = self.serialPort.read(self.serialPort.in_waiting)
-                print(d)
+                d = d.decode('utf-8')
+                sys.stdout.write(d)
+                sys.stdout.flush()
             else:
                 d = sys.stdin.readline()
                 d = d.encode('utf-8')

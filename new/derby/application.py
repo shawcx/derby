@@ -23,20 +23,8 @@ ioloop = tornado.ioloop.IOLoop.instance()
 
 
 def main():
-    defaultSerials = {
-        #'Linux'   : '/dev/ttyUSB0',
-        'Linux'   : '/dev/ttyDERBY',
-        'Darwin'  : '/dev/cu.usbserial',
-        'Windows' : 'COM3',
-    }
-
     # parse the command line arguments
     argparser = argparse.ArgumentParser()
-
-    argparser.add_argument('--serial',
-        metavar='<tty>', default=defaultSerials.get(platform.system()),
-        help='serial port to open'
-        )
 
     argparser.add_argument('--baud',
         metavar='<speed>', type=int, default=9600,
@@ -44,7 +32,7 @@ def main():
         )
 
     argparser.add_argument('--db',
-        metavar='<sqlite db>', default='derby.sqlite',
+        metavar='<sqlite db>', default=os.path.join(derby.root, 'derby.sqlite'),
         help='Path to database'
         )
 
@@ -85,18 +73,24 @@ class Application(tornado.web.Application):
 
         derby.db = derby.Database(derby.args.db)
 
+        config = {}
+        for item in derby.db.find('settings'):
+            config[item['name']] = item['value']
+
+        self.serialPort = None
+        self.OpenSerialPort(config['port'])
+
         # class to manage the state of the track
         self.trackState = derby.TrackState()
-
-        #self.serialPort = serial.Serial(derby.args.serial, derby.args.baud)
-        #ioloop.add_handler(self.serialPort, self.tapReadCb, ioloop.READ)
 
         patterns = [
             ( r'/events/([0-9]*)', derby.handlers.Events    ),
             ( r'/racers/([0-9]*)', derby.handlers.Racers    ),
             ( r'/groups/([0-9]*)', derby.handlers.Groups    ),
             ( r'/times/([0-9]*)',  derby.handlers.Times     ),
-            ( r'/serial',          derby.handlers.Serial    ),
+            ( r'/config/([a-z]*)', derby.handlers.Config    ),
+            ( r'/serial/test',     derby.handlers.PortTest  ),
+            ( r'/serial/',         derby.handlers.Serial    ),
             ( r'/ws',              derby.handlers.WebSocket ),
             ( r'/(settings)',      derby.handlers.Template  ),
             ( r'/',                derby.handlers.Template  ),
@@ -124,10 +118,6 @@ class Application(tornado.web.Application):
         ioloop.start()
         logging.info('Good-Bye')
 
-    def tapReadCb(self, fd, event):
-        data = fd.read(fd.in_waiting)
-        print(data.decode('utf-8').strip())
-
     def Broadcast(self, action, message):
         'Broadcast a message to all connected sockets'
         bundle = {
@@ -146,8 +136,22 @@ class Application(tornado.web.Application):
         logging.info('Terminating')
         self.Stop()
 
+    def OpenSerialPort(self, port):
+        if self.serialPort:
+            ioloop.remove_handler(self.serialPort)
+            self.serialPort.close()
+            self.serialPort = None
 
-class Template(tornado.web.RequestHandler):
-    def get(self, template=None):
-        template = template+'.html' if template else 'index.html'
-        self.render(template)
+        try:
+            self.serialPort = serial.Serial(port, 9600)
+        except:
+            logging.info('Unable to open serial port: %s', port)
+            return
+
+        ioloop.add_handler(self.serialPort, self.SerialReadCb, ioloop.READ)
+        ok = self.serialPort.write(b'hello world\n')
+        print(ok)
+
+    def SerialReadCb(self, fd, event):
+        data = fd.read(fd.in_waiting)
+        print(data.decode('utf-8').strip())

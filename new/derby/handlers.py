@@ -203,13 +203,28 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             pass
 
 
+class Config(tornado.web.RequestHandler):
+    def get(self, name=None):
+        self.set_header('Content-Type', 'application/json')
+        if not name:
+            settings = derby.db.find('settings')
+            self.write(json.dumps(settings))
+        else:
+            value = derby.db.findOne('settings', 'name', name)
+            self.write({name,value})
+
+    def put(self, name):
+        data = json.loads(self.request.body)
+        derby.db.update('settings', data, 'name')
+
+
 class Serial(tornado.web.RequestHandler):
     def get(self):
         self.set_header('Content-Type', 'application/json')
-        ports = [port.device for port in serial.tools.list_ports.comports()]
+        ports = [{'port':port.device} for port in serial.tools.list_ports.comports()]
         if derby.args.debug:
-            ports.append('/dev/ttyDERBY')
-        self.write({'ports':ports})
+            ports.append({'port':'/dev/ttyDERBY'})
+        self.write(json.dumps(ports))
 
     def post(self):
         racerA = self.get_argument('racerA')
@@ -223,4 +238,16 @@ class Serial(tornado.web.RequestHandler):
             logging.info('Masking Lane B')
             self.settings['pipe'].send(b'MB\r')
         self.settings['pipe'].send(b'LN\r')
+        self.set_status(204)
+
+
+class PortTest(tornado.web.RequestHandler):
+    def post(self):
+        port = self.request.body.decode('utf-8')
+        #self.application.OpenSerialPort(port)
+        try:
+            serial.Serial(port)
+        except:
+            raise tornado.web.HTTPError(500)
+
         self.set_status(204)

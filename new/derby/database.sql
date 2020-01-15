@@ -7,6 +7,9 @@ CREATE TABLE settings (
     "value"    TEXT
     );
 
+INSERT INTO settings (name,value) VALUES ('port','');
+INSERT INTO settings (name,value) VALUES ('speed','9600');
+
 --
 -- Events
 --
@@ -25,7 +28,7 @@ CREATE TABLE groups (
     "group_id" INTEGER PRIMARY KEY,
 
     UNIQUE("group", "event_id"),
-    FOREIGN KEY(event_id) REFERENCES events(event_id)
+    FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE
     );
 
 --
@@ -51,8 +54,8 @@ CREATE TABLE racers (
 
     "racer_id" INTEGER PRIMARY KEY,
 
-    FOREIGN KEY(event_id) REFERENCES events(event_id),
-    FOREIGN KEY(group_id) REFERENCES groups(group_id)
+    FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE,
+    FOREIGN KEY(group_id) REFERENCES groups(group_id) ON DELETE CASCADE
     );
 
 --

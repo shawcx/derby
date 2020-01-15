@@ -4,49 +4,57 @@ _        = require('underscore')
 Backbone = require('backbone')
 
 
-class Model extends Backbone.Model
-    idAttribute: 'settings_id'
-    urlRoot: '/data/settings/'
+class Item extends Backbone.Model
+    idAttribute: 'name'
 
+class Config extends Backbone.Collection
+    model: Item
+    url: '/config/'
 
-class Collection extends Backbone.Collection
-    model: Model
-    url: Model.prototype.urlRoot
-
-
-module.exports.Model      = Model
-module.exports.Collection = Collection
+class Ports extends Backbone.Collection
+    url: '/serial/'
 
 
 class Settings
     constructor: () ->
-        @ports = new Backbone.Collection()
+        @config = new Config()
+        @ports  = new Ports()
 
-        new PanelView
-            collection: @ports
+        new SettingsView
+            config: @config
+            ports:  @ports
 
-        $.ajax
-            method: 'GET'
-            url: '/serial'
-            success: (data) =>
-                for port in data.ports
-                    @ports.add port:port
-                return
+        promises = []
+        promises.push @config.fetch reset:true
+        promises.push @ports.fetch  reset:true
 
-class PanelView extends Backbone.View
+        Promise.all(promises).then () =>
+            #console.log JSON.stringify @config.toJSON()
+            return
+
+        return
+
+
+class SettingsView extends Backbone.View
     el: () -> $('#settings-ports')
 
     events:
-        'click #settings-ports-form-save' : 'OnSaveUser'
+        'click #ports-refresh' : 'OnPortRefresh'
+        'click #ports-test'    : 'OnPortTest'
+        'click #ports-save'    : 'OnPortSave'
 
     initialize: (@options) ->
         @$tbody = @$('tbody')
-        @listenTo @collection, 'add',   @Add, @
-        @listenTo @collection, 'reset', (models) =>
+        @listenTo @options.ports, 'add',   @Add, @
+        @listenTo @options.ports, 'reset', (models) =>
             @$tbody.empty()
             models.each (model) =>
                 @Add(model)
                 return
+            item = @options.config.get('port')
+            return if not item
+            port = item.get('value')
+            $("input[value=\"#{port}\"]").prop('checked', true)
             return
         return @
 
@@ -57,7 +65,30 @@ class PanelView extends Backbone.View
         @$tbody.append entry.$el
         return
 
-    OnSaveUser: (event) ->
+    OnPortRefresh: (event) ->
+        @options.ports.fetch reset:true
+        return
+
+    OnPortTest: (event) ->
+        value = $('input[name="port"]:checked').val()
+        return if not value
+
+        $.ajax
+            method: 'POST'
+            url: '/serial/test'
+            data: value
+            success: (data) =>
+                console.log 'SUCCESS:', data
+                return
+        return
+
+    OnPortSave: (event) ->
+        value = $('input[name="port"]:checked').val()
+        return if not value
+
+        item = @options.config.get('port')
+        item.set value:value
+        item.save()
         return
 
 
@@ -68,7 +99,7 @@ class RowView extends Backbone.View
     events:
         'click'           : 'OnClick'
         'click input'     : 'OnRadioClick'
-        'click .portname' : 'OnUserClick'
+        'click .portname' : 'OnPortClick'
 
     initialize: (@options) ->
         _.bindAll @, 'render'
@@ -81,7 +112,6 @@ class RowView extends Backbone.View
     render: () ->
         isChecked = @$('input[name="port"]').prop('checked')
         model = @model.toJSON()
-        console.log model
         @$el.html Templates['port-row'] model
         @$('input[name="port"]').prop('checked', isChecked)
         return
@@ -96,7 +126,7 @@ class RowView extends Backbone.View
         e.stopPropagation()
         return
 
-    OnUserClick: (e) ->
+    OnPortClick: (e) ->
         @$('input[name="port"]').prop('checked', true)
         cancelEvent(e)
 

@@ -31,15 +31,15 @@
       <tbody></tbody>
     </table>
     <div class="text-right">
-      <button type="button" class="btn btn-dark"   ><i class="fa fa-redo"    ></i> Refresh </button>
-      <button type="button" class="btn btn-danger" ><i class="fa fa-exchange"></i> Test    </button>
-      <button type="button" class="btn btn-primary"><i class="fa fa-save"    ></i> Save    </button>
+      <button id="ports-refresh" type="button" class="btn btn-dark"   ><i class="fa fa-redo"    ></i> Refresh </button>
+      <button id="ports-test"    type="button" class="btn btn-danger" ><i class="fa fa-exchange"></i> Test    </button>
+      <button id="ports-save"    type="button" class="btn btn-primary"><i class="fa fa-save"    ></i> Save    </button>
     </div>
   </div>
 </div>
 
 <script type="text/html-template" id="t-port-row">
   <td><input type="radio" name="port" value="<%- port %>" /></td>
-  <td width="100%"><a href="#" class="port"><%- port %></a></td>
+  <td width="100%"><%- port %></td>
 </script>
 {% end %}

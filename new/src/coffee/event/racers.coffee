@@ -149,9 +149,13 @@ class AddRacerModal extends Backbone.View
             constraints =
                 video: true
             @video = document.querySelector('video')
-            navigator.mediaDevices.getUserMedia(constraints).then (stream) =>
-                @video.srcObject = @stream = stream
-                return
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then (stream) =>
+                    @video.srcObject = @stream = stream
+                    return
+                .catch (error) =>
+                    alert('Could not access camera!')
+                    return
         return
 
     OnShownModal: (evt) ->
@@ -187,13 +191,6 @@ class AddRacerModal extends Backbone.View
         return cancelEvent(evt)
 
     OnClickVideo: () ->
-        constraints =
-          video:
-            width:
-              min: 320
-            height:
-                min: 240
-
         canvas = document.createElement('canvas')
         canvas.width  = @vidSize
         canvas.height = @vidSize

@@ -29,17 +29,19 @@ class GroupFilter extends Backbone.View
         $(e.target).removeClass('btn-secondary').addClass('btn-primary')
         @group = $(e.target).data('group')
         @FilterGroup()
+        return
 
     FilterGroup: () ->
         @group = null if @group is 'all'
         @table.racers.forEach (racer) =>
             row = @table.rows[racer.id]
             row.$el.remove()
-            if @group and racer.get('group') != @group
+            if @group and racer.get('group_id') != @group
                 return
             @table.$tbody.append(row.$el)
             return
         return
+
 
 class GroupButton extends Backbone.View
     tagName: 'button'

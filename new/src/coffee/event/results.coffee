@@ -33,13 +33,22 @@ class GroupFilter extends Backbone.View
 
     FilterGroup: () ->
         @group = null if @group is 'all'
+
+        count = 0
         @table.racers.forEach (racer) =>
             row = @table.rows[racer.id]
-            row.$el.remove()
+            row.$el.detach()
             if @group and racer.get('group_id') != @group
                 return
             @table.$tbody.append(row.$el)
+            count++
             return
+
+        #@table.$tbody.append($('<tr class="no-racers"><td colspan=9 class="text-center">Use "Add Racer" to add a participant.</td></tr>'))
+        if count is 0
+        then @table.$tbody.find('tr.no-racers').removeClass('d-none')
+        else @table.$tbody.find('tr.no-racers').addClass('d-none')
+
         return
 
 

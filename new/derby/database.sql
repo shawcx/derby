@@ -68,6 +68,6 @@ CREATE TABLE times (
     "time"     TEXT,
     "time_id"  INTEGER PRIMARY KEY,
 
-    FOREIGN KEY(event_id) REFERENCES events(event_id),
-    FOREIGN KEY(racer_id) REFERENCES racers(racer_id)
+    FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE,
+    FOREIGN KEY(racer_id) REFERENCES racers(racer_id) ON DELETE CASCADE
     );

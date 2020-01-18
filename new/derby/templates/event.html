@@ -1,16 +1,14 @@
 {% extends 'base.template' %}
 
 {% block links-left %}
-  <li class="nav-item">
-    <a class="nav-link" href="#" data-toggle="modal" data-target="#heat-modal">
-      <i class="fad fa-fw fa-lg fa-car-side"></i> Heat
-    </a>
-  </li>
+  <li class="nav-item"><a class="nav-link" href="/" >                                             <i class="fad fa-fw fa-lg fa-flag-checkered"></i> Events</a></li>
+  <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#heat-modal"><i class="fad fa-fw fa-lg fa-car-side"      ></i> Heat </a></li>
 {% end %}
 
 {% block links-right %}
   <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#add-racer-modal"><i class="fad fa-fw fa-lg fa-user-circle"></i> Add Racer </a></li>
   <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#groups-modal"   ><i class="fad fa-fw fa-lg fa-users"      ></i> Groups    </a></li>
+  <li class="nav-item"><a class="nav-link" href="/settings"                                           ><i class="fad fa-fw fa-lg fa-tools"      ></i> Settings  </a></li>
 {% end %}
 
 {% block body %}

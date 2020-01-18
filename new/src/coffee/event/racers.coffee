@@ -103,6 +103,7 @@ class AddRacerModal extends Backbone.View
 
     events:
         'show.bs.modal'          : 'OnShowModal'
+        'shown.bs.modal'         : 'OnShownModal'
         'hide.bs.modal'          : 'OnHideModal'
         'submit form'            : 'OnRacerSave'
         'click #add-racer-reset' : 'reset'
@@ -136,16 +137,12 @@ class AddRacerModal extends Backbone.View
 
         $('#avatarImg').hide()
         $('#avatarVid').show()
-        $('#add-racer-save').prop('disabled', true)
+        $('#add-racer-save').prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary')
 
         return
 
     OnShowModal: (evt) ->
-        if @groups.length is 0
-            alert('Please add group first')
-            @$el.modal('hide')
-            #e.stopPropagation()
-            return cancelEvent(evt)
+        @reset()
 
         @vidSize = $('#avatarVid').height()
         if not @stream
@@ -156,6 +153,11 @@ class AddRacerModal extends Backbone.View
                 @video.srcObject = @stream = stream
                 return
         return
+
+    OnShownModal: (evt) ->
+        if @groups.length is 0
+            alert('Please add group first!')
+
 
     OnHideModal: () ->
         return if not @stream
@@ -207,17 +209,19 @@ class AddRacerModal extends Backbone.View
             @vidSize                                # dst height
             )
 
-        avatar = canvas.toDataURL('image/jpeg', 0.9)
+        avatar = canvas.toDataURL('image/jpeg', 1.0)
         @racer.set('avatar', avatar)
         $('#avatarVid').hide()
         $('#avatarImg').attr('src', avatar).show()
-        $('#add-racer-save').prop('disabled', false)
+        $('#add-racer-save').prop('disabled', false).removeClass('btn-secondary').addClass('btn-primary')
+
         return
 
     OnClickImage: () ->
         $('#avatarImg').hide()
         $('#avatarVid').show()
-        $('#add-racer-save').prop('disabled', true)
+        $('#add-racer-save').prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary')
+
         @racer.unset('avatar')
         return
 

@@ -17,29 +17,22 @@
   <body>
   <nav id="devices-nav" class="navbar fixed-top navbar-expand-lg navbar-dark bg-derby">
     <a class="navbar-brand" href="/"><img src="/static/images/logo.png" /></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#device-navbar-collapse" aria-controls="device-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="device-navbar-collapse">
-      <ul class="navbar-nav mr-auto">
-        <!--
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-toggle="modal" data-target="#racers-modal">
-            <i class="fal fa-users"></i> Racers <span id="racers-count" class="badge badge-dark">0</span>
-          </a>
-        </li>
-        -->
-        <li class="nav-item"><a class="nav-link" href="/" ><i class="fad fa-fw fa-lg fa-flag-checkered"></i> Events</a></li>
+    <ul class="navbar-nav mr-auto">
+      <!--
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#racers-modal">
+          <i class="fal fa-users"></i> Racers <span id="racers-count" class="badge badge-dark">0</span>
+        </a>
+      </li>
+      -->
 {% block links-left %}
 {% end %}
-      </ul>
-      <ul class="navbar-nav ml-auto">
+    </ul>
+    <ul class="navbar-nav ml-auto">
 {% block links-right %}
 {% end %}
-        <li class="nav-item"><a class="nav-link" href="/settings" ><i class="fad fa-fw fa-lg fa-tools"></i> Settings</a></li>
-        <span class="navbar-text"><i id="ws-status" class="fa fa-wifi-slash d-none" title="Server Status"></i></span>
-      </ul>
-    </div>
+      <span class="navbar-text"><i id="ws-status" class="fa fa-wifi-slash d-none" title="Server Status"></i></span>
+    </ul>
   </nav>
   <div class="container">
     {% block body %}{% end %}

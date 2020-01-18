@@ -227,7 +227,6 @@ class RaceSelect extends Backbone.View
         return @
 
     AddGroup: (group) ->
-        console.log 'add group...', group.get('group')
         btn = new GroupSelect
             model: group
         @$('select').append(btn.$el)
@@ -247,8 +246,6 @@ class RaceSelect extends Backbone.View
 
     Add: (racer) ->
         group = @groups.get(racer.get('group_id')).get('group')
-        #group = group.toLocaleLowerCase()
-        #console.log 'TODO: add racer in heat.coffee', racer.get('group_id'), group
         @$select
             .find('.group-'+group)
             .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('count') } - #{ racer.get('racer') }</option>"))

@@ -14,46 +14,11 @@
 {% end %}
 
 {% block body %}
-<div id="results-body" class="container">
-  <div style="text-align: center; margin-bottom: 0.5em;">
-    <h1 id="event-name" class="text-light">{{ event['event'] }}</h1>
-    <div id="results-select-group" class="btn-group btn-group-lg" role="group" aria-label="Den Selection">
-      <button class="btn btn-primary select-group" data-group="all">All</button>
-    </div>
-  </div>
-  <table id="results-table" class="table table-hover table-sm">
-    <thead class="thead-dark">
-      <tr>
-        <th style=""></th>
-        <th style="">Name</th>
-        <th style="">Car</th>
-        <th style="">Group</th>
-        <th style="text-align: center;">1st</th>
-        <th style="text-align: center;">2nd</th>
-        <th style="text-align: center;">3rd</th>
-        <th style="text-align: center;">4th</th>
-        <th style="text-align: center;">Total</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <script type="text/html-template" id="t-result-row">
-    <td><img class="avatar" src="<%- avatar %>" /></td>
-    <td><a href="#" data-toggle="modal" data-target="#racer-modal" data-racer="<%- racer_id %>"><%- racer %></a></td>
-    <td><%- car %></td>
-    <td><%- group %></td>
-    <td class="td-times"><%- time1 %> <%- lane1 %></td>
-    <td class="td-times"><%- time2 %> <%- lane2 %></td>
-    <td class="td-times"><%- time3 %> <%- lane3 %></td>
-    <td class="td-times"><%- time4 %> <%- lane4 %></td>
-    <td class="td-times td-total"><%- total %></td>
-  </script>
-</div>
 
-{% include './event/racer.html' %}
-{% include './event/group.html' %}
-{% include './event/heat.html' %}
+{% include './event/results.html' %}
+{% include './event/racer.html'   %}
+{% include './event/group.html'   %}
+{% include './event/heat.html'    %}
 {% end %}
 
 {% block scripts %}

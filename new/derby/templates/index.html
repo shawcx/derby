@@ -11,6 +11,7 @@
         <tr>
           <th>Event Name</th>
           <th>Date</th>
+          <th></th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -18,6 +19,7 @@
     <script type="text/html-template" id="t-event-row">
       <td><a href="/events/<%- event_id %>"><%- event %></a></td>
       <td><%- date %></td>
+      <td class="text-right"><button class="btn btn-link delete-event"><i class="text-danger fa fa-trash-alt"></i></button></td>
     </script>
   </div>
 </div>

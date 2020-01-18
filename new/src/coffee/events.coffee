@@ -98,6 +98,8 @@ class EventsTable extends Backbone.View
 class EventsRow extends Backbone.View
     tagName: 'tr'
     className: 'eventRow'
+    events:
+        'click .delete-event' : 'OnDeleteEvent'
 
     initialize: () ->
         _.bindAll @, 'render'
@@ -110,6 +112,12 @@ class EventsRow extends Backbone.View
     render: () ->
         @$el.html Templates['event-row'] @model.toJSON()
         return @
+
+    OnDeleteEvent: (evt) ->
+        really = confirm("Remove #{ @model.get('event') }?")
+        return if not really
+        @model.destroy wait: true
+        return
 
 
 module.exports.Events        = Events

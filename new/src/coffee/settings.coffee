@@ -43,15 +43,18 @@ class SettingsView extends Backbone.View
         'click #ports-test'    : 'OnPortTest'
         'click #ports-save'    : 'OnPortSave'
 
-    initialize: (@options) ->
+    initialize: (options) ->
+        @ports  = options.ports
+        @config = options.config
+
         @$tbody = @$('tbody')
-        @listenTo @options.ports, 'add',   @Add, @
-        @listenTo @options.ports, 'reset', (models) =>
+        @listenTo @ports, 'add',   @Add, @
+        @listenTo @ports, 'reset', (models) =>
             @$tbody.empty()
             models.each (model) =>
                 @Add(model)
                 return
-            item = @options.config.get('port')
+            item = @config.get('port')
             return if not item
             port = item.get('value')
             $("input[value=\"#{port}\"]").prop('checked', true)
@@ -66,7 +69,7 @@ class SettingsView extends Backbone.View
         return
 
     OnPortRefresh: (event) ->
-        @options.ports.fetch reset:true
+        @ports.fetch reset:true
         return
 
     OnPortTest: (event) ->
@@ -86,7 +89,7 @@ class SettingsView extends Backbone.View
         value = $('input[name="port"]:checked').val()
         return if not value
 
-        item = @options.config.get('port')
+        item = @config.get('port')
         item.set value:value
         item.save()
         return
@@ -101,7 +104,7 @@ class RowView extends Backbone.View
         'click input'     : 'OnRadioClick'
         'click .portname' : 'OnPortClick'
 
-    initialize: (@options) ->
+    initialize: (options) ->
         _.bindAll @, 'render'
         @render()
         @listenTo @model, 'change',  @render

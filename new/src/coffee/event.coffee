@@ -3,12 +3,13 @@ $        = require('jquery')
 _        = require('underscore')
 Backbone = require('backbone')
 
-Groups  = require('./event/groups.js')
-Racers  = require('./event/racers.js')
-Times   = require('./event/times.js')
-Heat    = require('./event/heat.js')
-Results = require('./event/results.js')
-Socket  = require('./socket.js')
+Groups   = require('./event/groups.js')
+Racers   = require('./event/racers.js')
+Times    = require('./event/times.js')
+Heat     = require('./event/heat.js')
+Results  = require('./event/results.js')
+Settings = require('./event/settings.js')
+Socket   = require('./socket.js')
 
 
 class DerbyEvent
@@ -19,6 +20,8 @@ class DerbyEvent
         @groups = new Groups.Collection
         @racers = new Racers.Collection
         @times  = new Times.Collection
+        @config = new Settings.Config()
+        @ports  = new Settings.Ports()
 
         @groups.on 'destroy', (groupModel) =>
             console.log 'main destroy', groupModel
@@ -42,6 +45,10 @@ class DerbyEvent
         new Racers.RacerModal
             racers: @racers
             groups: @groups
+
+        new Settings.SettingsModal
+            config: @config
+            ports:  @ports
 
         @heatModal = new Heat.HeatModal
             racers: @racers
@@ -70,6 +77,8 @@ class DerbyEvent
         promises.push @groups.fetch reset:true
         promises.push @racers.fetch reset:true
         promises.push @times.fetch  reset:true
+        promises.push @config.fetch reset:true
+        promises.push @ports.fetch  reset:true
 
         Promise.all(promises).then () =>
             @times.forEach (timeModel) =>

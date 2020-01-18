@@ -15,28 +15,12 @@ class Ports extends Backbone.Collection
     url: '/serial/'
 
 
-class Settings
-    constructor: () ->
-        @config = new Config()
-        @ports  = new Ports()
-
-        new SettingsView
-            config: @config
-            ports:  @ports
-
-        promises = []
-        promises.push @config.fetch reset:true
-        promises.push @ports.fetch  reset:true
-
-        Promise.all(promises).then () =>
-            #console.log JSON.stringify @config.toJSON()
-            return
-
-        return
+module.exports.Config = Config
+module.exports.Ports  = Ports
 
 
-class SettingsView extends Backbone.View
-    el: () -> $('#settings-ports')
+class SettingsModal extends Backbone.View
+    el: () -> $('#settings-modal')
 
     events:
         'click #ports-refresh' : 'OnPortRefresh'
@@ -92,6 +76,7 @@ class SettingsView extends Backbone.View
         item = @config.get('port')
         item.set value:value
         item.save()
+        @$el.modal('hide')
         return
 
 
@@ -134,4 +119,4 @@ class RowView extends Backbone.View
         cancelEvent(e)
 
 
-module.exports.Settings = Settings
+module.exports.SettingsModal = SettingsModal

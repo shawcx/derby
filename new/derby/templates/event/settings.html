@@ -1,45 +1,27 @@
-{% extends 'base.template' %}
 
-{% block body %}
-
-<!--
-<div class="card bg-light mt-4" id="settings-groups">
-  <div class="card-body">
-    <a class="float-right text-primary" href="#" data-toggle="modal" data-target="#add-event-modal"><i class="fal fa-2x fa-fw fa-plus-circle"></i></a>
-    <h1><i class="fad fa-users"></i> Groups</h1>
-    <table id="settings-ports-table" class="table table-condensed table-borderless">
-      <thead class="thead-dark">
-        <tr>
-          <th width="1"></th>
-          <th style="">Group Name</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</div>
--->
-<script type="text/html-template" id="t-group-row">
-  <td><input type="check" name="group" value="<%- group %>" /></td>
-  <td width="100%"><a href="#"><%- group %></a></td>
-</script>
-
-<div class="card bg-light mt-4" id="settings-ports">
-  <div class="card-body">
-    <h1><i class="fad fa-usb-drive"></i> Serial Port</h1>
-    <table id="settings-ports-table" class="table table-condensed table-borderless">
-      <tbody></tbody>
-    </table>
-    <div class="text-right">
-      <button id="ports-refresh" type="button" class="btn btn-dark"   ><i class="fa fa-redo"    ></i> Refresh </button>
-      <button id="ports-test"    type="button" class="btn btn-danger" ><i class="fa fa-exchange"></i> Test    </button>
-      <button id="ports-save"    type="button" class="btn btn-primary"><i class="fa fa-save"    ></i> Save    </button>
+<div id="settings-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settings-label" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="settings-label"><i class="fad fa-usb-drive"></i> Serial Port</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table id="settings-ports-table" class="table table-condensed table-borderless">
+          <tbody></tbody>
+        </table>
+        <div class="text-right">
+          <button id="ports-refresh" type="button" class="btn btn-dark"   ><i class="fa fa-redo"    ></i> Refresh </button>
+          <button id="ports-test"    type="button" class="btn btn-danger" ><i class="fa fa-exchange"></i> Test    </button>
+          <button id="ports-save"    type="button" class="btn btn-primary"><i class="fa fa-save"    ></i> Save    </button>
+        </div>
+        <script type="text/html-template" id="t-port-row">
+          <td><input type="radio" name="port" value="<%- port %>" /></td>
+          <td width="100%"><%- port %></td>
+        </script>
+      </div>
     </div>
   </div>
 </div>
-
-<script type="text/html-template" id="t-port-row">
-  <td><input type="radio" name="port" value="<%- port %>" /></td>
-  <td width="100%"><%- port %></td>
-</script>
-{% end %}

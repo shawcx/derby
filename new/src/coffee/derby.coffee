@@ -10,7 +10,6 @@ window.Templates = {}
 
 Events   = require('./events.js')
 Event    = require('./event.js')
-Settings = require('./settings.js')
 
 
 $(document).ready () ->
@@ -25,7 +24,6 @@ $(document).ready () ->
     switch components[1]
         when ''         then new Events.Events
         when 'events'   then new Event.DerbyEvent
-        when 'settings' then new Settings.Settings
     return
 
 

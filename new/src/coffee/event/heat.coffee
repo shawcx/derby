@@ -15,6 +15,7 @@ class HeatModal extends Backbone.View
 
     initialize: (options) ->
         @racers = options.racers
+        @groups = options.groups
 
         @needAccept = false
         @ready = false
@@ -23,12 +24,14 @@ class HeatModal extends Backbone.View
 
     render: () ->
         @selectA = new RaceSelect
-            collection: @racers
+            racers: @racers
+            groups: @groups
             parent: @
             lane: 'A'
 
         @selectB = new RaceSelect
-            collection: @racers
+            racers: @racers
+            groups: @groups
             parent: @
             lane: 'B'
 
@@ -200,21 +203,35 @@ class RaceSelect extends Backbone.View
 
     initialize: (options) ->
         @racer_id = -1
+        @racers   = options.racers
+        @groups   = options.groups
         @parent   = options.parent
         @lane     = options.lane
 
         @render()
 
-        @listenTo @collection, 'add', @Add, @
-        @listenTo @collection, 'change', @RacerChange, @
-        @listenTo @collection, 'reset', (racers) =>
+        @listenTo @racers, 'add', @Add, @
+        @listenTo @racers, 'change', @RacerChange, @
+        @listenTo @racers, 'reset', (racers) =>
             racers.forEach @Add, @
             return
-        @listenTo @collection, 'remove', (racer) =>
+        @listenTo @racers, 'remove', (racer) =>
             $option = $('.option-'+racer.id)
             $option.remove()
             return
+
+        @listenTo @groups, 'add', @AddGroup, @
+        @listenTo @groups, 'reset', (groups) =>
+            groups.forEach @AddGroup, @
+            return
         return @
+
+    AddGroup: (group) ->
+        console.log 'add group...', group.get('group')
+        btn = new GroupSelect
+            model: group
+        @$('select').append(btn.$el)
+        return
 
     render: () ->
         values =
@@ -229,13 +246,12 @@ class RaceSelect extends Backbone.View
         return @
 
     Add: (racer) ->
-        #group = @collection.groups.get(racer.get('group_id')).get('group')
+        group = @groups.get(racer.get('group_id')).get('group')
         #group = group.toLocaleLowerCase()
-        console.log 'TODO: add racer in heat.coffee', racer.get('group_id')
-
-        #@$select
-        #    .find('.group-'+group)
-        #    .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('count') } - #{ racer.get('racer') }</option>"))
+        #console.log 'TODO: add racer in heat.coffee', racer.get('group_id'), group
+        @$select
+            .find('.group-'+group)
+            .append($("<option class=\"option-#{ racer.id }\" value=\"#{ racer.id }\">#{ racer.get('count') } - #{ racer.get('racer') }</option>"))
         return
 
     RacerChange: (racer) ->
@@ -263,7 +279,7 @@ class RaceSelect extends Backbone.View
             values.lane1 = values.lane2 = values.lane3 = values.lane4 = '-'
             @updateTimes(values)
         else
-            racer = @collection.get(@racer_id)
+            racer = @racers.get(@racer_id)
             src = racer.get('avatar')
             @updateTimes(racer.toJSON())
 
@@ -300,3 +316,22 @@ class RaceSelect extends Backbone.View
             then @$('.time').text time.toFixed(4)
             else @$('.time').text '💥'
         return
+
+
+class GroupSelect extends Backbone.View
+    tagName: 'optgroup'
+    className: () -> "group group-#{@model.get('group')}"
+    attributes: () ->
+        'label': @model.get('group')
+
+    initialize: (options) ->
+        @render()
+        @listenTo @model, 'change',  @render, @
+        @listenTo @model, 'remove',  @remove, @
+        @listenTo @model, 'destroy', @remove, @
+        return @
+
+    render: () ->
+        @model.toJSON()
+        @$el.attr 'label', @model.get('group')
+        return @

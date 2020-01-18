@@ -21,23 +21,22 @@ class RacerModel extends Backbone.Model
     calculateTotal: () ->
         times = []
         for idx in [1..4]
-            t = @get('time'+idx)
-            t = parseFloat(t)
-            if t == 0
+            time = parseFloat(@get('time'+idx))
+            if time == 0
                 times.push(10)
-            else if t
-                times.push(t)
+            else if time
+                times.push(time)
             # else ignore
 
         sortNumber = (a, b) -> a - b
         times.sort(sortNumber)
-        worse = times[3]
+        worst = times[3]
         times = times.slice(0,3)
 
         sumNumber = (a, b) -> a + b
         total = times.reduce(sumNumber, 0) / times.length
         @set('total', total.toFixed(4))
-        return worse
+        return worst
 
 
 class RacerCollection extends Backbone.Collection

@@ -150,14 +150,14 @@ class ResultsRow extends Backbone.View
         @$el.html Templates['result-row'] model
 
         if @model.get('count') == 4
-            worse = @model.calculateTotal()
-            worse = worse.toFixed(4)
-            if worse == '10.0000'
-                worse = '💥'
+            worst = @model.calculateTotal()
+            worst = worst.toFixed(4)
+            if worst == '10.0000'
+                worst = '💥'
 
             for el,idx in @$el.find('.td-times')
                 break if idx is 4
-                if $(el).text().startsWith(worse)
+                if $(el).text().startsWith(worst)
                     $(el).css('opacity', '0.5').css('text-decoration', 'line-through')
                     break
 

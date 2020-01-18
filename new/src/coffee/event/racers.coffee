@@ -63,14 +63,16 @@ class RacerModal extends Backbone.View
         'click #delete-racer'  : 'OnDelete'
 
     initialize: (options) ->
+        @racers = options.racers
+        @groups = options.groups
         return @
 
     OnShowModal: (evt) ->
-        @racer = @collection.get $(evt.relatedTarget).data('racer')
+        @racer = @racers.get $(evt.relatedTarget).data('racer')
         model = @racer.toJSON()
         @$('img.avatar').attr 'src', model.avatar
         @$('#race-modal-racer').text model.racer
-        @$('#race-modal-group').text model.group
+        @$('#race-modal-group').text @groups.get(model.group_id).get('group')
         @$('#race-modal-car'  ).text model.car
         return
 

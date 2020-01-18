@@ -117,7 +117,11 @@ class ResultsRow extends Backbone.View
     render: () ->
         model = @model.toJSON()
 
-        model.group = @collection.get(@model.get('group_id')).get('group')
+        @stopListening(@group)
+        @group = @collection.get(@model.get('group_id'))
+        @listenTo @group, 'change', @render, @
+
+        model.group = @group.get('group')
 
         model.time1='💥' if model.time1 == '0.0000'
         model.time2='💥' if model.time2 == '0.0000'

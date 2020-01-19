@@ -185,8 +185,6 @@ class Application(tornado.web.Application):
         self._input += data
 
         while self._input:
-            logging.debug('BUFFER: %s', repr(self._input))
-
             if self._input[0] == '>':
                 logging.debug('Gate Open')
                 self.set('gateClosed', False)

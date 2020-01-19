@@ -37,7 +37,7 @@ CREATE TABLE groups (
 CREATE TABLE racers (
     "event_id" INTEGER NOT NULL,
     "group_id" INTEGER NOT NULL,
-    "racer"    TEXT    NOT NULL UNIQUE,
+    "racer"    TEXT    NOT NULL,
     "car"      TEXT    NOT NULL,
     "avatar"   TEXT, -- JPEG of racer or avatar
 
@@ -54,6 +54,7 @@ CREATE TABLE racers (
 
     "racer_id" INTEGER PRIMARY KEY,
 
+    UNIQUE("racer", "event_id"),
     FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE,
     FOREIGN KEY(group_id) REFERENCES groups(group_id) ON DELETE CASCADE
     );

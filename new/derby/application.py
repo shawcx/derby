@@ -147,10 +147,11 @@ class Application(tornado.web.Application):
             return
 
         try:
-            self.serialPort = serial.Serial(port, 9600)
+            self.serialPort = serial.Serial(port, 9600, xonxoff=True)
+            logging.info('Opened serial port: %s', port)
             self.set('portOpen', port)
         except:
-            logging.info('Unable to open serial port: %s', port)
+            logging.warn('Unable to open serial port: %s', port)
             self.set('portOpen', None)
             return
 
@@ -166,10 +167,14 @@ class Application(tornado.web.Application):
 
     def SerialReadCb(self, fd, event):
         data = self.serialPort.read(self.serialPort.in_waiting)
-        try:
-            data = data.decode('ascii')
-        except UnicodeDecodeError:
-            logging.warn('Discarding data: %s', repr(data[0]))
+        while data:
+            try:
+                data = data.decode('ascii')
+                break
+            except UnicodeDecodeError:
+                logging.warn('Discarding data: %s', repr(data[0]))
+                data = data[1:]
+
         self._input += data
 
         while self._input:

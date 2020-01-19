@@ -11,6 +11,7 @@ import queue
 import signal
 import socket
 import sys
+import time
 
 import serial
 import tornado.web
@@ -147,7 +148,7 @@ class Application(tornado.web.Application):
             return
 
         try:
-            self.serialPort = serial.Serial(port, 9600, xonxoff=True)
+            self.serialPort = serial.Serial(port, 9600, xonxoff=True, timeout=0.02)
             logging.info('Opened serial port: %s', port)
             self.set('portOpen', port)
         except:
@@ -159,11 +160,17 @@ class Application(tornado.web.Application):
         ioloop.add_handler(self.serialPort, self.SerialReadCb, ioloop.READ)
 
         # unmask lanes
-        self.serialPort.write(b'MG')
+        self.SerialWrite('MG')
         # ensure the new time format is used
-        self.serialPort.write(b'N2')
+        self.SerialWrite('N2')
         # get the gate status
-        self.serialPort.write(b'RG')
+        self.SerialWrite('RG')
+
+    def SerialWrite(self, msg):
+        msg = msg + '\n'
+        msg = msg.encode('ascii')
+        self.serialPort.write(msg)
+        time.sleep(0.02)
 
     def SerialReadCb(self, fd, event):
         data = self.serialPort.read(self.serialPort.in_waiting)

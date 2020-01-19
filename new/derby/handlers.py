@@ -173,7 +173,7 @@ class Times(tornado.web.RequestHandler):
                 self.set_status(400)
                 self.write('%s', e)
 
-        self.application.serialPort.write(b'MG')
+        self.application.SerialWrite('MG')
 
         self.set_status(204)
 
@@ -238,14 +238,14 @@ class Serial(tornado.web.RequestHandler):
         racerA = self.get_argument('racerA')
         racerB = self.get_argument('racerB')
 
-        ok = self.application.serialPort.write(b'\r\nMG')
+        ok = self.application.SerialWrite('MG')
         if racerA == '-1':
             logging.info('Masking Lane A')
-            self.application.serialPort.write(b'\r\nMA\r')
+            self.application.SerialWrite('MA')
         if racerB == '-1':
             logging.info('Masking Lane B')
-            self.application.serialPort.write(b'\r\nMB\r')
-        ok = self.application.serialPort.write(b'\r\nLN')
+            self.application.SerialWrite('MB')
+        ok = self.application.SerialWrite('LN')
         self.set_status(204)
 
 
@@ -263,6 +263,6 @@ class PortTest(tornado.web.RequestHandler):
                 logging.error('%s', e)
                 raise tornado.web.HTTPError(500)
 
-        serialPort.write(b'RS')
+        SerialWrite('RS')
 
         self.set_status(204)

@@ -27,7 +27,10 @@ class Events(tornado.web.RequestHandler):
             self.write(json.dumps(events))
         else:
             event = derby.db.findOne('events', 'event_id', event_id)
-            self.render('event.html', event=event)
+            if event is None:
+                self.redirect('/')
+            else:
+                self.render('event.html', event=event)
 
     def post(self, event_id=None):
         try:
@@ -144,6 +147,7 @@ class Times(tornado.web.RequestHandler):
 
         laneA = results.get('laneA')
         entry1 = dict(
+            event_id = results.get('event_id'),
             racer_id = laneA.get('racer'),
             lane     = 'A',
             time     = laneA.get('time'),
@@ -157,6 +161,7 @@ class Times(tornado.web.RequestHandler):
 
         laneB = results.get('laneB')
         entry2 = dict(
+            event_id = results.get('event_id'),
             racer_id = laneB.get('racer'),
             lane     = 'B',
             time     = laneB.get('time'),
@@ -168,7 +173,7 @@ class Times(tornado.web.RequestHandler):
                 self.set_status(400)
                 self.write('%s', e)
 
-        self.settings['pipe'].send(b'MG\r')
+        self.application.serialPort.write(b'MG')
 
         self.set_status(204)
 
@@ -184,8 +189,7 @@ class WebSocket(tornado.websocket.WebSocketHandler):
     def open(self):
         self.set_nodelay(True)
         self.application.websockets[self.wsid] = self
-        state = self.application.trackState.state
-        self.write_message(dict(action='connected', message=state))
+        self.write_message(dict(action='trackState', message=self.application.state))
 
     def on_message(self, msg):
         if msg == 'ping':
@@ -216,6 +220,10 @@ class Config(tornado.web.RequestHandler):
     def put(self, name):
         data = json.loads(self.request.body)
         derby.db.update('settings', data, 'name')
+        if data['name'] == 'port':
+            self.application.OpenSerialPort(data['value'])
+        self.set_status(204)
+
 
 
 class Serial(tornado.web.RequestHandler):
@@ -230,24 +238,31 @@ class Serial(tornado.web.RequestHandler):
         racerA = self.get_argument('racerA')
         racerB = self.get_argument('racerB')
 
-        self.settings['pipe'].send(b'MG\r')
+        ok = self.application.serialPort.write(b'\r\nMG')
         if racerA == '-1':
             logging.info('Masking Lane A')
-            self.settings['pipe'].send(b'MA\r')
+            self.application.serialPort.write(b'\r\nMA\r')
         if racerB == '-1':
             logging.info('Masking Lane B')
-            self.settings['pipe'].send(b'MB\r')
-        self.settings['pipe'].send(b'LN\r')
+            self.application.serialPort.write(b'\r\nMB\r')
+        ok = self.application.serialPort.write(b'\r\nLN')
         self.set_status(204)
 
 
 class PortTest(tornado.web.RequestHandler):
     def post(self):
-        port = self.request.body.decode('utf-8')
-        #self.application.OpenSerialPort(port)
-        try:
-            serial.Serial(port)
-        except:
-            raise tornado.web.HTTPError(500)
+        testPort = self.request.body.decode('utf-8')
+        current = self.application.state.get('portOpen')
+
+        if testPort == current:
+            serialPort = self.application.serialPort
+        else:
+            try:
+                serial.Serial(testPort)
+            except Exception as e:
+                logging.error('%s', e)
+                raise tornado.web.HTTPError(500)
+
+        serialPort.write(b'RS')
 
         self.set_status(204)

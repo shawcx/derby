@@ -70,6 +70,10 @@ def main():
 class Application(tornado.web.Application):
     def __init__(self):
         self.websockets = {}
+        self.state = {
+            'portOpen'   : None,
+            'gateClosed' : None,
+        }
 
         derby.db = derby.Database(derby.args.db)
 
@@ -79,9 +83,6 @@ class Application(tornado.web.Application):
 
         self.serialPort = None
         self.OpenSerialPort(config['port'])
-
-        # class to manage the state of the track
-        self.trackState = derby.TrackState()
 
         patterns = [
             ( r'/events/([0-9]*)', derby.handlers.Events    ),
@@ -147,14 +148,143 @@ class Application(tornado.web.Application):
 
         try:
             self.serialPort = serial.Serial(port, 9600)
+            self.set('portOpen', port)
         except:
             logging.info('Unable to open serial port: %s', port)
+            self.set('portOpen', None)
             return
 
+        self._input = ''
         ioloop.add_handler(self.serialPort, self.SerialReadCb, ioloop.READ)
-        ok = self.serialPort.write(b'hello world\n')
-        print(ok)
+
+        # unmask lanes
+        self.serialPort.write(b'MG')
+        # ensure the new time format is used
+        self.serialPort.write(b'N2')
+        # get the gate status
+        self.serialPort.write(b'RG')
 
     def SerialReadCb(self, fd, event):
-        data = fd.read(fd.in_waiting)
-        print(data.decode('utf-8').strip())
+        data = self.serialPort.read(self.serialPort.in_waiting)
+        try:
+            data = data.decode('ascii')
+        except UnicodeDecodeError:
+            logging.warn('Discarding data: %s', repr(data[0]))
+        self._input += data
+
+        while self._input:
+            logging.debug('BUFFER: %s', repr(self._input))
+
+            if self._input[0] == '>':
+                logging.debug('Gate Open')
+                self.set('gateClosed', False)
+                self._input = self._input[1:]
+                continue
+
+            if self._input[0] == '@':
+                logging.debug('Gate Closed')
+                self.set('gateClosed', True)
+                self._input = self._input[1:]
+                continue
+
+            if self._input[0] == '*':
+                self._input = self._input[1:]
+                continue
+
+            if self._input.startswith('RG0'):
+                logging.debug('Query Gate Open')
+                self.set('gateClosed', False)
+                self._input = self._input[3:]
+                continue
+
+            if self._input.startswith('RG1'):
+                logging.debug('Query Gate Closed')
+                self.set('gateClosed', True)
+                self._input = self._input[3:]
+                continue
+
+            if self._input.startswith('N2'):
+                logging.debug('Timing Mode Set')
+                self.set('timingSet', True)
+                self._input = self._input[2:]
+                continue
+
+            if self._input[0] == '\r': # carriage return
+                self._input = self._input[1:]
+                continue
+
+            if self._input[0] == '\n': # new line
+                self._input = self._input[1:]
+                continue
+
+            if self._input.startswith('MG'): # enable all lanes
+                self._input = self._input[2:]
+                continue
+
+            if self._input.startswith('AC'): # response to MG
+                self._input = self._input[2:]
+                continue
+
+            if self._input.startswith('MA'): # mask lane A
+                self._input = self._input[2:]
+                continue
+
+            if self._input.startswith('MB'): # make lane B
+                self._input = self._input[2:]
+                continue
+
+            if self._input.startswith('LN'): # release gate
+                self._input = self._input[2:]
+                continue
+
+            if self._input.startswith('A='):
+                # did not receive all the results yet
+                if len(self._input) < 60:
+                    break
+                logging.debug('Results: %s', self._input[:60])
+                self.parseResults(self._input[:60])
+                self._input = self._input[60:]
+                continue
+
+            # test if \r\n has been sent
+            try:
+                cr = self._input.index('\r')
+            except ValueError:
+                # not enough data to continue parsing
+                break
+
+            unknown = self._input[:cr]
+            self._input = self._input[cr+1:]
+            logging.debug('IGNORED: %s', repr(unknown))
+
+
+    def set(self, name, value):
+        self.state[name] = value
+        self.Broadcast('trackState', self.state)
+
+    def parseResults(self, rawResults):
+        # Example return data, 60 bytes
+        # 'A=0.9682! B=1.5024" C=0.0000  D=0.0000  E=0.0000  F=0.0000  '
+        try:
+            timeA = float(rawResults[ 2: 8])
+            timeB = float(rawResults[12:18])
+            # unused on pack 30's 2-lane track
+            #timeC = float(rawResults[22:28])
+            #timeD = float(rawResults[32:38])
+            #timeE = float(rawResults[42:48])
+            #timeF = float(rawResults[52:58])
+        except ValueError:
+            self.Broadcast('exception', 'invalid race results')
+            logging.error('Parse error: %s', repr(rawResults))
+            return
+
+        results = {
+            'A' : timeA,
+            'B' : timeB,
+            #'C' : timeC, # unused
+            #'D' : timeD, # unused
+            #'E' : timeE, # unused
+            #'F' : timeF, # unused
+        }
+        logging.info('A: %s B: %s', timeA, timeB)
+        self.Broadcast('raceResults', results)

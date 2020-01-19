@@ -20,7 +20,8 @@ class Socket
 
         @ws.onopen = (event) =>
             @timeout = @options.timeout
-            $('#ws-status').css('color', '#3c3').removeClass('fa-wifi-slash').addClass('fa-wifi')
+            #$('#ws-status').css('color', '#3c3').removeClass('fa-wifi-slash').addClass('fa-wifi')
+            $('#ws-status').addClass('d-none')
             if @options.ping
                 @interval = setInterval () =>
                     @ws.send('ping')
@@ -46,12 +47,14 @@ class Socket
 
             clearInterval(@interval)
 
+            $('#ws-status').removeClass('d-none')
+
             if @timeout > @options.maxtime
                 $('#ws-status').css('color', '#c33')
                 console.log('[!] Unable to reconnect to server, giving up.')
                 return
 
-            $('#ws-status').css('color', '#cc3').removeClass('fa-wifi').addClass('fa-wifi-slash')
+            $('#ws-status').css('color', '#cc3')
             console.log('[-] Connection closed, reconnecting in', Math.round(@timeout))
 
             setTimeout () =>

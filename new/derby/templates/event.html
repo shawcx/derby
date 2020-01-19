@@ -1,14 +1,18 @@
 {% extends 'base.template' %}
 
 {% block links-left %}
+  <!--
   <li class="nav-item"><a class="nav-link" href="/" >                                             <i class="fad fa-fw fa-lg fa-flag-checkered"></i> Events</a></li>
-  <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#heat-modal"><i class="fad fa-fw fa-lg fa-car-side"      ></i> Heat </a></li>
+  -->
+  <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#heat-modal"><i class="fad fa-fw fa-lg fa-flag-checkered"      ></i> Heat </a></li>
 {% end %}
 
 {% block links-right %}
   <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#add-racer-modal"><i class="fad fa-fw fa-lg fa-user-circle"></i> Add Racer </a></li>
   <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#groups-modal"   ><i class="fad fa-fw fa-lg fa-users"      ></i> Groups    </a></li>
   <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#settings-modal" ><i class="fad fa-fw fa-lg fa-tools"      ></i> Settings  </a></li>
+  <span id="ws-status" class="navbar-text pl-1 pr-2 glow d-none"            ><i class="fad fa-wifi-slash" title="Connection Status"></i></span>
+  <span id="tr-status" class="navbar-text pl-1 pr-2 glow d-none text-danger"><i class="fad fa-usb-drive"  title="Track Status"     ></i></span>
 {% end %}
 
 {% block body %}

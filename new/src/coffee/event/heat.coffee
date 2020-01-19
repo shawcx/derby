@@ -49,7 +49,7 @@ class HeatModal extends Backbone.View
         delay = 750
         $.ajax
             method: 'POST'
-            url: '/serial'
+            url: '/serial/'
             data:
                 action: 'release'
                 racerA: @selectA.racer_id
@@ -67,6 +67,7 @@ class HeatModal extends Backbone.View
             method: 'POST'
             url: '/times/'
             data: JSON.stringify
+                event_id: event_id
                 laneA:
                     racer: @selectA.racer_id
                     time:  @timeA
@@ -126,6 +127,10 @@ class HeatModal extends Backbone.View
         @selectA.$('.time').text '-.----'
         @selectB.$('.time').text '-.----'
         @needAccept = false
+        $('#lightyellow1').removeClass('bright-yellow')
+        $('#lightyellow2').removeClass('bright-yellow')
+        $('#lightyellow3').removeClass('bright-yellow')
+        $('#lightgreen').removeClass('bright-green')
         @checkGateReady()
         return
 

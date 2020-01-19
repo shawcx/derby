@@ -69,7 +69,6 @@ class DerbyEvent
 #            return null
 
         @dispatch = _.clone(Backbone.Events)
-        @dispatch.on 'connected',   @OnConnected,   @
         @dispatch.on 'trackState',  @OnTrackState,  @
         @dispatch.on 'raceResults', @OnRaceResults, @
 
@@ -100,26 +99,18 @@ class DerbyEvent
 
             @socket = new Socket
                 onmessage: (bundle) =>
+                    #console.log bundle.action, bundle.message
                     @dispatch.trigger(bundle.action, bundle.message)
                     return
             return
         return
 
-    # called after the websocket is successfully connected
-    # sends current track state
-    OnConnected: (message) ->
-        #if message.gateClosed is null
-        #    alert('Serial interface not connected')
-        @heatModal.gate(message.gateClosed)
-
-# dev -------------------------------
-        #$('#groups-modal').modal()
-        #@heatModal.selectA.set(1)
-        #@heatModal.selectB.set(2)
-# -----------------------------------
-        return
-
     OnTrackState: (message) ->
+        if message.portOpen
+            $('#tr-status').addClass('d-none')
+        else
+            $('#tr-status').removeClass('d-none')
+
         @heatModal.gate(message.gateClosed)
         return
 

@@ -31,7 +31,6 @@
     <ul class="navbar-nav ml-auto">
 {% block links-right %}
 {% end %}
-      <span class="navbar-text"><i id="ws-status" class="fa fa-wifi-slash d-none" title="Server Status"></i></span>
     </ul>
   </nav>
   <div class="container">

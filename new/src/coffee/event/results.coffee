@@ -44,8 +44,7 @@ class GroupFilter extends Backbone.View
             count++
             return
 
-        #@table.$tbody.append($('<tr class="no-racers"><td colspan=9 class="text-center">Use "Add Racer" to add a participant.</td></tr>'))
-        if count is 0
+        if @collection.length and count is 0
         then @table.$tbody.find('tr.no-racers').removeClass('d-none')
         else @table.$tbody.find('tr.no-racers').addClass('d-none')
 
@@ -98,6 +97,22 @@ class ResultsTable extends Backbone.View
                 return
             @groupFilter.FilterGroup()
             return
+
+        @listenTo @groups, 'add', () =>
+            @$tbody.find('tr.no-groups').addClass('d-none')
+            if @racers.length is 0
+                @$tbody.find('tr.no-racers').removeClass('d-none')
+            else
+                @$tbody.find('tr.no-racers').addClass('d-none')
+
+            return
+        @listenTo @groups, 'reset', (groups) =>
+            if groups.length > 0
+                @$tbody.find('tr.no-groups').addClass('d-none')
+            else
+                @$tbody.find('tr.no-racers').addClass('d-none')
+            return
+
         return @
 
     Add: (racer) ->

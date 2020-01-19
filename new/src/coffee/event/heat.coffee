@@ -100,10 +100,7 @@ class HeatModal extends Backbone.View
                 @OnSwapLanes()
                 return
 
-        $('#lightyellow1').removeClass('bright-yellow')
-        $('#lightyellow2').removeClass('bright-yellow')
-        $('#lightyellow3').removeClass('bright-yellow')
-        $('#lightgreen').removeClass('bright-green')
+        @resetLights()
         @reset()
         return
 
@@ -127,11 +124,15 @@ class HeatModal extends Backbone.View
         @selectA.$('.time').text '-.----'
         @selectB.$('.time').text '-.----'
         @needAccept = false
+        @resetLights()
+        @checkGateReady()
+        return
+
+    resetLights: () ->
         $('#lightyellow1').removeClass('bright-yellow')
         $('#lightyellow2').removeClass('bright-yellow')
         $('#lightyellow3').removeClass('bright-yellow')
         $('#lightgreen').removeClass('bright-green')
-        @checkGateReady()
         return
 
     gate: (gateClosed) ->
@@ -163,6 +164,7 @@ class HeatModal extends Backbone.View
         @selectA.result(timeA)
         @selectB.result(timeB)
 
+        @resetLights()
         @$('.board').removeClass('board-winner')
 
         if timeA == 0 and timeB == 0

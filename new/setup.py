@@ -3,23 +3,11 @@
 import sys
 import os
 
-from setuptools import setup
+import setuptools
 
 exec(compile(open('derby/version.py').read(),'version.py','exec'))
 
-def findDataFiles(root):
-    paths = []
-    trim = len(root) + 1
-    for base,directories,filenames in os.walk(root):
-        if base.endswith('__pycache__'):
-            continue
-        for filename in filenames:
-            if filename.endswith('.py'):
-                continue
-            paths.append(os.path.join(base, filename)[trim:])
-    return paths
-
-setup(
+setuptools.setup(
     name             = 'derby',
     author           = __author__,
     author_email     = __email__,
@@ -33,10 +21,11 @@ setup(
             'derby = derby.application:main',
             ]
         },
-    packages = [
-        'derby',
+    packages = setuptools.find_packages(),
+    include_package_data = True,
+    install_requires = [
+        'tornado',
+        'pyserial',
         ],
-    package_data = {
-        'derby': findDataFiles('derby')
-        },
+    zip_safe = False
     )

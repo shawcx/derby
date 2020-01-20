@@ -217,6 +217,11 @@ class RaceSelect extends Backbone.View
 
         @render()
 
+        @listenTo @groups, 'add', @AddGroup, @
+        @listenTo @groups, 'reset', (groups) =>
+            groups.forEach @AddGroup, @
+            return
+
         @listenTo @racers, 'add', @Add, @
         @listenTo @racers, 'change', @RacerChange, @
         @listenTo @racers, 'reset', (racers) =>
@@ -227,10 +232,6 @@ class RaceSelect extends Backbone.View
             $option.remove()
             return
 
-        @listenTo @groups, 'add', @AddGroup, @
-        @listenTo @groups, 'reset', (groups) =>
-            groups.forEach @AddGroup, @
-            return
         return @
 
     AddGroup: (group) ->

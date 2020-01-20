@@ -76,6 +76,7 @@ class Groups(tornado.web.RequestHandler):
         try:
             derby.db.insert('groups', data, 'group_id')
             self.write(data)
+            self.application.Broadcast('groups', data)
         except derby.error as e:
             self.set_status(400)
             self.write(str(e))
@@ -88,9 +89,11 @@ class Groups(tornado.web.RequestHandler):
 
         derby.db.update('groups', data, 'group_id')
         self.write(data)
+        self.application.Broadcast('groups', data)
 
     def delete(self, group_id=None):
         derby.db.delete('groups', group_id, 'group_id')
+        self.application.Broadcast('groupRemove', group_id)
         self.set_status(204)
 
 
@@ -111,6 +114,7 @@ class Racers(tornado.web.RequestHandler):
         try:
             derby.db.insert('racers', data, 'racer_id')
             self.write(data)
+            self.application.Broadcast('racers', data)
         except derby.error:
             self.set_status(400)
             self.write('Duplicate name')
@@ -124,13 +128,15 @@ class Racers(tornado.web.RequestHandler):
         try:
             derby.db.update('racers', data, 'racer_id')
             self.write(data)
+            self.application.Broadcast('racers', data)
         except derby.error:
             self.set_status(400)
             self.write('Duplicate name')
 
     def delete(self, racer_id=None):
         derby.db.delete('racers', racer_id, 'racer_id')
-        derby.db.delete('times', racer_id, 'racer_id')
+        derby.db.delete('times',  racer_id, 'racer_id')
+        self.application.Broadcast('racerRemove', racer_id)
         self.set_status(204)
 
 
@@ -263,6 +269,6 @@ class PortTest(tornado.web.RequestHandler):
                 logging.error('%s', e)
                 raise tornado.web.HTTPError(500)
 
-        SerialWrite('RS')
+        serialPort.write('RS')
 
         self.set_status(204)

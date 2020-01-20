@@ -63,12 +63,12 @@ CREATE TABLE racers (
 -- Friendly names for managing multiple accounts
 --
 CREATE TABLE times (
-    "event_id" INTEGER NOT NULL,
+    --"event_id" INTEGER NOT NULL,
     "racer_id" INTEGER NOT NULL,
     "lane"     TEXT,
     "time"     TEXT,
     "time_id"  INTEGER PRIMARY KEY,
 
-    FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE,
+    --FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE,
     FOREIGN KEY(racer_id) REFERENCES racers(racer_id) ON DELETE CASCADE
     );

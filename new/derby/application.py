@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-import collections
-import configparser
-import json
 import logging
 import os
-import platform
-import queue
 import signal
-import socket
 import sys
 import time
 

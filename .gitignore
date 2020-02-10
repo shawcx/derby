@@ -1,3 +1,6 @@
 __pycache__
 *.pyc
-derby.sqlite
+*.sqlite
+/build
+/dist
+/derby.egg-info

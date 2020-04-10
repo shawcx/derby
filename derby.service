@@ -1,0 +1,11 @@
+[Unit]
+Description=Pinewood Derby
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+ExecStart=derby
+
+[Install]
+WantedBy=multi-user.target

@@ -1,1 +1,2 @@
+include derby.service
 recursive-include derby *
